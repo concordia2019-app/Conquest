@@ -18,6 +18,7 @@ public class Country {
 	private int army;
 	private int[] adjacentCountriesID;
 	private int playerID;
+	private String playerName;
 
 	/**
 	 * @param countryName         Country's name
@@ -69,8 +70,17 @@ public class Country {
 
 		return playerID;
 	}
+	
+	public String getPlayerName() {
+		return playerName;
+	}
 
-	public void setPlayerId(int playerId) {
-		this.playerID = playerId;
+	public void setArmy(int army) {
+		this.army = army;
+	}
+	
+	public void setPlayer(int playerID, String playerName) {
+		this.playerID = playerID;
+		this.playerName = playerName;
 	}
 }
