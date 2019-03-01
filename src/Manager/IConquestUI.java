@@ -13,7 +13,6 @@ import Model.Country;
 import Model.LeftArmiesResponse;
 
 public interface IConquestUI {
-
 	/**
 	 * <p>
 	 * This method is printing the start menu of the game
@@ -86,5 +85,6 @@ public interface IConquestUI {
 	 *         country
 	 */
 	public LeftArmiesResponse numberOfArmiesToleave(Country country);
+
 
 }

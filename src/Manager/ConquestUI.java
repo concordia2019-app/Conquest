@@ -1,5 +1,6 @@
 package Manager;
 
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -38,7 +39,7 @@ public class ConquestUI implements IConquestUI {
 	private ArrayList<String> PlayerNames = new ArrayList<String>();
 	UIHelper uiHelper;
 	private Map map = new Map();
-	private Editor editor = new Editor();
+
 
 	public ConquestUI() {
 		scanner = new Scanner(System.in);
@@ -67,10 +68,10 @@ public class ConquestUI implements IConquestUI {
 				Integer parsedInputValue = Integer.parseInt(startMenuInput);
 				switch (parsedInputValue) {
 				case 1:
-					map.MainMap(editor);
+					System.out.println("**   Game is started   **");
 					PlayerNumber = getNumberOfPlayer();
 					ArrayList<String> playerNames = getPlayernames(PlayerNumber);
-					editor.assigningPlayerCountries(playerNames, PlayerNumber);
+					map.assigningPlayerCountries(playerNames, PlayerNumber);
 					break;
 				case 2:
 					System.out.println("Loading new map.");
