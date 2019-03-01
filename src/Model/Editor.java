@@ -13,7 +13,7 @@ import java.util.Random;
  */
 
 public class Editor {
-	public Player[] Players;
+	
 
 	public ArrayList<Country> setCountries(ArrayList<Country> country) {
 		
@@ -36,54 +36,10 @@ public class Editor {
 		country.add(new Country("Hungary", 17, 4, 2, new int[] { 15, 16, 18, 19 }, 4, "Player 4"));
 		country.add(new Country("Romania", 18, 4, 2, new int[] { 9, 14, 15, 17, 19 }, 4, "Player 4"));
 		country.add(new Country("Yugoslavia", 19, 4, 2, new int[] { 16, 17, 18, 20 }, 4, "Player 4"));
-		country.add(new Country("Albania", 20, 4, 2, new int[] { 1, 19 }, 4, "Player 4"));
-		
+		country.add(new Country("Albania", 20, 4, 2, new int[] { 1, 19 }, 4, "Player 4"));		
 		return country;
 	}
 
-	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
-		Players = new Player[playerCount];
-		ArrayList<Country> countryTempList = country;
-		Random random = new Random();
-		int counter = countryTempList.size() / playerCount;
-		int restOfCountries = countryTempList.size() % playerCount;
-		for (int i = 0; i < playerCount; i++) {
-			int[] countriesIds = new int[counter];
-			for (int j = 0; j < counter; j++) {
-				int randomCountryId = random.nextInt(countryTempList.size());
-				countriesIds[j] = countryTempList.get(randomCountryId).getCountryID();
-				countryTempList.remove(randomCountryId);
-				// updateCountryById(i, countriesIds[j]);
-			}
-			Players[i] = new Player(i, playerNames.get(i), countriesIds);
-		}
-		if (restOfCountries > 0) {
-			for (Player rechargePlayer : Players) {
-				int randomCountryId = random.nextInt(countryTempList.size());
-				int playerCountryCount = rechargePlayer.getCountryID().length + 1;
-				int[] currentPlayerCountries = rechargePlayer.getCountryID();
-				int[] rechargedPlayerCountriesList = new int[playerCountryCount];
-				for (int i = 0; i < playerCountryCount - 1; i++) {
-					rechargedPlayerCountriesList[i] = currentPlayerCountries[i];
-				}
-				int newCountryIdForPlayer = countryTempList.get(randomCountryId).getCountryID();
-				rechargedPlayerCountriesList[playerCountryCount - 1] = newCountryIdForPlayer;
-				rechargePlayer.setCountryId(rechargedPlayerCountriesList);
-				countryTempList.remove(randomCountryId);
-				updateCountryById(rechargePlayer.getPlayerID(), newCountryIdForPlayer);
-				if (countryTempList.size() == 0) {
-					break;
-				}
-			}
-		}
-	}
 
-	private void updateCountryById(int playerId, int countryId) {
-		for (Country countryItem : country) {
-			int countryItemId = countryItem.getCountryID();
-			if (countryItemId == countryId)
-				countryItem.setPlayerId(playerId);
-		}
-	}
 
 }
