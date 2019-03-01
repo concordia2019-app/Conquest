@@ -13,10 +13,10 @@ import java.util.Random;
  */
 
 public class Editor {
-	private ArrayList<Country> country = new ArrayList<Country>();
 	public Player[] Players;
 
-	public Editor() {
+	public ArrayList<Country> setCountries(ArrayList<Country> country) {
+		
 		country.add(new Country("Norway", 1, 1, 2, new int[] { 2, 3, 20 }, 1, "Player 1"));
 		country.add(new Country("Denmark", 2, 1, 2, new int[] { 1, 3, 4 }, 1, "Player 1"));
 		country.add(new Country("Sweden", 3, 1, 2, new int[] { 1, 2, 14 }, 1, "Player 1"));
@@ -37,6 +37,8 @@ public class Editor {
 		country.add(new Country("Romania", 18, 4, 2, new int[] { 9, 14, 15, 17, 19 }, 4, "Player 4"));
 		country.add(new Country("Yugoslavia", 19, 4, 2, new int[] { 16, 17, 18, 20 }, 4, "Player 4"));
 		country.add(new Country("Albania", 20, 4, 2, new int[] { 1, 19 }, 4, "Player 4"));
+		
+		return country;
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
@@ -84,7 +86,4 @@ public class Editor {
 		}
 	}
 
-	public ArrayList<Country> getCountry() {
-		return country;
-	}
 }

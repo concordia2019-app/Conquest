@@ -42,32 +42,26 @@ public class Country {
 	}
 
 	public int getCountryID() {
-
 		return countryID;
 	}
 
 	public String getCountryName() {
-
 		return countryName;
 	}
 
 	public int getContinentID() {
-
 		return continentID;
 	}
 
 	public int getArmy() {
-
 		return army;
 	}
 
 	public int[] getAdjacentCountriesID() {
-
 		return adjacentCountriesID;
 	}
 
 	public int getPlayerID() {
-
 		return playerID;
 	}
 	
