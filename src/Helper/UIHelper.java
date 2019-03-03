@@ -49,4 +49,19 @@ public class UIHelper {
 		}
 		return null;
 	}
+	
+	/**
+	 * This method check in int is find in the array
+	 * @param listId the list for searching
+	 * @param id the value or id to search
+	 * @return if it find, then return true, else return false;
+	 */
+	public boolean isIdExistInList(int[] listId, int id) {
+		for (int i = 0; i < listId.length; i++) {
+			if (listId[i] == id) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

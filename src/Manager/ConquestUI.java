@@ -1,6 +1,5 @@
 package Manager;
 
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -33,13 +32,15 @@ public class ConquestUI implements IConquestUI {
 	private String InputNumberOfPlayers = "Enter bumber of players [2..5]:";
 	private String ErrorEnteredValue = "Entered value is not acceptable.";
 	private String ErrorInputNumberOfPlayers = "Your input number is not acceptable. Please enter a number between 2..5";
+	private String AttackFinishQuestion = "Is attack finished ?(Y/N)";
 	private Scanner scanner;
 
+	private Player[] Players;
+	private ArrayList<Country> Countries;
 	private Integer PlayerNumber;
 	private ArrayList<String> PlayerNames = new ArrayList<String>();
 	UIHelper uiHelper;
 	private Map map = new Map();
-
 
 	public ConquestUI() {
 		scanner = new Scanner(System.in);
@@ -72,6 +73,9 @@ public class ConquestUI implements IConquestUI {
 					PlayerNumber = getNumberOfPlayer();
 					ArrayList<String> playerNames = getPlayernames(PlayerNumber);
 					map.assigningPlayerCountries(playerNames, PlayerNumber);
+					Countries = map.getCountries();
+					Players = map.getPlayers();
+					conquestUIAttackQuestion();
 					break;
 				case 2:
 					System.out.println("Loading new map.");
@@ -135,10 +139,13 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(AttackQuestion);
 			String attackDecision = scanner.nextLine();
-			if (attackDecision.toLowerCase() == "n") {
+			if (attackDecision.equalsIgnoreCase("n")) {
+				System.out.println("Attack is finieshed.");
 				// TODO go to move question
 				break;
-			} else if (attackDecision.toLowerCase() == "y") {
+			} else if (attackDecision.equalsIgnoreCase("y")) {
+				System.out.println("Sttack is started.");
+				attackPlayer(Players, Countries);
 				// TODO go to attack
 				break;
 			} else {
@@ -157,7 +164,7 @@ public class ConquestUI implements IConquestUI {
 			System.out.println(MoveQuestion);
 			String attackDecision = scanner.nextLine();
 			if (attackDecision.toLowerCase() == "n") {
-				// TODO turn player
+				// TODO go to calculate Map
 				break;
 			} else if (attackDecision.toLowerCase() == "y") {
 				// TODO go to move
@@ -258,5 +265,77 @@ public class ConquestUI implements IConquestUI {
 			PlayerNames.add(scanner.next());
 		}
 		return PlayerNames;
+	}
+
+	/**
+	 * This method manage the attack of players
+	 * 
+	 * @param playerList  list of players to play one by one
+	 * @param countryList list of countries to retrieve player's countries and
+	 *                    adjacencies
+	 */
+	@Override
+	public void attackPlayer(Player[] playerList, ArrayList<Country> countryList) {
+		for (Player playerItem : Players) {
+			String enteredPlayerCountryId = "";
+			int convertedPlayerCId = -1;
+			String enteredEnemyCountryId = "";
+			int convertedEnemyCId = -1;
+			int[] relatedCountryIds = playerItem.getCountryID();
+			boolean attackIsFinished = true;
+			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
+			while (attackIsFinished) {
+				while (true) {
+					System.out.println("Choose your country Id to attack:");
+					for (int cId : relatedCountryIds) {
+						Country currentCountryTemp = uiHelper.getCountryById(countryList, cId);
+						System.out.println(currentCountryTemp.getCountryName() + " with " + currentCountryTemp.getArmy()
+								+ " armies." + " -- Country Id :" + cId);
+					}
+					enteredPlayerCountryId = scanner.nextLine();
+					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
+							&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
+						convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
+						break;
+					}
+					System.out.println(ErrorEnteredValue);
+				}
+
+				Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
+				int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
+
+				while (true) {
+					System.out.println("Choose your enemy with enter the country Id:");
+					for (int cId : adjacaniesIds) {
+						Country currentCountryTemp = uiHelper.getCountryById(countryList, cId);
+						System.out.println(currentCountryTemp.getCountryName() + " with " + currentCountryTemp.getArmy()
+								+ " armies." + " -- Country Id :" + cId);
+					}
+					enteredEnemyCountryId = scanner.nextLine();
+					if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
+							&& uiHelper.tryParseInt(enteredEnemyCountryId)) {
+						convertedEnemyCId = Integer.parseInt(enteredEnemyCountryId);
+						break;
+					}
+					System.out.println(ErrorEnteredValue);
+				}
+				System.out.println("You chose to attack to No." + convertedEnemyCId + " with country No."
+						+ convertedPlayerCId + "   It will be calculated.");
+				System.out.println(AttackFinishQuestion);
+				String attackDecision = scanner.nextLine();
+				while (true) {
+					if (attackDecision.equalsIgnoreCase("y")) {
+						attackIsFinished = true;
+						break;
+					} else if (attackDecision.equalsIgnoreCase("n")) {
+						System.out.println("   Attack is finished for this player.   ");
+						System.out.println("=========================================");
+						attackIsFinished = false;
+						break;
+					} else
+						System.out.println(ErrorEnteredValue);
+				}
+			}
+		}
 	}
 }

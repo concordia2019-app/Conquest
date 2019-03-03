@@ -7,10 +7,12 @@ package Manager;
  * @author F.S
  */
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import Model.Country;
 import Model.LeftArmiesResponse;
+import Model.Player;
 
 public interface IConquestUI {
 	/**
@@ -86,5 +88,12 @@ public interface IConquestUI {
 	 */
 	public LeftArmiesResponse numberOfArmiesToleave(Country country);
 
+	/**
+	 * This method manage the attack of players
+	 * 
+	 * @param playerList list of players to play one by one 
+	 * @param countryList list of countries to retrieve player's countries and adjacencies
+	 */
+	public void attackPlayer(Player[] playerList , ArrayList<Country> countryList);
 
 }
