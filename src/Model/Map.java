@@ -154,11 +154,7 @@ public class Map {
 		}
 		// Just for test
 		System.out.print("\n\n");
-		for (Country countryTemp : CountriesList) {
-			System.out.println(
-					"**Country Id: " + countryTemp.getCountryID() + " **Country Name: " + countryTemp.getCountryName()
-					+ " **PlayerId:" + countryTemp.getPlayerID() + " **Armies:" + countryTemp.getArmy());
-		}
+		MainMap();
 	}
 
 	public void assignArmies() {
