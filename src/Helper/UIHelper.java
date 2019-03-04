@@ -49,17 +49,42 @@ public class UIHelper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method check in int is find in the array
+	 * 
 	 * @param listId the list for searching
-	 * @param id the value or id to search
+	 * @param id     the value or id to search
 	 * @return if it find, then return true, else return false;
 	 */
 	public boolean isIdExistInList(int[] listId, int id) {
 		for (int i = 0; i < listId.length; i++) {
 			if (listId[i] == id) {
 				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * This class add armiesToAdd to the armies of country with countryId which is
+	 * in list of countryList
+	 * 
+	 * @param countryId   Id of country to add armies
+	 * @param countryList List of the countries to find country
+	 * @param armiesToAdd number of armies that player want to add
+	 * @return it shows the status of update. if armies have been updated, the return true, otherwise, return false.
+	 */
+	public boolean addArmiesToCountryById(int countryId, ArrayList<Country> countryList, int armiesToAdd) {
+		for (Country country : countryList) {
+			int cId = country.getCountryID();
+			if(cId == countryId) {
+				int currentArmies = country.getArmy();
+				int newArmiesValue = (currentArmies+armiesToAdd);
+				country.setArmy(newArmiesValue);
+				if(newArmiesValue!=currentArmies) {
+					return true;
+				}
 			}
 		}
 		return false;
