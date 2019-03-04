@@ -37,9 +37,7 @@ public class Editor {
 		country.add(new Country("Romania", 18, 4, 0, new int[] { 9, 14, 15, 17, 19 }, 4, "Player 4"));
 		country.add(new Country("Yugoslavia", 19, 4, 0, new int[] { 16, 17, 18, 20 }, 4, "Player 4"));
 		country.add(new Country("Albania", 20, 4, 0, new int[] { 1, 19 }, 4, "Player 4"));		
+		
 		return country;
 	}
-
-
-
 }
