@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.generic.ReturnInstruction;
-
 public class Map {
 	final int FirstArmies = 21;
 	public Player[] Players;
@@ -27,33 +25,58 @@ public class Map {
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 
 		for (int i = 0; i < CountriesList.size(); i++)
-			System.out.format(table, showCountryID(i), showCountryName(i), showArmy(i), showContinentID(i),
-					Arrays.toString(showAdjacentCountriesID(i)), showPlayerName(i));
+			System.out.format(table, showCountryID(CountriesList, i), showCountryName(CountriesList, i), showArmy(CountriesList, i),
+					showContinentID(CountriesList, i), Arrays.toString(showAdjacentCountriesID(CountriesList, i)), 
+					showPlayerName(CountriesList, i));
 
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 	}
+	
+	public void PlayerMap(Player player) {
+		
+		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
-	/*
-	 * public void AttackMap(Editor editor, Player player) { String table =
-	 * "|%-14d|%-39s|%-24d|%-41s|%-23d|%n";
-	 * 
-	 * System.out.println("This is player no. " + player.getPlayerID() + " - " +
-	 * player.getPlayerName() + " turn to attack!");
-	 * 
-	 * System.out.format(
-	 * "+--------------+---------------------------------------+------------------------+-----------------------------------------+-----------------------+%n"
-	 * ); System.out.format(
-	 * "| Country's ID | No. of armies inside player's country | Opponent's country' ID | No. of armies inside opponent's country | Opponent's player' ID |%n"
-	 * ); System.out.format(
-	 * "+--------------+---------------------------------------+------------------------+-----------------------------------------+-----------------------+%n"
-	 * );
-	 * 
-	 * for(int i = 0; i < player.getCountryID().; i++ ) System.out.format(table,
-	 * player.getCountryID().get(i), editor.getCountry().get(i).getArmy(),
-	 * editor.getCountry().get(i).getArmy(),
-	 * Arrays.toString(editor.getCountry().get(i).getAdjacentCountriesID())); }
-	 */
+
+		System.out.format(
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
+		System.out.format(
+				"| Country's ID | Country's name | No. of armies | Continent's ID |   Adjacent countries' ID   | Player's name |%n");
+		System.out.format(
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
+			
+		ArrayList<Country> playerCountries = getPlayerCorrespondingCountries(player.getCountryID());
+		
+		for(int i = 0; i < playerCountries.size(); i++) 
+			System.out.format(table, showCountryID(playerCountries, i), showCountryName(playerCountries, i), showArmy(playerCountries, i), 
+					showContinentID(playerCountries, i), Arrays.toString(showAdjacentCountriesID(playerCountries, i)), 
+					showPlayerName(playerCountries, i));
+		
+		System.out.format(
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");		
+	}
+
+
+	public void AttackMap(Player player, Country country) { 
+		
+		String table = "|%-24d|%-26s|%-41d|%-23d|%n";
+
+		System.out.println("You have selected " + country.getCountryName() + " country to attack! There are " + country.getArmy() + " army inside this country.");
+
+		System.out.format(
+			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n"); 
+		System.out.format(
+			"| Opponent's country' ID | Opponent's country' Name | No. of armies inside opponent's country | Opponent's player' ID |%n"); 
+		System.out.format(
+			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
+		
+		ArrayList<Country> specificCountryAdjacents = getSpecificCountryAdjacentsForAttack(player.getCountryID(), country.getCountryID());
+		
+		for(int i = 0; i < specificCountryAdjacents.size(); i++) 
+			System.out.format(table, showCountryID(specificCountryAdjacents, i), showCountryName(specificCountryAdjacents, i), 
+					showArmy(specificCountryAdjacents, i), showPlayerID(specificCountryAdjacents, i));
+		
+	}
 
 	public void MoveMap(Editor editor, Player player) {
 
@@ -124,7 +147,7 @@ public class Map {
 		for (Country countryTemp : CountriesList) {
 			System.out.println(
 					"**Country Id: " + countryTemp.getCountryID() + " **Country Name: " + countryTemp.getCountryName()
-							+ " **PlayerId:" + countryTemp.getPlayerID() + " **Armies:" + countryTemp.getArmy());
+					+ " **PlayerId:" + countryTemp.getPlayerID() + " **Armies:" + countryTemp.getArmy());
 		}
 	}
 
@@ -179,33 +202,37 @@ public class Map {
 	public void setCountries(ArrayList<Country> countryList) {
 		this.CountriesList = countryList;
 	}
-	
+
 	public void setPlayers(Player[] players) {
 		this.Players = players;
 	}
 
-	public int showCountryID(int counter) {
-		return CountriesList.get(counter).getCountryID();
+	public int showCountryID(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getCountryID();
 	}
 
-	public String showCountryName(int counter) {
-		return CountriesList.get(counter).getCountryName();
+	public String showCountryName(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getCountryName();
 	}
 
-	public int showArmy(int counter) {
-		return CountriesList.get(counter).getArmy();
+	public int showArmy(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getArmy();
 	}
 
-	public int showContinentID(int counter) {
-		return CountriesList.get(counter).getContinentID();
+	public int showContinentID(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getContinentID();
 	}
 
-	public int[] showAdjacentCountriesID(int counter) {
-		return CountriesList.get(counter).getAdjacentCountriesID();
+	public int[] showAdjacentCountriesID(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getAdjacentCountriesID();
 	}
 
-	public String showPlayerName(int counter) {
-		return CountriesList.get(counter).getPlayerName();
+	public int showPlayerID(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getPlayerID();
+	}
+	
+	public String showPlayerName(ArrayList<Country> listOfCountries, int counter) {
+		return listOfCountries.get(counter).getPlayerName();
 	}
 
 	public void setPlayer(int countryID, int playerID, String playerName) {
@@ -222,5 +249,33 @@ public class Map {
 
 	public Player[] getPlayers() {
 		return (this.Players);
+	}
+	
+	public ArrayList<Country> getPlayerCorrespondingCountries(int[] countriesID) {
+		ArrayList<Country> playerCountries = new ArrayList<Country>();
+		
+		for(int i = 0; i < countriesID.length; i++)
+			for(int j = 0; j < CountriesList.size(); j++)
+				if(showCountryID(CountriesList, j) == countriesID[i])
+					playerCountries.add(CountriesList.get(j));
+		
+		return playerCountries;
+	}
+	
+	public ArrayList<Country> getSpecificCountryAdjacentsForAttack(int[] playerCountries, int specificCountryID) {
+		
+		ArrayList<Country> specificCountryAdjacents = new ArrayList<Country>();
+		
+		for(int i = 0; i < CountriesList.size(); i++) 
+			for(int j = 0; j < showAdjacentCountriesID(CountriesList, i).length; j++) 
+				if(showAdjacentCountriesID(CountriesList, i)[j] == specificCountryID)
+					specificCountryAdjacents.add(CountriesList.get(i));
+		
+		for(int i = 0; i < specificCountryAdjacents.size(); i++)
+			for(int j = 0; j < playerCountries.length; j++)
+				if(showCountryID(specificCountryAdjacents, i) == playerCountries[j])
+					specificCountryAdjacents.remove(i);
+		
+		return specificCountryAdjacents;
 	}
 }
