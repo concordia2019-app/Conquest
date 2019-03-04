@@ -64,33 +64,36 @@ public class Map {
 		System.out.println("You have selected " + country.getCountryName() + " country to attack! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n"); 
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n"); 
 		System.out.format(
-			"| Opponent's country' ID | Opponent's country' Name | No. of armies inside opponent's country | Opponent's player' ID |%n"); 
+				"| Opponent's country' ID | Opponent's country' Name | No. of armies inside opponent's country | Opponent's player' ID |%n"); 
 		System.out.format(
-			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
 		
-		ArrayList<Country> specificCountryAdjacents = getSpecificCountryAdjacentsForAttack(player.getCountryID(), country.getCountryID());
+		ArrayList<Country> specificCountryAdjacentsForAttack = getSpecificCountryAdjacentsForAttack(player.getCountryID(), country.getCountryID());
 		
-		for(int i = 0; i < specificCountryAdjacents.size(); i++) 
-			System.out.format(table, showCountryID(specificCountryAdjacents, i), showCountryName(specificCountryAdjacents, i), 
-					showArmy(specificCountryAdjacents, i), showPlayerID(specificCountryAdjacents, i));
+		for(int i = 0; i < specificCountryAdjacentsForAttack.size(); i++) 
+			System.out.format(table, showCountryID(specificCountryAdjacentsForAttack, i), showCountryName(specificCountryAdjacentsForAttack, i), 
+					showArmy(specificCountryAdjacentsForAttack, i), showPlayerID(specificCountryAdjacentsForAttack, i));
 		
+		System.out.format(
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
 	}
 
-	public void MoveMap(Editor editor, Player player) {
+	public void MoveMap(Player player, Country country) {
 
-		String table = "|%-14d|%-39d|%-33d|%-42d|%n";
+		String table = "|%-39d|%-33d|%-42d|%n";
 
-		System.out.println(
-				"This is player no. " + player.getPlayerID() + " - " + player.getPlayerName() + " turn to move!");
+		System.out.println("You have selected " + country.getCountryName() + " country to move! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-				"+--------------+---------------------------------------+---------------------------------+------------------------------------------+%n");
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
 		System.out.format(
-				"| Country's ID | No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside adjacence's country |%n");
+				"| No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside adjacence's country |%n");
 		System.out.format(
-				"+--------------+---------------------------------------+---------------------------------+------------------------------------------+%n");
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
+		
+		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(), country.getCountryID());
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
@@ -264,18 +267,35 @@ public class Map {
 	
 	public ArrayList<Country> getSpecificCountryAdjacentsForAttack(int[] playerCountries, int specificCountryID) {
 		
-		ArrayList<Country> specificCountryAdjacents = new ArrayList<Country>();
+		ArrayList<Country> specificCountryAdjacentsForAttack = new ArrayList<Country>();
 		
 		for(int i = 0; i < CountriesList.size(); i++) 
 			for(int j = 0; j < showAdjacentCountriesID(CountriesList, i).length; j++) 
 				if(showAdjacentCountriesID(CountriesList, i)[j] == specificCountryID)
-					specificCountryAdjacents.add(CountriesList.get(i));
+					specificCountryAdjacentsForAttack.add(CountriesList.get(i));
 		
-		for(int i = 0; i < specificCountryAdjacents.size(); i++)
+		for(int i = 0; i < specificCountryAdjacentsForAttack.size(); i++)
 			for(int j = 0; j < playerCountries.length; j++)
-				if(showCountryID(specificCountryAdjacents, i) == playerCountries[j])
-					specificCountryAdjacents.remove(i);
+				if(showCountryID(specificCountryAdjacentsForAttack, i) == playerCountries[j])
+					specificCountryAdjacentsForAttack.remove(i);
 		
-		return specificCountryAdjacents;
+		return specificCountryAdjacentsForAttack;
+	}
+	
+	public ArrayList<Country> getSpecificCountryAdjacentsForMove(int[] playerCountries, int specificCountryID) {
+		
+		ArrayList<Country> specificCountryAdjacentsForMove = new ArrayList<Country>();
+		
+		for(int i = 0; i < CountriesList.size(); i++) 
+			for(int j = 0; j < showAdjacentCountriesID(CountriesList, i).length; j++) 
+				if(showAdjacentCountriesID(CountriesList, i)[j] == specificCountryID)
+					specificCountryAdjacentsForMove.add(CountriesList.get(i));
+		
+		for(int i = 0; i < specificCountryAdjacentsForMove.size(); i++)
+			for(int j = 0; j < playerCountries.length; j++)
+				if(showCountryID(specificCountryAdjacentsForMove, i) != playerCountries[j])
+					specificCountryAdjacentsForMove.remove(i);
+		
+		return specificCountryAdjacentsForMove;
 	}
 }
