@@ -21,21 +21,15 @@ public class Player {
 	}
 
 	public int getPlayerID() {
-
 		return playerID;
-
 	}
 
 	public String getPlayerName() {
-
 		return playerName;
-
 	}
 
 	public int[] getCountryID() {
-
 		return countryID;
-
 	}
 
 	public void setCountryId(int[] countriesIds) {

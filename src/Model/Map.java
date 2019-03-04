@@ -94,6 +94,13 @@ public class Map {
 				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
 		
 		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(), country.getCountryID());
+	
+		for(int i = 0; i < specificCountryAdjacentsForMove.size(); i++) 
+			System.out.format(table, showCountryID(specificCountryAdjacentsForMove, i), showCountryName(specificCountryAdjacentsForMove, i), 
+					showArmy(specificCountryAdjacentsForMove, i), showPlayerID(specificCountryAdjacentsForMove, i));
+		
+		System.out.format(
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
