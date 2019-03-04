@@ -176,6 +176,14 @@ public class Map {
 		CountriesList = editor.setCountries(CountriesList);
 	}
 
+	public void setCountries(ArrayList<Country> countryList) {
+		this.CountriesList = countryList;
+	}
+	
+	public void setPlayers(Player[] players) {
+		this.Players = players;
+	}
+
 	public int showCountryID(int counter) {
 		return CountriesList.get(counter).getCountryID();
 	}
@@ -211,8 +219,8 @@ public class Map {
 	public ArrayList<Country> getCountries() {
 		return CountriesList;
 	}
-	
-	public Player[] getPlayers(){
+
+	public Player[] getPlayers() {
 		return (this.Players);
 	}
 }
