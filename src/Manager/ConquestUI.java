@@ -41,6 +41,7 @@ public class ConquestUI implements IConquestUI {
 	private ArrayList<String> PlayerNames = new ArrayList<String>();
 	UIHelper uiHelper;
 	private Map map = new Map();
+	final int FirstArmiesNumberReinforcement = 3;
 
 	public ConquestUI() {
 		scanner = new Scanner(System.in);
@@ -75,6 +76,9 @@ public class ConquestUI implements IConquestUI {
 					map.assigningPlayerCountries(playerNames, PlayerNumber);
 					Countries = map.getCountries();
 					Players = map.getPlayers();
+					for (Player playerItem : Players) {
+						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
+					}
 					conquestUIAttackQuestion();
 					break;
 				case 2:
@@ -91,7 +95,6 @@ public class ConquestUI implements IConquestUI {
 					System.out.println("Entered value is not acceptable.[0..2]");
 					break;
 				}
-
 				break;
 			} else
 				System.out.println("Entered value is not acceptable.[0..2]");
@@ -138,13 +141,13 @@ public class ConquestUI implements IConquestUI {
 	public void conquestUIAttackQuestion() {
 		while (true) {
 			System.out.println(AttackQuestion);
-			String attackDecision = scanner.nextLine();
+			String attackDecision = scanner.next();
 			if (attackDecision.equalsIgnoreCase("n")) {
 				System.out.println("Attack is finieshed.");
 				// TODO go to move question
 				break;
 			} else if (attackDecision.equalsIgnoreCase("y")) {
-				System.out.println("Sttack is started.");
+				System.out.println("Attack is started.");
 				attackPlayer(Players, Countries);
 				// TODO go to attack
 				break;
@@ -207,7 +210,6 @@ public class ConquestUI implements IConquestUI {
 	@Override
 	public void showMap() {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -286,43 +288,36 @@ public class ConquestUI implements IConquestUI {
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
+					map.PlayerMap(playerItem);
 					System.out.println("Choose your country Id to attack:");
-					for (int cId : relatedCountryIds) {
-						Country currentCountryTemp = uiHelper.getCountryById(countryList, cId);
-						System.out.println(currentCountryTemp.getCountryName() + " with " + currentCountryTemp.getArmy()
-								+ " armies." + " -- Country Id :" + cId);
-					}
-					enteredPlayerCountryId = scanner.nextLine();
+					enteredPlayerCountryId = scanner.next();
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
 							&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
 						convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
 						break;
 					}
 					System.out.println(ErrorEnteredValue);
+					break;
 				}
 
 				Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
 				int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
 
 				while (true) {
+					map.AttackMap(playerItem, chosenPlayerCountry);
 					System.out.println("Choose your enemy with enter the country Id:");
-					for (int cId : adjacaniesIds) {
-						Country currentCountryTemp = uiHelper.getCountryById(countryList, cId);
-						System.out.println(currentCountryTemp.getCountryName() + " with " + currentCountryTemp.getArmy()
-								+ " armies." + " -- Country Id :" + cId);
-					}
-					enteredEnemyCountryId = scanner.nextLine();
+					enteredEnemyCountryId = scanner.next();
 					if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
 							&& uiHelper.tryParseInt(enteredEnemyCountryId)) {
 						convertedEnemyCId = Integer.parseInt(enteredEnemyCountryId);
 						break;
 					}
 					System.out.println(ErrorEnteredValue);
+					break;
 				}
 				System.out.println("You chose to attack to No." + convertedEnemyCId + " with country No."
 						+ convertedPlayerCId + "   It will be calculated.");
-				System.out.println(AttackFinishQuestion);
-				String attackDecision = scanner.nextLine();
+				String attackDecision = scanner.next();
 				while (true) {
 					if (attackDecision.equalsIgnoreCase("y")) {
 						attackIsFinished = true;
@@ -338,4 +333,61 @@ public class ConquestUI implements IConquestUI {
 			}
 		}
 	}
+
+	/**
+	 * This method give N number of armies to the players and they are able to add
+	 * them to their armies who are in each country.
+	 * 
+	 * @param armiesNumber number of armies
+	 * @player current player to separate countries and assign armies
+	 */
+	@Override
+	public void reinforcementOfPlayer(int armiesNumber, Player player) {
+		String inputArmiesNumberReinforcementStr = "";
+		int inputArmiesNumberReinforcement = -1;
+		int armiesNumberReinforcement = armiesNumber;
+		int[] playerCountriesIdList = player.getCountryID();
+		String countryIdStr = "";
+		int countryId = -1;
+
+		while (true) {
+			countryIdStr = "";
+			// Show list of player's countries
+			map.PlayerMap(player);
+			// Show list of player's countries
+
+			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
+			System.out.println("There are '" + armiesNumberReinforcement + " armies to assign to your countries.");
+			System.out.println("Choose your country that you want to add armies: ");
+
+			countryIdStr = scanner.next();
+			if (uiHelper.tryParseInt(countryIdStr)) {
+				countryId = Integer.parseInt(countryIdStr);
+				if (uiHelper.isIdExistInList(playerCountriesIdList, countryId)) {
+					System.out.println("Enter number of armies to add to selected country: ");
+					inputArmiesNumberReinforcementStr = scanner.next();
+					if (uiHelper.tryParseInt(inputArmiesNumberReinforcementStr)) {
+						inputArmiesNumberReinforcement = Integer.parseInt(inputArmiesNumberReinforcementStr);
+						if (inputArmiesNumberReinforcement > 0
+								&& inputArmiesNumberReinforcement <= armiesNumberReinforcement) {
+							uiHelper.addArmiesToCountryById(countryId, Countries, inputArmiesNumberReinforcement);
+							armiesNumberReinforcement -= inputArmiesNumberReinforcement;
+							if (armiesNumberReinforcement < 1) {
+								System.out.println(
+										"Reinforcement for playeer " + player.getPlayerName() + " is finished.");
+								map.MainMap();
+								break;
+							}
+						} else
+							System.out.println(ErrorEnteredValue);
+					} else
+						System.out.println(ErrorEnteredValue);
+				} else
+					System.out.println(ErrorEnteredValue);
+			} else
+				System.out.println(ErrorEnteredValue);
+		}
+
+	}
+
 }

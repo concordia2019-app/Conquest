@@ -147,11 +147,7 @@ public class Map {
 		}
 		// Just for test
 		System.out.print("\n\n");
-		for (Country countryTemp : CountriesList) {
-			System.out.println(
-					"**Country Id: " + countryTemp.getCountryID() + " **Country Name: " + countryTemp.getCountryName()
-					+ " **PlayerId:" + countryTemp.getPlayerID() + " **Armies:" + countryTemp.getArmy());
-		}
+		MainMap();
 	}
 
 	public void assignArmies() {
@@ -298,4 +294,62 @@ public class Map {
 		
 		return specificCountryAdjacentsForMove;
 	}
+	/**
+	 * rndRange method will generate a random number between first to last.
+	 * @param first  get first number .
+	 * @param last   get last number .
+	 * @return RndNumber is  a random number between first number and last number and display it.
+	 */
+	public static int rndRange(int first , int last) {
+		Random rnd = new Random();
+		int RndNumber = rnd.nextInt(last + 1 - first) + first;
+		return RndNumber;
+	}
+	
+	
+		/**
+		 * method Competition will do the fighting between two players and show the result step by step.
+		 * @param NumAttacker number of armies the attacker has at his disposal for the fight.
+		 * @param NumDefender number of armies the defender has at his disposal for the fight.
+		 * @return StatusFight return the result of the game that who wins.
+		 */
+		public static int Competition (int NumAttacker , int NumDefender){
+			int Dice_Attacker;
+			int Dice_Defender;
+			// if attacker won is true = 1;
+			int StatusFight = 1;
+			//continue until one the players army become ZERO.
+			while (true) {
+				Dice_Attacker = rndRange(1, 6);
+				Dice_Defender = rndRange(1, 6);
+				System.out.println("Dice of the Games: ");
+				System.out.println(Dice_Attacker);
+				System.out.println(Dice_Defender);
+				//compare dice numbers and reducing the number of armies.
+				if(Dice_Defender >= Dice_Attacker) {
+					NumAttacker--;
+				}
+				else {
+					NumDefender--;
+				}
+			System.out.println("Number of Armies: ");
+			System.out.println(NumAttacker);
+			System.out.println(NumDefender);
+			//if the armies of defender or attacker got ZERO, war finishes. 
+			if(NumDefender == 0 || NumAttacker == 0) {
+				break;
+			}
+			}
+			//RESAULT of war.
+			if(NumDefender == 0) {
+				 StatusFight = 1;
+				 System.out.println("\nAttacker WINS\n");
+			}
+			else {
+				StatusFight = 0;
+				System.out.println("\nDefender WINS\n");
+			}
+			// status of the fight.
+			return StatusFight;
+		}
 }
