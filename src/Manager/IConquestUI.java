@@ -95,5 +95,14 @@ public interface IConquestUI {
 	 * @param countryList list of countries to retrieve player's countries and adjacencies
 	 */
 	public void attackPlayer(Player[] playerList , ArrayList<Country> countryList);
+	
+	/**
+	 * This method give N number of armies to the players and they are able to add
+	 * them to their armies who are in each country.
+	 * 
+	 * @param armiesNumber number of armies
+	 * @player current player to separate countries and assign armies
+	 */
+	public void reinforcementOfPlayer(int armiesNumber,Player player);
 
 }

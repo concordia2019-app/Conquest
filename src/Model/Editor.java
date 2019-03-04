@@ -21,7 +21,7 @@ public class Editor {
 		country.add(new Country("Denmark", 2, 1, 0, new int[] { 1, 3, 4 }, 1, "Player 1"));
 		country.add(new Country("Sweden", 3, 1, 0, new int[] { 1, 2, 14 }, 1, "Player 1"));
 		country.add(new Country("Germany", 4, 2, 0, new int[] { 2, 5, 7, 8, 9, 10, 14, 16 }, 2, "Player 2"));
-		country.add(new Country("Netherlands", 5, 0, 2, new int[] { 4, 6, 7 }, 2, "Player 2"));
+		country.add(new Country("Netherlands", 5, 2, 0, new int[] { 4, 6, 7 }, 2, "Player 2"));
 		country.add(new Country("UK", 6, 2, 0, new int[] { 5, 7, 9 }, 2, "Player 2"));
 		country.add(new Country("Belgium", 7, 2, 0, new int[] { 4, 5, 6, 8, 9 }, 2, "Player 2"));
 		country.add(new Country("Luxemburg", 8, 2, 0, new int[] { 4, 7, 9 }, 2, "Player 2"));
