@@ -374,7 +374,7 @@ public class ConquestUI implements IConquestUI {
 							armiesNumberReinforcement -= inputArmiesNumberReinforcement;
 							if (armiesNumberReinforcement < 1) {
 								System.out.println(
-										"Reinforcement for playeer " + player.getPlayerName() + " is finished.");
+										"Reinforcement for player " + player.getPlayerName() + " is finished.");
 								map.MainMap();
 								break;
 							}
