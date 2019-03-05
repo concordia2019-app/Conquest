@@ -47,11 +47,12 @@ public class MapGenerator {
 			} catch (Exception e) {
 				printException(e.getMessage());
 			}
+
 		}
 	}
 
 	private void printException(String exceptionErrorMessage) {
-		if (exceptionErrorMessage==null || exceptionErrorMessage.isEmpty()) {
+		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
 			System.out.println("Check your file. There is something wrong in the content of the file.");
 			System.out.println("Check and press enter");
 			input.nextLine();
@@ -71,31 +72,37 @@ public class MapGenerator {
 	public ArrayList<Country> MapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
-		JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
-		if ((int) allCountryDetailsResponse.get("status") == 1) {
-			JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
-			Object[] jsonCountries = allCountryDetails.toArray();
-			for (int i = 0; i < allCountryDetails.size(); i++) {
-				JSONObject countryDetails = (JSONObject) jsonCountries[i];
-				String name = (String) countryDetails.get("name");
-				Integer id = Integer.parseInt(countryDetails.get("id").toString());
-				Integer continentId = Integer.parseInt(countryDetails.get("continent").toString());
-				Integer army = Integer.parseInt(countryDetails.get("numberOfArmies").toString());
-				JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountries");
-				int[] numbers = new int[adjacentCountriesId.size()];
-				// Extract numbers from JSON array.
-				int[] adjCountries = new int[numbers.length];
-				for (int j = 0; j < adjacentCountriesId.size() - 1; ++j) {
-					adjCountries[j] = (Integer.parseInt((adjacentCountriesId.get(j)).toString()));
+		try {
+			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
+			if ((int) allCountryDetailsResponse.get("status") == 1) {
+				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
+				Object[] jsonCountries = allCountryDetails.toArray();
+				for (int i = 0; i < allCountryDetails.size(); i++) {
+					JSONObject countryDetails = (JSONObject) jsonCountries[i];
+					String name = (String) countryDetails.get("name");
+					Integer id = Integer.parseInt(countryDetails.get("id").toString());
+					Integer continentId = Integer.parseInt(countryDetails.get("continent").toString());
+					Integer army = Integer.parseInt(countryDetails.get("numberOfArmies").toString());
+					JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountries");
+					int[] numbers = new int[adjacentCountriesId.size()];
+					// Extract numbers from JSON array.
+					int[] adjCountries = new int[numbers.length];
+					for (int j = 0; j < adjacentCountriesId.size() - 1; ++j) {
+						adjCountries[j] = (Integer.parseInt((adjacentCountriesId.get(j)).toString()));
+					}
+					Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
+					importedCountries.add(c);
 				}
-				Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
-				importedCountries.add(c);
+			} else {
 			}
-		} else {
-		}
-		for (Country ct : importedCountries) {
-			System.out
-					.println("armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
+			for (Country ct : importedCountries) {
+				System.out.println(
+						"armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
+			}
+		} catch (NumberFormatException e) {
+			printException(e.getMessage());
+		} catch (Exception e) {
+			printException(e.getMessage());
 		}
 		return importedCountries;
 
