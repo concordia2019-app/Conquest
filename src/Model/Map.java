@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * 
+ * This class is for showing different kinds of map for specific reasons.
+ * 
+ * @author AHasheminezhad
+ */
 public class Map {
 	final int FirstArmies = 21;
 	public Player[] Players;
@@ -13,6 +19,9 @@ public class Map {
 		setCountries();
 	}
 
+	/**
+	 * MainMap is printing every country with its details and player it belongs to in the console.
+	 */
 	public void MainMap() {
 
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
@@ -32,11 +41,15 @@ public class Map {
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 	}
-	
-	public void PlayerMap(Player player) {
-		
-		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
+	/**
+	 * PlayerMap is printing only countries the player we send owns.
+	 * 
+	 * @param player The player who we want to show his/her countries.
+	 */
+	public void PlayerMap(Player player) {
+
+		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
@@ -44,53 +57,77 @@ public class Map {
 				"| Country's ID | Country's name | No. of armies | Continent's ID |   Adjacent countries' ID   | Player's name |%n");
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
-			
+
 		ArrayList<Country> playerCountries = getPlayerCorrespondingCountries(player.getCountryID());
-		
+
 		for(int i = 0; i < playerCountries.size(); i++) 
 			System.out.format(table, showCountryID(playerCountries, i), showCountryName(playerCountries, i), showArmy(playerCountries, i), 
 					showContinentID(playerCountries, i), Arrays.toString(showAdjacentCountriesID(playerCountries, i)), 
 					showPlayerName(playerCountries, i));
-		
+
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");		
 	}
 
 
+	/**
+	 * AttackMap is printing adjacencies of the specific country that player wants to attack with 
+	 * and excludes countries that are his/her from the list.
+	 * 
+	 * @param player The player who wants to attack.
+	 * @param country The country that the player has chosen to attack with.
+	 */
 	public void AttackMap(Player player, Country country) { 
-		
+
 		String table = "|%-24d|%-26s|%-41d|%-23d|%n";
 
 		System.out.println("You have selected " + country.getCountryName() + " country to attack! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n"); 
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n"); 
 		System.out.format(
-			"| Opponent's country' ID | Opponent's country' Name | No. of armies inside opponent's country | Opponent's player' ID |%n"); 
+				"| Opponent's country' ID | Opponent's country' Name | No. of armies inside opponent's country | Opponent's player' ID |%n"); 
 		System.out.format(
-			"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
-		
-		ArrayList<Country> specificCountryAdjacents = getSpecificCountryAdjacentsForAttack(player.getCountryID(), country.getCountryID());
-		
-		for(int i = 0; i < specificCountryAdjacents.size(); i++) 
-			System.out.format(table, showCountryID(specificCountryAdjacents, i), showCountryName(specificCountryAdjacents, i), 
-					showArmy(specificCountryAdjacents, i), showPlayerID(specificCountryAdjacents, i));
-		
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
+
+		ArrayList<Country> specificCountryAdjacentsForAttack = getSpecificCountryAdjacentsForAttack(player.getCountryID(), country.getCountryID());
+
+		for(int i = 0; i < specificCountryAdjacentsForAttack.size(); i++) 
+			System.out.format(table, showCountryID(specificCountryAdjacentsForAttack, i), showCountryName(specificCountryAdjacentsForAttack, i), 
+					showArmy(specificCountryAdjacentsForAttack, i), showPlayerID(specificCountryAdjacentsForAttack, i));
+
+		System.out.format(
+				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
 	}
 
-	public void MoveMap(Editor editor, Player player) {
+	/**
+	 * MoveMap is printing adjacencies of the specific country that player wants to move with
+	 * and excludes countries that are not his/her from the list.
+	 * 
+	 * @param player The player who wants to move.
+	 * @param country The country that the player has chosen to move with.
+	 */
+	public void MoveMap(Player player, Country country) {
 
-		String table = "|%-14d|%-39d|%-33d|%-42d|%n";
+		String table = "|%-39d|%-33d|%-42d|%n";
 
-		System.out.println(
-				"This is player no. " + player.getPlayerID() + " - " + player.getPlayerName() + " turn to move!");
+		System.out.println("You have selected " + country.getCountryName() + " country to move! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-				"+--------------+---------------------------------------+---------------------------------+------------------------------------------+%n");
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
 		System.out.format(
-				"| Country's ID | No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside adjacence's country |%n");
+				"| No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside adjacence's country |%n");
 		System.out.format(
-				"+--------------+---------------------------------------+---------------------------------+------------------------------------------+%n");
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
+
+		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(), country.getCountryID());
+
+		for(int i = 0; i < specificCountryAdjacentsForMove.size(); i++) 
+			System.out.format(table, showCountryID(specificCountryAdjacentsForMove, i), showCountryName(specificCountryAdjacentsForMove, i), 
+					showArmy(specificCountryAdjacentsForMove, i), showPlayerID(specificCountryAdjacentsForMove, i));
+
+		System.out.format(
+				"+---------------------------------------+---------------------------------+------------------------------------------+%n");
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
@@ -190,88 +227,247 @@ public class Map {
 		}
 	}
 
+	/**
+	 * Sends an ArrayList to Editor to fill the CountriesList with values.
+	 */
 	public void setCountries() {
 		Editor editor = new Editor();
 		CountriesList = editor.setCountries(CountriesList);
 	}
 
+	/**
+	 * This is a setter for value of all of the countries inside CountriesList.
+	 * 
+	 * @param countryList ArrayList of all of the countries inside the map.
+	 */
 	public void setCountries(ArrayList<Country> countryList) {
 		this.CountriesList = countryList;
 	}
 
+	/**
+	 * This is a setter for value of all the players inside the map.
+	 * 
+	 * @param players Array of all the players.
+	 */
 	public void setPlayers(Player[] players) {
 		this.Players = players;
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose country ID from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the country ID.
+	 */
 	public int showCountryID(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getCountryID();
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose country Name from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the country Name.
+	 */
 	public String showCountryName(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getCountryName();
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose Army from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the Army.
+	 */
 	public int showArmy(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getArmy();
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose continent ID from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the continent ID.
+	 */
 	public int showContinentID(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getContinentID();
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose adjacent countries ID from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the adjacent countries ID.
+	 */
 	public int[] showAdjacentCountriesID(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getAdjacentCountriesID();
 	}
 
+	/**
+	 * @param listOfCountries List of countries which we want choose player ID from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the player ID.
+	 */
 	public int showPlayerID(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getPlayerID();
 	}
-	
+
+	/**
+	 * @param listOfCountries List of countries which we want choose player name from.
+	 * @param counter which specific country from the ArrayList.
+	 * @return It will return the player name.
+	 */
 	public String showPlayerName(ArrayList<Country> listOfCountries, int counter) {
 		return listOfCountries.get(counter).getPlayerName();
 	}
 
+	/**
+	 * This method will set a player to a country.
+	 * 
+	 * @param countryID A country ID that player has won during attack.
+	 * @param playerID corresponding player ID.
+	 * @param playerName corresponding player name.
+	 */
 	public void setPlayer(int countryID, int playerID, String playerName) {
 		CountriesList.get(countryID).setPlayer(playerID, playerName);
 	}
 
+	/**
+	 * This method will set an army to a country.
+	 * 
+	 * @param countryID A country ID that player has won during attack.
+	 * @param army corresponding army value that is remaining after the attack.
+	 */
 	public void setArmy(int countryID, int army) {
 		CountriesList.get(countryID).setArmy(army);
 	}
 
+	/**
+	 * @return An ArrayList containing all of the countries inside map.
+	 */
 	public ArrayList<Country> getCountries() {
 		return CountriesList;
 	}
 
+	/**
+	 * This method is a getter for all player objects.
+	 * 
+	 * @return it will return an array of all players.
+	 */
 	public Player[] getPlayers() {
 		return (this.Players);
 	}
-	
+
+	/**
+	 * @param countriesID Array of countries a specific player owns.
+	 * @return ArrayList of corresponding countries objects 
+	 */
 	public ArrayList<Country> getPlayerCorrespondingCountries(int[] countriesID) {
 		ArrayList<Country> playerCountries = new ArrayList<Country>();
-		
+
 		for(int i = 0; i < countriesID.length; i++)
 			for(int j = 0; j < CountriesList.size(); j++)
 				if(showCountryID(CountriesList, j) == countriesID[i])
 					playerCountries.add(CountriesList.get(j));
-		
+
 		return playerCountries;
 	}
-	
+
+	/**
+	 * @param playerCountries Array of countries that a specific player owns.
+	 * @param specificCountryID A specific country ID that player has chosen to attack with.
+	 * @return ArrayList of all of the ajdacencies that the player is able to attack.
+	 */
 	public ArrayList<Country> getSpecificCountryAdjacentsForAttack(int[] playerCountries, int specificCountryID) {
-		
-		ArrayList<Country> specificCountryAdjacents = new ArrayList<Country>();
-		
+
+		ArrayList<Country> specificCountryAdjacentsForAttack = new ArrayList<Country>();
+
 		for(int i = 0; i < CountriesList.size(); i++) 
 			for(int j = 0; j < showAdjacentCountriesID(CountriesList, i).length; j++) 
 				if(showAdjacentCountriesID(CountriesList, i)[j] == specificCountryID)
-					specificCountryAdjacents.add(CountriesList.get(i));
-		
-		for(int i = 0; i < specificCountryAdjacents.size(); i++)
+					specificCountryAdjacentsForAttack.add(CountriesList.get(i));
+
+		for(int i = 0; i < specificCountryAdjacentsForAttack.size(); i++)
 			for(int j = 0; j < playerCountries.length; j++)
-				if(showCountryID(specificCountryAdjacents, i) == playerCountries[j])
-					specificCountryAdjacents.remove(i);
-		
-		return specificCountryAdjacents;
+				if(showCountryID(specificCountryAdjacentsForAttack, i) == playerCountries[j])
+					specificCountryAdjacentsForAttack.remove(i);
+
+		return specificCountryAdjacentsForAttack;
+	}
+
+	/**
+	 * @param playerCountries Array of countries that a specific player owns.
+	 * @param specificCountryID A specific country ID that player has chosen to fortify.
+	 * @return ArrayList of all of the ajdacencies that the player is able to fortify.
+	 */
+	public ArrayList<Country> getSpecificCountryAdjacentsForMove(int[] playerCountries, int specificCountryID) {
+
+		ArrayList<Country> specificCountryAdjacentsForMove = new ArrayList<Country>();
+
+		for(int i = 0; i < CountriesList.size(); i++) 
+			for(int j = 0; j < showAdjacentCountriesID(CountriesList, i).length; j++) 
+				if(showAdjacentCountriesID(CountriesList, i)[j] == specificCountryID)
+					specificCountryAdjacentsForMove.add(CountriesList.get(i));
+
+		for(int i = 0; i < specificCountryAdjacentsForMove.size(); i++)
+			for(int j = 0; j < playerCountries.length; j++)
+				if(showCountryID(specificCountryAdjacentsForMove, i) != playerCountries[j])
+					specificCountryAdjacentsForMove.remove(i);
+
+		return specificCountryAdjacentsForMove;
+	}
+
+	/**
+	 * rndRange method will generate a random number between first to last.
+	 * @param first  get first number .
+	 * @param last   get last number .
+	 * @return RndNumber is  a random number between first number and last number and display it.
+	 */
+	public static int rndRange(int first , int last) {
+		Random rnd = new Random();
+		int RndNumber = rnd.nextInt(last + 1 - first) + first;
+		return RndNumber;
+	}
+
+	/**
+	 * Competition method will do the fighting between two players and show the result step by step.
+	 * 
+	 * @param NumAttacker number of armies the attacker has at his disposal for the fight.
+	 * @param NumDefender number of armies the defender has at his disposal for the fight.
+	 * @return StatusFight return the result of the game that who wins.
+	 */
+	public static int Competition (int NumAttacker , int NumDefender){
+		int Dice_Attacker;
+		int Dice_Defender;
+		// if attacker won is true = 1;
+		int StatusFight = 1;
+		//continue until one the players army become ZERO.
+		while (true) {
+			Dice_Attacker = rndRange(1, 6);
+			Dice_Defender = rndRange(1, 6);
+			System.out.println("Dice of the Games: ");
+			System.out.println(Dice_Attacker);
+			System.out.println(Dice_Defender);
+			//compare dice numbers and reducing the number of armies.
+			if(Dice_Defender >= Dice_Attacker) {
+				NumAttacker--;
+			}
+			else {
+				NumDefender--;
+			}
+			System.out.println("Number of Armies: ");
+			System.out.println(NumAttacker);
+			System.out.println(NumDefender);
+			//if the armies of defender or attacker got ZERO, war finishes. 
+			if(NumDefender == 0 || NumAttacker == 0) {
+				break;
+			}
+		}
+		//RESAULT of war.
+		if(NumDefender == 0) {
+			StatusFight = 1;
+			System.out.println("\nAttacker WINS\n");
+		}
+		else {
+			StatusFight = 0;
+			System.out.println("\nDefender WINS\n");
+		}
+		// status of the fight.
+		return StatusFight;
 	}
 }
