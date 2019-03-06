@@ -47,7 +47,7 @@ public class Map {
 	 * 
 	 * @param player The player who we want to show his/her countries.
 	 */
-	public void PlayerMap(Player player) {
+	public void playerMap(Player player) {
 
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
@@ -77,7 +77,7 @@ public class Map {
 	 * @param player The player who wants to attack.
 	 * @param country The country that the player has chosen to attack with.
 	 */
-	public void AttackMap(Player player, Country country) { 
+	public void attackMap(Player player, Country country) { 
 
 		String table = "|%-24d|%-26s|%-41d|%-23d|%n";
 
@@ -107,7 +107,7 @@ public class Map {
 	 * @param player The player who wants to move.
 	 * @param country The country that the player has chosen to move with.
 	 */
-	public void MoveMap(Player player, Country country) {
+	public void moveMap(Player player, Country country) {
 
 		String table = "|%-39d|%-33d|%-42d|%n";
 
@@ -431,7 +431,7 @@ public class Map {
 	 * @param NumDefender number of armies the defender has at his disposal for the fight.
 	 * @return StatusFight return the result of the game that who wins.
 	 */
-	public static int Competition (int NumAttacker , int NumDefender){
+	public static int competition (int NumAttacker , int NumDefender){
 		int Dice_Attacker;
 		int Dice_Defender;
 		// if attacker won is true = 1;

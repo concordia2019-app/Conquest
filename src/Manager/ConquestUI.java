@@ -322,7 +322,7 @@ public class ConquestUI implements IConquestUI {
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
-					map.PlayerMap(playerItem);
+					map.playerMap(playerItem);
 					System.out.println("Choose your country Id to attack:");
 					enteredPlayerCountryId = scanner.next();
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -338,7 +338,7 @@ public class ConquestUI implements IConquestUI {
 				int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
 
 				while (true) {
-					map.AttackMap(playerItem, chosenPlayerCountry);
+					map.attackMap(playerItem, chosenPlayerCountry);
 					System.out.println("Choose your enemy with enter the country Id:");
 					enteredEnemyCountryId = scanner.next();
 					if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
@@ -387,7 +387,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
-			map.PlayerMap(player);
+			map.playerMap(player);
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
