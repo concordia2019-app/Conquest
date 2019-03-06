@@ -225,13 +225,21 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.print(InputNumberOfPlayers);
 			int num = scanner.nextInt();
-			if (num < 1 || num >= 5) {
+			if (checkPlayerNumber(num)) {
 				System.out.println(ErrorInputNumberOfPlayers);
 			} else
 				return num;
 		}
 	}
-
+private boolean checkPlayerNumber(int number)
+{
+    		if (number < 1 || number >= 5)
+                {
+                    return true;
+                }    
+                else
+                    return false;
+}
 	/**
 	 * This method check the count of armies which player want to leave in moving
 	 * 
