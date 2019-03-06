@@ -21,6 +21,7 @@ import Model.*;
  * @author F.S
  *
  */
+
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
