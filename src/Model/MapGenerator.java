@@ -26,7 +26,8 @@ public class MapGenerator {
 	 * @param name country name.
 	 * @return (JSONObject) response
 	 */
-	public JSONObject getObjectbyName(String name, String filePath) {
+	public JSONObject getObjectbyName(String name) {
+		String filePath = System.getProperty("user.dir")+"\\bin\\ResourceProject\\CountrySample.json";
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
@@ -56,8 +57,8 @@ public class MapGenerator {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
 			Integer eneteredVal = -1;
 			System.out.println("Check and press enter or press 0 to exit.");
-			System.out.println("Put your file in "+System.getProperty("user.dir")+"\bin");
-			eneteredVal =Integer.parseInt(input.next());
+			System.out.println("Put your file in " + System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+			eneteredVal = Integer.parseInt(input.next());
 			if (eneteredVal == 0) {
 				System.exit(0);
 			}
@@ -65,8 +66,8 @@ public class MapGenerator {
 			Integer eneteredVal = -1;
 			System.out.print(exceptionErrorMessage);
 			System.out.println("Check and press enter or press 0 to exit.");
-			System.out.println("Put your file in "+System.getProperty("user.dir")+"\bin");
-			eneteredVal =Integer.parseInt(input.next());
+			System.out.println("Put your file in " + System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+			eneteredVal = Integer.parseInt(input.next());
 			if (eneteredVal == 0) {
 				System.exit(0);
 			}
@@ -79,11 +80,11 @@ public class MapGenerator {
 	 * @param filePath
 	 * @return
 	 */
-	public ArrayList<Country> MapReader(String filePath) {
+	public ArrayList<Country> mapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
-			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
+			JSONObject allCountryDetailsResponse = getObjectbyName("Countries");
 			if ((int) allCountryDetailsResponse.get("status") == 1) {
 				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
 				Object[] jsonCountries = allCountryDetails.toArray();
@@ -105,10 +106,6 @@ public class MapGenerator {
 				}
 			} else {
 			}
-			/*for (Country ct : importedCountries) {
-				System.out.println(
-						"armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
-			}*/
 		} catch (NumberFormatException e) {
 			printException(e.getMessage());
 		} catch (Exception e) {

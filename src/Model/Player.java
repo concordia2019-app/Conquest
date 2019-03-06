@@ -64,7 +64,7 @@ public class Player {
 	 * @return resultOfAttack Result of the process.
 	 */
 
-	public boolean Attack(int numberOfArmiesOfAttacker, int numberOfArmiesOfDefender) {
+	public boolean attack(int numberOfArmiesOfAttacker, int numberOfArmiesOfDefender) {
 		int diceValueAttacker;
 		int diceValueDefender;
 		boolean resultOfAttack;
@@ -92,7 +92,7 @@ public class Player {
 		return resultOfAttack;
 	}
 
-	public void ResultOfAttack(boolean resultOfAttack) {
+	public void resultOfAttack(boolean resultOfAttack) {
 
 		if (resultOfAttack == true)
 			System.out.println("Attacker Won! The country is now yours :)");
@@ -101,7 +101,7 @@ public class Player {
 
 	}
 
-	public void Move(int firstCountryID, int secondCountryID) {
+	public void move(int firstCountryID, int secondCountryID) {
 
 	}
 }

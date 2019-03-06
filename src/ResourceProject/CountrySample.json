@@ -7,9 +7,9 @@
 "playerID":1,
 "playerName":"Player 1"
 },
-{"name":"Denmark",
+{"name":"Denmark1",
 "id":2,
-"continent":1,
+"continent":2,
 "numberOfArmies":0,
 "adjacentCountries":[1, 3, 4],
 "playerID":1,

@@ -112,14 +112,13 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
-	
 	private void getFilePathForLoadingMap() {
-		System.out.print("Enter the path file of Map :");
-		String filePath= scanner.next();
-		ArrayList<Country> loadingListCountries =  mapGenerator.MapReader(filePath);
+		System.out.println("Your file should be in this path : "+System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		String filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
+		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);
 		map.setCountries(loadingListCountries);
 	}
-	
+
 	/**
 	 * <p>
 	 * This method give the path of note file to to load them in the map, then read
@@ -160,11 +159,11 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(AttackQuestion);
 			String attackDecision = scanner.next();
-			if (attackDecision.equalsIgnoreCase("n") || attackDecision=="N") {
+			if (attackDecision.equalsIgnoreCase("n") || attackDecision == "N") {
 				System.out.println("Attack is finieshed.");
 				// TODO go to move question
 				break;
-			} else if (attackDecision.equalsIgnoreCase("y") || attackDecision=="Y") {
+			} else if (attackDecision.equalsIgnoreCase("y") || attackDecision == "Y") {
 				System.out.println("Attack is started.");
 				attackPlayer(Players, Countries);
 				// TODO go to attack
@@ -184,10 +183,10 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(MoveQuestion);
 			String attackDecision = scanner.nextLine();
-			if (attackDecision.toLowerCase() == "n" || attackDecision=="N") {
+			if (attackDecision.toLowerCase() == "n" || attackDecision == "N") {
 				// TODO go to calculate Map
 				break;
-			} else if (attackDecision.toLowerCase() == "y" || attackDecision=="Y") {
+			} else if (attackDecision.toLowerCase() == "y" || attackDecision == "Y") {
 				// TODO go to move
 				break;
 			} else {
@@ -249,15 +248,14 @@ public class ConquestUI implements IConquestUI {
 				return num;
 		}
 	}
-	public boolean checkPlayerNumber(int number)
-	{
-    		if (number < 1 || number >= 5)
-                {
-                    return true;
-                }    
-                else
-                    return false;
+
+	public boolean checkPlayerNumber(int number) {
+		if (number < 1 || number >= 5) {
+			return true;
+		} else
+			return false;
 	}
+
 	/**
 	 * This method check the count of armies which player want to leave in moving
 	 * 
@@ -294,10 +292,10 @@ public class ConquestUI implements IConquestUI {
 			while (true) {
 				System.out.format("Enter name of player %d: ", i + 1);
 				playerName = scanner.nextLine();
-				if(playerName.isEmpty() || playerName.length()>16) {
+				if (playerName.isEmpty() || playerName.length() > 16) {
 					System.out.println(ErrorEnteredValue);
-				}
-				else break;
+				} else
+					break;
 			}
 			PlayerNames.add(playerName);
 		}
@@ -354,10 +352,10 @@ public class ConquestUI implements IConquestUI {
 						+ convertedPlayerCId + "   It will be calculated.");
 				String attackDecision = scanner.next();
 				while (true) {
-					if (attackDecision.equalsIgnoreCase("y") || attackDecision=="Y") {
+					if (attackDecision.equalsIgnoreCase("y") || attackDecision == "Y") {
 						attackIsFinished = true;
 						break;
-					} else if (attackDecision.equalsIgnoreCase("n") || attackDecision=="N") {
+					} else if (attackDecision.equalsIgnoreCase("n") || attackDecision == "N") {
 						System.out.println("   Attack is finished for this player.   ");
 						System.out.println("=========================================");
 						attackIsFinished = false;

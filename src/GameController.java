@@ -29,7 +29,7 @@ public class GameController {
              
     }
     
-    public void SetAttack()
+    public void setAttack()
     {
         System.out.println("hi");
     }
