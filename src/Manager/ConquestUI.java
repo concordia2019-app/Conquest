@@ -231,15 +231,15 @@ public class ConquestUI implements IConquestUI {
 				return num;
 		}
 	}
-private boolean checkPlayerNumber(int number)
-{
+	public boolean checkPlayerNumber(int number)
+	{
     		if (number < 1 || number >= 5)
                 {
                     return true;
                 }    
                 else
                     return false;
-}
+	}
 	/**
 	 * This method check the count of armies which player want to leave in moving
 	 * 
