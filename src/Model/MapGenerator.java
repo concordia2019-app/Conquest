@@ -62,6 +62,7 @@ public class MapGenerator {
 					+ "\\bin\\ResourceProject\\CountrySample.json");
 			eneteredVal = Integer.parseInt(input.next());
 			if (eneteredVal == 0) {
+				returnEmptyCountryList();
 				System.exit(0);
 			}
 		} else {
@@ -77,6 +78,11 @@ public class MapGenerator {
 		}
 	}
 
+	private ArrayList<Country> returnEmptyCountryList() {
+		ArrayList<Country> emptyCountryList = new ArrayList<Country>();
+		return emptyCountryList;
+	}
+
 	/**
 	 * This method read the map from the uploaded file
 	 * 
@@ -87,7 +93,7 @@ public class MapGenerator {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
-			JSONObject allCountryDetailsResponse = getObjectbyName("Countries",filePath);
+			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
 			if ((int) allCountryDetailsResponse.get("status") == 1) {
 				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
 				Object[] jsonCountries = allCountryDetails.toArray();
