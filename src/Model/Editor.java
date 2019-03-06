@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Date: Feb 15-2019
