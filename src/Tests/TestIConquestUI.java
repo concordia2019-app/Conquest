@@ -17,7 +17,7 @@ public class TestIConquestUI {
 		assertEquals(new int[] {2, 3, 4, 5} , playerNumber);
 		
 	}
-@Test
+	@Test
 	public void testGetNumberOfPlayer() {
 		ConquestUI conquestUI = new ConquestUI();
 		
