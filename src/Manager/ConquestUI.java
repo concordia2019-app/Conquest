@@ -87,8 +87,8 @@ public class ConquestUI implements IConquestUI {
 					getFilePathForLoadingMap();
 					System.out.println("**   Game is started   **");
 					PlayerNumber = getNumberOfPlayer();
-					ArrayList<String> playerNames = getPlayernames(PlayerNumber);
-					map.assigningPlayerCountries(playerNames, PlayerNumber);
+					ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
+					map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
 					Countries = map.getCountries();
 					Players = map.getPlayers();
 					for (Player playerItem : Players) {
