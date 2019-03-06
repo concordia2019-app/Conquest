@@ -11,6 +11,9 @@ import Model.Map;
 
 public class TestMap {
 
+	/**
+	 * This test is to check whether the player country ids are corresponding to the actual country.
+	 */
 	@Test
 	public void testGetPlayerCorrespondingCountries() {
 		Map map = new Map();
@@ -22,6 +25,10 @@ public class TestMap {
 		assertEquals(map.CountriesList.get(0), Actual.get(0));
 	}
 	
+	/**
+	 * This test is to check whether the country id we send and the array of countries the player own 
+	 * is returning country objects that are attackable.
+	 */
 	@Test
 	public void testGetSpecificCountryAdjacentsForAttack() {
 		Map map = new Map();
