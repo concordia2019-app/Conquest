@@ -418,7 +418,7 @@ public class Map {
 	 * @param last   get last number .
 	 * @return RndNumber is  a random number between first number and last number and display it.
 	 */
-	public static int rndRange(int first , int last) {
+	public static int rndRange(int first, int last) {
 		Random rnd = new Random();
 		int RndNumber = rnd.nextInt(last + 1 - first) + first;
 		return RndNumber;
