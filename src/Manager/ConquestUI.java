@@ -42,6 +42,7 @@ public class ConquestUI implements IConquestUI {
 	UIHelper uiHelper;
 	private Map map = new Map();
 	final int FirstArmiesNumberReinforcement = 3;
+	private MapGenerator mapGenerator = new MapGenerator();
 
 	public ConquestUI() {
 		scanner = new Scanner(System.in);
@@ -83,8 +84,7 @@ public class ConquestUI implements IConquestUI {
 					break;
 				case 2:
 					System.out.println("Loading new map.");
-					System.out.println();
-					conquestUIGetNodes();
+					getFilePathForLoadingMap();
 					break;
 				case 3:
 					System.out.println("quit.");
@@ -102,6 +102,14 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
+	
+	private void getFilePathForLoadingMap() {
+		System.out.print("Enter the path file of Map :");
+		String filePath= scanner.next();
+		ArrayList<Country> loadingListCountries =  mapGenerator.MapReader(filePath);
+		map.setCountries(loadingListCountries);
+	}
+	
 	/**
 	 * <p>
 	 * This method give the path of note file to to load them in the map, then read
@@ -142,11 +150,11 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(AttackQuestion);
 			String attackDecision = scanner.next();
-			if (attackDecision.equalsIgnoreCase("n")) {
+			if (attackDecision.equalsIgnoreCase("n") || attackDecision=="N") {
 				System.out.println("Attack is finieshed.");
 				// TODO go to move question
 				break;
-			} else if (attackDecision.equalsIgnoreCase("y")) {
+			} else if (attackDecision.equalsIgnoreCase("y") || attackDecision=="Y") {
 				System.out.println("Attack is started.");
 				attackPlayer(Players, Countries);
 				// TODO go to attack
@@ -166,10 +174,10 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(MoveQuestion);
 			String attackDecision = scanner.nextLine();
-			if (attackDecision.toLowerCase() == "n") {
+			if (attackDecision.toLowerCase() == "n" || attackDecision=="N") {
 				// TODO go to calculate Map
 				break;
-			} else if (attackDecision.toLowerCase() == "y") {
+			} else if (attackDecision.toLowerCase() == "y" || attackDecision=="Y") {
 				// TODO go to move
 				break;
 			} else {
@@ -269,10 +277,19 @@ public class ConquestUI implements IConquestUI {
 	 * @return Names that player enter names for each player.
 	 */
 	public ArrayList<String> getPlayernames(int n) {
+		scanner.nextLine();
 		System.out.format("Enter %d names of your players: \n", n);
 		for (int i = 0; i < n; i++) {
-			System.out.format("Enter name of player %d: ", i + 1);
-			PlayerNames.add(scanner.next());
+			String playerName = "";
+			while (true) {
+				System.out.format("Enter name of player %d: ", i + 1);
+				playerName = scanner.nextLine();
+				if(playerName.isEmpty() || playerName.length()>16) {
+					System.out.println(ErrorEnteredValue);
+				}
+				else break;
+			}
+			PlayerNames.add(playerName);
 		}
 		return PlayerNames;
 	}
@@ -327,10 +344,10 @@ public class ConquestUI implements IConquestUI {
 						+ convertedPlayerCId + "   It will be calculated.");
 				String attackDecision = scanner.next();
 				while (true) {
-					if (attackDecision.equalsIgnoreCase("y")) {
+					if (attackDecision.equalsIgnoreCase("y") || attackDecision=="Y") {
 						attackIsFinished = true;
 						break;
-					} else if (attackDecision.equalsIgnoreCase("n")) {
+					} else if (attackDecision.equalsIgnoreCase("n") || attackDecision=="N") {
 						System.out.println("   Attack is finished for this player.   ");
 						System.out.println("=========================================");
 						attackIsFinished = false;
@@ -365,7 +382,7 @@ public class ConquestUI implements IConquestUI {
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
-			System.out.println("There are '" + armiesNumberReinforcement + " armies to assign to your countries.");
+			System.out.println("There are -" + armiesNumberReinforcement + "- armies to assign to your countries.");
 			System.out.println("Choose your country that you want to add armies: ");
 
 			countryIdStr = scanner.next();

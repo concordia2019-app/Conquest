@@ -1,4 +1,5 @@
 package Model;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 
 public class MapGenerator {
 
@@ -54,13 +54,22 @@ public class MapGenerator {
 
 	private void printException(String exceptionErrorMessage) {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
-			System.out.println("Check your file. There is something wrong in the content of the file.");
-			System.out.println("Check and press enter");
-			input.nextLine();
+			Integer eneteredVal = -1;
+			System.out.println("Check and press enter or press 0 to exit.");
+			System.out.println("Put your file in "+System.getProperty("user.dir")+"\bin");
+			eneteredVal =Integer.parseInt(input.next());
+			if (eneteredVal == 0) {
+				System.exit(0);
+			}
 		} else {
+			Integer eneteredVal = -1;
 			System.out.print(exceptionErrorMessage);
-			System.out.println("Check and press enter");
-			input.nextLine();
+			System.out.println("Check and press enter or press 0 to exit.");
+			System.out.println("Put your file in "+System.getProperty("user.dir")+"\bin");
+			eneteredVal =Integer.parseInt(input.next());
+			if (eneteredVal == 0) {
+				System.exit(0);
+			}
 		}
 	}
 
@@ -96,10 +105,10 @@ public class MapGenerator {
 				}
 			} else {
 			}
-			for (Country ct : importedCountries) {
+			/*for (Country ct : importedCountries) {
 				System.out.println(
 						"armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
-			}
+			}*/
 		} catch (NumberFormatException e) {
 			printException(e.getMessage());
 		} catch (Exception e) {
