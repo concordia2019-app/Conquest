@@ -10,4 +10,28 @@
  */
 public class GameController {
     
+    
+    
+    private static GameController instance;
+    
+    
+    public static GameController getInstance()
+    {
+        if(instance==null)
+        {
+            instance=new GameController();
+            return instance;
+        }
+        else
+        {
+            return instance;
+        }
+             
+    }
+    
+    public void SetAttack()
+    {
+        System.out.println("hi");
+    }
+    
 }
