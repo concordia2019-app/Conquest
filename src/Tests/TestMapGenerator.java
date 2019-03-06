@@ -26,11 +26,11 @@ public class TestMapGenerator {
 	@Test
 	public void testInvalidMap() {
 		MapGenerator mapGenerator = new MapGenerator();
-		boolean status = true;
+		boolean status = false;
 		ArrayList<Country> allCountries = mapGenerator.mapReader(System.getProperty("user.dir") + "\\bin\\ResourceProject\\WrongCountrySample.json");
 		
-		if(allCountries.isEmpty())
-			status = false;
+		if(mapGenerator.returnValidMapStatus())
+			status = true;
 	
 		assertTrue(status);
 	}

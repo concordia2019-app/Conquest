@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 
 public class MapGenerator {
 
+	public boolean isMapValid = true;
 	Scanner input;
 
 	public MapGenerator() {
@@ -32,7 +33,9 @@ public class MapGenerator {
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
-		while (true) {
+		int countForReading = 3;
+		while (countForReading > 0) {
+			countForReading--;
 			try {
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(new FileReader(filePath));
@@ -42,18 +45,28 @@ public class MapGenerator {
 				response.put("status", 1);
 				return response;
 			} catch (FileNotFoundException e) {
+				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (IOException e) {
+				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (ParseException e) {
+				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (Exception e) {
+				this.isMapValid = false;
 				printException(e.getMessage());
 			}
 
 		}
+		System.out.println("You have only 3 chance to load the map. Game is over. run the game again.");
+		return null;
 	}
-
+	
+	public boolean returnValidMapStatus() {
+		return this.isMapValid;
+	}
+	
 	private void printException(String exceptionErrorMessage) {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
 			Integer eneteredVal = -1;
@@ -62,7 +75,6 @@ public class MapGenerator {
 					+ "\\bin\\ResourceProject\\CountrySample.json");
 			eneteredVal = Integer.parseInt(input.next());
 			if (eneteredVal == 0) {
-				returnEmptyCountryList();
 				System.exit(0);
 			}
 		} else {
