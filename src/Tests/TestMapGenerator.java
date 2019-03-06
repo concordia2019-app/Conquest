@@ -11,6 +11,9 @@ import Model.MapGenerator;
 
 public class TestMapGenerator {
 
+	/**
+	 * This will test if the map is loaded properly or not. #1
+	 */
 	@Test
 	public void testMapIsLoadedProperlyOrNot() {
 		MapGenerator mapGenerator = new MapGenerator();
@@ -23,6 +26,9 @@ public class TestMapGenerator {
 		assertTrue(status);
 	}
 	
+	/**
+	 * This will test for an invalid map. #3
+	 */
 	@Test
 	public void testInvalidMap() {
 		MapGenerator mapGenerator = new MapGenerator();
