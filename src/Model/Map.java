@@ -22,7 +22,7 @@ public class Map {
 	/**
 	 * MainMap is printing every country with its details and player it belongs to in the console.
 	 */
-	public void MainMap() {
+	public void showMainMap() {
 
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
@@ -180,7 +180,7 @@ public class Map {
 		}
 		// Just for test
 		System.out.print("\n\n");
-		MainMap();
+		showMainMap();
 	}
 
 	public void assignArmies() {
