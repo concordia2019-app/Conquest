@@ -38,7 +38,7 @@ public class TestMapGenerator {
 		if(mapGenerator.returnValidMapStatus())
 			status = true;
 	
-		assertTrue(status);
+		assertFalse(status);
 	}
 
 }
