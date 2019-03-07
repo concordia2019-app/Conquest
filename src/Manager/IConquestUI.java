@@ -41,8 +41,11 @@ public interface IConquestUI {
 	/**
 	 * This method just ask from player if player want to attack Y => to agree that
 	 * want to attack N => to skip the attack
+	 * @param strQuestion String to show the message
+	 * @return if player pass n , then return false, on the other hand, if pass y,
+	 *         then return true
 	 */
-	public void conquestUIAttackQuestion();
+	public boolean conquestUiYesNoQuestion(String strQuestion);
 
 	/**
 	 * This method just ask from player if player want to move Y => to agree that
@@ -91,11 +94,12 @@ public interface IConquestUI {
 	/**
 	 * This method manage the attack of players
 	 * 
-	 * @param playerList list of players to play one by one 
-	 * @param countryList list of countries to retrieve player's countries and adjacencies
+	 * @param playerList  list of players to play one by one
+	 * @param countryList list of countries to retrieve player's countries and
+	 *                    adjacencies
 	 */
-	public void attackPlayer(Player[] playerList , ArrayList<Country> countryList);
-	
+	public void attackPlayer(Player[] playerList, ArrayList<Country> countryList);
+
 	/**
 	 * This method give N number of armies to the players and they are able to add
 	 * them to their armies who are in each country.
@@ -103,6 +107,6 @@ public interface IConquestUI {
 	 * @param armiesNumber number of armies
 	 * @player current player to separate countries and assign armies
 	 */
-	public void reinforcementOfPlayer(int armiesNumber,Player player);
+	public void reinforcementOfPlayer(int armiesNumber, Player player);
 
 }

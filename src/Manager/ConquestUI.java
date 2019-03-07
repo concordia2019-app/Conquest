@@ -81,8 +81,11 @@ public class ConquestUI implements IConquestUI {
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
-					conquestUIAttackQuestion();
-					break;
+					while(true) {
+						attackPlayer(Players, Countries);
+						movePlayer(Players, Countries);
+					}
+					//break;
 				case 2:
 					System.out.println("Loading new map.");
 					getFilePathForLoadingMap();
@@ -95,8 +98,12 @@ public class ConquestUI implements IConquestUI {
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
-					conquestUIAttackQuestion();
-					break;
+
+					while(true) {
+						attackPlayer(Players, Countries);
+						movePlayer(Players, Countries);
+					}
+					//break;
 				case 3:
 					System.out.println("quit.");
 					System.exit(0);
@@ -114,7 +121,8 @@ public class ConquestUI implements IConquestUI {
 	}
 
 	private void getFilePathForLoadingMap() {
-		System.out.println("Your file should be in this path : "+System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		System.out.println("Your file should be in this path : " + System.getProperty("user.dir")
+				+ "\\bin\\ResourceProject\\CountrySample.json");
 		String filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
 		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);
 		map.setCountries(loadingListCountries);
@@ -154,21 +162,22 @@ public class ConquestUI implements IConquestUI {
 	/**
 	 * This method just ask from player if player want to attack Y => to agree that
 	 * want to attack N => to skip the attack
+	 * 
+	 * @return if player pass n , then return false, on the other hand, if pass y,
+	 *         then return true
 	 */
 	@Override
-	public void conquestUIAttackQuestion() {
+	public boolean conquestUiYesNoQuestion(String strQuestion) {
 		while (true) {
-			System.out.println(AttackQuestion);
+			System.out.println(strQuestion);
 			String attackDecision = scanner.next();
 			if (attackDecision.equalsIgnoreCase("n") || attackDecision == "N") {
 				System.out.println("Attack is finieshed.");
-				// TODO go to move question
-				break;
+				return false;
 			} else if (attackDecision.equalsIgnoreCase("y") || attackDecision == "Y") {
 				System.out.println("Attack is started.");
-				attackPlayer(Players, Countries);
-				// TODO go to attack
-				break;
+				// attackPlayer(Players, Countries);
+				return true;
 			} else {
 				System.out.println(WrongInputString);
 			}
@@ -184,11 +193,12 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.println(MoveQuestion);
 			String attackDecision = scanner.nextLine();
-			if (attackDecision.toLowerCase() == "n" || attackDecision == "N") {
-				// TODO go to calculate Map
+			if (attackDecision.equalsIgnoreCase("n") || attackDecision == "N") {
+				// no for move
+				System.out.println("Move is finished. The Game should turn.");
 				break;
-			} else if (attackDecision.toLowerCase() == "y" || attackDecision == "Y") {
-				// TODO go to move
+			} else if (attackDecision.equalsIgnoreCase("y") || attackDecision == "Y") {
+				movePlayer(Players, Countries);
 				break;
 			} else {
 				System.out.println(WrongInputString);
@@ -303,6 +313,125 @@ public class ConquestUI implements IConquestUI {
 		return PlayerNames;
 	}
 
+	public void movePlayer(Player[] playerList, ArrayList<Country> countryList) {
+		for (Player playerItem : Players) {
+			String attackInfoTitle = "Attack for player - " + playerItem.getPlayerName() + " - \r\n";
+			int attackInfoTitleLength = ("Attack for player - " + playerItem.getPlayerName() + " - \r\n").length();
+			for (int i = 0; i < attackInfoTitleLength; i++) {
+				attackInfoTitle += "=";
+			}
+			System.out.println(attackInfoTitle);
+
+			boolean attackAnswer = conquestUiYesNoQuestion(MoveQuestion);
+			if (attackAnswer) {
+				String enteredPlayerCountryId = "";
+				int convertedPlayerCId = -1;
+				String enteredCountryIdForMove = "";
+				int convertCIdForMove = -1;
+				int[] relatedCountryIds = playerItem.getCountryID();
+				boolean movementIsFinished = true;
+				System.out.println("Mmove is started for player => " + playerItem.getPlayerName());
+				while (movementIsFinished) {
+					while (true) {
+						map.playerMap(playerItem);
+						System.out.println("Choose your country Id to move:");
+						enteredPlayerCountryId = scanner.next();
+						if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
+								&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
+							convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
+							break;
+						}
+						System.out.println(ErrorEnteredValue);
+						break;
+					}
+
+					Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
+					ArrayList<Country> adjacaniesIds = map.getSpecificCountryAdjacentsForMove(playerItem.getCountryID(),
+							chosenPlayerCountry.getCountryID());
+
+					while (true) {
+						if (adjacaniesIds.size() > 0) {
+							// map.moveMap(playerItem, chosenPlayerCountry);
+							for (int cAdj = 0; cAdj < adjacaniesIds.size(); cAdj++) {
+								System.out.println("Country Name: " + adjacaniesIds.get(cAdj).getCountryName()
+										+ "Country Id: " + adjacaniesIds.get(cAdj).getCountryID() + "Number of armies: "
+										+ adjacaniesIds.get(cAdj).getArmy());
+							}
+							System.out.println("Choose your country as a target country with enter the Id:");
+							enteredCountryIdForMove = scanner.next();
+							if (enteredCountryIdForMove != "" && enteredCountryIdForMove != null
+									&& uiHelper.tryParseInt(enteredCountryIdForMove)) {
+								convertCIdForMove = Integer.parseInt(enteredCountryIdForMove);
+								break;
+							}
+							System.out.println(ErrorEnteredValue);
+							break;
+						} else {
+							System.out.println("There is no country as a target country to move.");
+							break;
+						}
+
+					}
+					// Move calculation
+					boolean isMoveSuccessful = false;
+					while (!isMoveSuccessful) {
+						System.out.println("Enter number of armies to move.");
+						int armiesForMovement = scanner.nextInt();
+						isMoveSuccessful = calculationOfMovement(convertedPlayerCId, convertCIdForMove,
+								armiesForMovement);
+						if (!isMoveSuccessful) {
+							System.out.println(ErrorEnteredValue);
+						}
+					}
+
+					// End move
+					attackAnswer = conquestUiYesNoQuestion(MoveQuestion);
+					if (!attackAnswer) {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	public boolean calculationOfMovement(int fromCountryId, int toCountryId, int armyNumbToMove) {
+		Country sourceCountry = uiHelper.getCountryById(Countries, fromCountryId);
+		int sourceCountryArmies = sourceCountry.getArmy();
+		Country targegCountry = uiHelper.getCountryById(Countries, toCountryId);
+		int targetCountryArmies = targegCountry.getArmy();
+
+		if ((sourceCountryArmies - 1) < armyNumbToMove) {
+			return false;
+		} else {
+			decreaseCountryArmies(fromCountryId, armyNumbToMove);
+			increaseCountryArmies(toCountryId, armyNumbToMove);
+			return true;
+		}
+
+	}
+
+	public void increaseCountryArmies(int Cid, int armiesNumber) {
+		for (Country country : Countries) {
+			int currentCountryId = country.getCountryID();
+			int currentCountryArmies = country.getArmy();
+			if (currentCountryId == Cid) {
+				int calculatedArmies = currentCountryArmies - armiesNumber;
+				country.setArmy(calculatedArmies);
+			}
+		}
+	}
+
+	public void decreaseCountryArmies(int Cid, int armiesNumber) {
+		for (Country country : Countries) {
+			int currentCountryId = country.getCountryID();
+			int currentCountryArmies = country.getArmy();
+			if (currentCountryId == Cid) {
+				int calculatedArmies = currentCountryArmies + armiesNumber;
+				country.setArmy(calculatedArmies);
+			}
+		}
+	}
+
 	/**
 	 * This method manage the attack of players
 	 * 
@@ -313,58 +442,62 @@ public class ConquestUI implements IConquestUI {
 	@Override
 	public void attackPlayer(Player[] playerList, ArrayList<Country> countryList) {
 		for (Player playerItem : Players) {
-			String enteredPlayerCountryId = "";
-			int convertedPlayerCId = -1;
-			String enteredEnemyCountryId = "";
-			int convertedEnemyCId = -1;
-			int[] relatedCountryIds = playerItem.getCountryID();
-			boolean attackIsFinished = true;
-			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
-			while (attackIsFinished) {
-				while (true) {
-					map.playerMap(playerItem);
-					System.out.println("Choose your country Id to attack:");
-					enteredPlayerCountryId = scanner.next();
-					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
-							&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
-						convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
-						break;
-					}
-					System.out.println(ErrorEnteredValue);
-					break;
-				}
+			String attackInfoTitle = "Attack for player - " + playerItem.getPlayerName() + " - \r\n";
+			int attackInfoTitleLength = ("Attack for player - " + playerItem.getPlayerName() + " - \r\n").length();
+			for (int i = 0; i < attackInfoTitleLength; i++) {
+				attackInfoTitle += "=";
+			}
+			System.out.println(attackInfoTitle);
 
-				Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
-				int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
-
-				while (true) {
-					map.attackMap(playerItem, chosenPlayerCountry);
-					System.out.println("Choose your enemy with enter the country Id:");
-					enteredEnemyCountryId = scanner.next();
-					if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
-							&& uiHelper.tryParseInt(enteredEnemyCountryId)) {
-						convertedEnemyCId = Integer.parseInt(enteredEnemyCountryId);
-						break;
-					}
-					System.out.println(ErrorEnteredValue);
-					break;
-				}
-				System.out.println("You chose to attack to No." + convertedEnemyCId + " with country No."
-						+ convertedPlayerCId + "   It will be calculated.");
-				String attackDecision = scanner.next();
-				while (true) {
-					if (attackDecision.equalsIgnoreCase("y") || attackDecision == "Y") {
-						attackIsFinished = true;
-						break;
-					} else if (attackDecision.equalsIgnoreCase("n") || attackDecision == "N") {
-						System.out.println("   Attack is finished for this player.   ");
-						System.out.println("=========================================");
-						attackIsFinished = false;
-						break;
-					} else
+			boolean attackAnswer = conquestUiYesNoQuestion(AttackQuestion);
+			if (attackAnswer) {
+				String enteredPlayerCountryId = "";
+				int convertedPlayerCId = -1;
+				String enteredEnemyCountryId = "";
+				int convertedEnemyCId = -1;
+				int[] relatedCountryIds = playerItem.getCountryID();
+				boolean attackIsFinished = true;
+				System.out.println("Attack is started for player => " + playerItem.getPlayerName());
+				while (attackIsFinished) {
+					while (true) {
+						map.playerMap(playerItem);
+						System.out.println("Choose your country Id to attack:");
+						enteredPlayerCountryId = scanner.next();
+						if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
+								&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
+							convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
+							break;
+						}
 						System.out.println(ErrorEnteredValue);
+						break;
+					}
+
+					Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
+					int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
+
+					while (true) {
+						map.attackMap(playerItem, chosenPlayerCountry);
+						System.out.println("Choose your enemy with enter the country Id:");
+						enteredEnemyCountryId = scanner.next();
+						if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
+								&& uiHelper.tryParseInt(enteredEnemyCountryId)) {
+							convertedEnemyCId = Integer.parseInt(enteredEnemyCountryId);
+							break;
+						}
+						System.out.println(ErrorEnteredValue);
+						break;
+					}
+
+					System.out.println("You chose to attack to No." + convertedEnemyCId + " with country No."
+							+ convertedPlayerCId + "   It will be calculated.");
+
+					attackAnswer = conquestUiYesNoQuestion(AttackQuestion);
+					if (!attackAnswer) {
+						break;
+					}
 				}
 			}
+
 		}
 	}
 
