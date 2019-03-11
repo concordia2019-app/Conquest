@@ -22,7 +22,7 @@ public class Map {
 	/**
 	 * MainMap is printing every country with its details and player it belongs to in the console.
 	 */
-	public void showMainMap() {
+	public void printMainMap() {
 
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
@@ -47,7 +47,7 @@ public class Map {
 	 * 
 	 * @param player The player who we want to show his/her countries.
 	 */
-	public void playerMap(Player player) {
+	public void printPlayerMap(Player player) {
 
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
@@ -77,7 +77,7 @@ public class Map {
 	 * @param player The player who wants to attack.
 	 * @param country The country that the player has chosen to attack with.
 	 */
-	public void attackMap(Player player, Country country) { 
+	public void printAttackMap(Player player, Country country) { 
 
 		String table = "|%-24d|%-26s|%-41d|%-23d|%n";
 
@@ -107,18 +107,18 @@ public class Map {
 	 * @param player The player who wants to move.
 	 * @param country The country that the player has chosen to move with.
 	 */
-	public void moveMap(Player player, Country country) {
+	public void printMoveMap(Player player, Country country) {
 
-		String table = "|%-39d|%-33d|%n";
+		String table = "|%-39d|%-33d|%-43d|%n";
 
 		System.out.println("You have selected " + country.getCountryName() + " country to move! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-				"+---------------------------------------+---------------------------------+%n");
+				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
 		System.out.format(
-				"| No. of armies inside player's country | Player's adjacent countries' ID |%n");
+				"| No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside the adjacent country |%n");
 		System.out.format(
-				"+---------------------------------------+---------------------------------+%n");
+				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
 
 		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(), country.getCountryID());
 
@@ -126,7 +126,7 @@ public class Map {
 			System.out.format(table, showArmy(specificCountryAdjacentsForMove, i), Arrays.toString(showAdjacentCountriesID(specificCountryAdjacentsForMove, i)));
 
 		System.out.format(
-				"+---------------------------------------+---------------------------------+%n");
+				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
@@ -180,7 +180,7 @@ public class Map {
 		}
 		// Just for test
 		System.out.print("\n\n");
-		showMainMap();
+		printMainMap();
 	}
 
 	public void assignArmies() {
