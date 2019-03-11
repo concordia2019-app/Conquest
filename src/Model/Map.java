@@ -109,24 +109,26 @@ public class Map {
 	 */
 	public void printMoveMap(Player player, Country country) {
 
-		String table = "|%-39d|%-33d|%-43d|%n";
+		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
 		System.out.println("You have selected " + country.getCountryName() + " country to move! There are " + country.getArmy() + " army inside this country.");
 
 		System.out.format(
-				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 		System.out.format(
-				"| No. of armies inside player's country | Player's adjacent countries' ID | No. of armies inside the adjacent country |%n");
+				"| Country's ID | Country's name | No. of armies | Continent's ID |   Adjacent countries' ID   | Player's name |%n");
 		System.out.format(
-				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 
 		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(), country.getCountryID());
 
 		for(int i = 0; i < specificCountryAdjacentsForMove.size(); i++) 
-			System.out.format(table, showArmy(specificCountryAdjacentsForMove, i), Arrays.toString(showAdjacentCountriesID(specificCountryAdjacentsForMove, i)));
+			System.out.format(table, showCountryID(specificCountryAdjacentsForMove, i), showCountryName(specificCountryAdjacentsForMove, i), showArmy(specificCountryAdjacentsForMove, i), 
+					showContinentID(specificCountryAdjacentsForMove, i), Arrays.toString(showAdjacentCountriesID(specificCountryAdjacentsForMove, i)), 
+					showPlayerName(specificCountryAdjacentsForMove, i));
 
 		System.out.format(
-				"+---------------------------------------+---------------------------------+-------------------------------------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 	}
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
