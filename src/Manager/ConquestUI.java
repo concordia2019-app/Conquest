@@ -333,7 +333,7 @@ public class ConquestUI implements IConquestUI {
 				System.out.println("Mmove is started for player => " + playerItem.getPlayerName());
 				while (movementIsFinished) {
 					while (true) {
-						map.playerMap(playerItem);
+						map.printPlayerMap(playerItem);
 						System.out.println("Choose your country Id to move:");
 						enteredPlayerCountryId = scanner.next();
 						if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -460,7 +460,7 @@ public class ConquestUI implements IConquestUI {
 				System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 				while (attackIsFinished) {
 					while (true) {
-						map.playerMap(playerItem);
+						map.printPlayerMap(playerItem);
 						System.out.println("Choose your country Id to attack:");
 						enteredPlayerCountryId = scanner.next();
 						if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -476,7 +476,7 @@ public class ConquestUI implements IConquestUI {
 					int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
 
 					while (true) {
-						map.attackMap(playerItem, chosenPlayerCountry);
+						map.printAttackMap(playerItem, chosenPlayerCountry);
 						System.out.println("Choose your enemy with enter the country Id:");
 						enteredEnemyCountryId = scanner.next();
 						if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
@@ -520,7 +520,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
-			map.playerMap(player);
+			map.printPlayerMap(player);
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
@@ -542,7 +542,7 @@ public class ConquestUI implements IConquestUI {
 							if (armiesNumberReinforcement < 1) {
 								System.out.println(
 										"Reinforcement for player " + player.getPlayerName() + " is finished.");
-								map.showMainMap();
+								map.printMainMap();
 								break;
 							}
 						} else
