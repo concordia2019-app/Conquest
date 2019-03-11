@@ -1,4 +1,5 @@
 package Model;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 
 /**
  * This class read and write a map from the JSON file.
+ * 
  * @author Pegah
  *
  */
@@ -58,8 +60,10 @@ public class MapGenerator {
 
 		}
 	}
+
 	/**
 	 * This method prints the error message, if any error occurs.
+	 * 
 	 * @param exceptionErrorMessage it is the error message parameter.
 	 */
 	private void printException(String exceptionErrorMessage) {
@@ -80,7 +84,7 @@ public class MapGenerator {
 	 * @param filePath this is a path of the JSON file.
 	 * @return (ArrayList<Country>) importedCountries.
 	 */
-	public ArrayList<Country> MapReader(String filePath) {
+	public ArrayList<Country> mapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
@@ -118,29 +122,31 @@ public class MapGenerator {
 		return importedCountries;
 
 	}
+
 	/**
+	 * 
 	 * This method writes the inputs to JSON file.
+	 * 
 	 * @param countries this parameter is a list of countries.
 	 * @return (String) obj.
 	 */
 	public static String writeMap(ArrayList<Country> countries) {
 		Gson gson = new Gson();
 		String obj = gson.toJson(countries);
-        File file = new File("C:\\Users\\Pegah\\eclipse-workspace\\Risk\\src\\uploads\\test.json");
-      try {
-		if (file.createNewFile())
-		  {
-		      FileWriter writer = new FileWriter(file);
-		      writer.write(obj);
-		      writer.close();
-		      System.out.println("File is created!");
-		  } else {
-			  
-		      System.out.println("File already exists.");
-		  }
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
+		File file = new File("C:\\Users\\Pegah\\eclipse-workspace\\Risk\\src\\uploads\\test.json");
+		try {
+			if (file.createNewFile()) {
+				FileWriter writer = new FileWriter(file);
+				writer.write(obj);
+				writer.close();
+				System.out.println("File is created!");
+			} else {
+
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return obj;
 	}
 
