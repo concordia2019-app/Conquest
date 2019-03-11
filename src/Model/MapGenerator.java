@@ -1,7 +1,8 @@
 package Model;
-
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,10 +11,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
 
+/**
+ * This class read and write a map from the JSON file.
+ * @author Pegah
+ *
+ */
 public class MapGenerator {
 
-	public boolean isMapValid = true;
 	Scanner input;
 
 	public MapGenerator() {
@@ -24,18 +30,14 @@ public class MapGenerator {
 	 * This method get the JSON file path and put the details of data to the
 	 * JSONArray.
 	 * 
-	 * @param name country name.
-	 * @return (JSONObject) response
+	 * @param name this parameter is a country name.
+	 * @return (JSONObject) response.
 	 */
 	public JSONObject getObjectbyName(String name, String filePath) {
-		if (filePath.isEmpty())
-			filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
-		int countForReading = 3;
-		while (countForReading > 0) {
-			countForReading--;
+		while (true) {
 			try {
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(new FileReader(filePath));
@@ -45,63 +47,40 @@ public class MapGenerator {
 				response.put("status", 1);
 				return response;
 			} catch (FileNotFoundException e) {
-				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (IOException e) {
-				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (ParseException e) {
-				this.isMapValid = false;
 				printException(e.getMessage());
 			} catch (Exception e) {
-				this.isMapValid = false;
 				printException(e.getMessage());
 			}
 
 		}
-		System.out.println("You have only 3 chance to load the map. Game is over. run the game again.");
-		return null;
 	}
-	
-	public boolean returnValidMapStatus() {
-		return this.isMapValid;
-	}
-	
+	/**
+	 * This method prints the error message, if any error occurs.
+	 * @param exceptionErrorMessage it is the error message parameter.
+	 */
 	private void printException(String exceptionErrorMessage) {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
-			Integer eneteredVal = -1;
-			System.out.println("Check and press enter or press 0 to exit.");
-			System.out.println("Put your file in " + System.getProperty("user.dir")
-					+ "\\bin\\ResourceProject\\CountrySample.json");
-			eneteredVal = Integer.parseInt(input.next());
-			if (eneteredVal == 0) {
-				System.exit(0);
-			}
+			System.out.println("Check your file. There is something wrong in the content of the file.");
+			System.out.println("Check and press enter");
+			input.nextLine();
 		} else {
-			Integer eneteredVal = -1;
 			System.out.print(exceptionErrorMessage);
-			System.out.println("Check and press enter or press 0 to exit.");
-			System.out.println("Put your file in " + System.getProperty("user.dir")
-					+ "\\bin\\ResourceProject\\CountrySample.json");
-			eneteredVal = Integer.parseInt(input.next());
-			if (eneteredVal == 0) {
-				System.exit(0);
-			}
+			System.out.println("Check and press enter");
+			input.nextLine();
 		}
-	}
-
-	private ArrayList<Country> returnEmptyCountryList() {
-		ArrayList<Country> emptyCountryList = new ArrayList<Country>();
-		return emptyCountryList;
 	}
 
 	/**
-	 * This method read the map from the uploaded file
+	 * This method read the map from the uploaded JSON file.
 	 * 
-	 * @param filePath
-	 * @return
+	 * @param filePath this is a path of the JSON file.
+	 * @return (ArrayList<Country>) importedCountries.
 	 */
-	public ArrayList<Country> mapReader(String filePath) {
+	public ArrayList<Country> MapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
@@ -127,6 +106,10 @@ public class MapGenerator {
 				}
 			} else {
 			}
+			for (Country ct : importedCountries) {
+				System.out.println(
+						"armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
+			}
 		} catch (NumberFormatException e) {
 			printException(e.getMessage());
 		} catch (Exception e) {
@@ -134,6 +117,31 @@ public class MapGenerator {
 		}
 		return importedCountries;
 
+	}
+	/**
+	 * This method writes the inputs to JSON file.
+	 * @param countries this parameter is a list of countries.
+	 * @return (String) obj.
+	 */
+	public static String writeMap(ArrayList<Country> countries) {
+		Gson gson = new Gson();
+		String obj = gson.toJson(countries);
+        File file = new File("C:\\Users\\Pegah\\eclipse-workspace\\Risk\\src\\uploads\\test.json");
+      try {
+		if (file.createNewFile())
+		  {
+		      FileWriter writer = new FileWriter(file);
+		      writer.write(obj);
+		      writer.close();
+		      System.out.println("File is created!");
+		  } else {
+			  
+		      System.out.println("File already exists.");
+		  }
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+		return obj;
 	}
 
 }
