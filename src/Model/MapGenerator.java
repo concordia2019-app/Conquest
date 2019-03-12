@@ -84,7 +84,7 @@ public class MapGenerator {
 	 * @param filePath this is a path of the JSON file.
 	 * @return (ArrayList<Country>) importedCountries.
 	 */
-	public ArrayList<Country> mapReader(String filePath) {
+	public ArrayList<Country> MapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
@@ -124,25 +124,31 @@ public class MapGenerator {
 	}
 
 	/**
-	 * 
-	 * This method writes the inputs to JSON file.
+	 * This method writes and update the inputs to JSON file.
 	 * 
 	 * @param countries this parameter is a list of countries.
 	 * @return (String) obj.
 	 */
-	public static String writeMap(ArrayList<Country> countries) {
+	public static String writeMap(ArrayList<Country> countries, String filePath) {
 		Gson gson = new Gson();
 		String obj = gson.toJson(countries);
-		File file = new File("C:\\Users\\Pegah\\eclipse-workspace\\Risk\\src\\uploads\\test.json");
+		File file = new File(filePath);
 		try {
 			if (file.createNewFile()) {
-				FileWriter writer = new FileWriter(file);
-				writer.write(obj);
-				writer.close();
-				System.out.println("File is created!");
+				int writeStatus = fileWriter(file, obj);
+				if(writeStatus == 1) {
+					System.out.println("File is created!");
+				}else {
+					System.out.println("Error while creating the file!");
+				}
 			} else {
-
-				System.out.println("File already exists.");
+				file.delete();
+				int writeStatus = fileWriter(file,obj);
+				if(writeStatus == 1) {
+					System.out.println("File is updated!");
+				}else {
+					System.out.println("Error while updating the file!");
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -150,4 +156,25 @@ public class MapGenerator {
 		return obj;
 	}
 
+	/**
+	 * This function writes the file.
+	 * @param file this is the input file object.
+	 * @param obj this is the input object to write into the file.
+	 * @return (int) status.
+	 * @throws IOException 
+	 */
+	public static int fileWriter(File file, String obj) throws IOException {
+		int status = 0;
+		try {
+			FileWriter writer = new FileWriter(file);
+			status = 1;
+			writer.write(obj);
+			writer.close();
+
+		} catch (IOException e) {
+			status = 0;
+			e.printStackTrace();
+		}
+		return status;
+	}
 }
