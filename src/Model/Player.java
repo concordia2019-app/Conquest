@@ -3,14 +3,14 @@ package Model;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
 import Helper.PlayerHelper;
 import Helper.UIHelper;
-import Model.Card.cardTypes;
 import View.ConquestUI;
 import View.MapView;
 
 /**
- * This class is for the attack phase.
+ * This class is for the attack phase.	
  * 
  * @author AHasheminezhad
  */
@@ -25,11 +25,10 @@ public class Player {
 	private ArrayList<Card> cards;
 
 	
-	public Player(int playerID, String playerName, int[] countryID, ArrayList<Card> cards) {
+	public Player(int playerID, String playerName, int[] countryID) {
 		this.playerID = playerID;
 		this.playerName = playerName;
 		this.countryID = countryID;
-		this.cards = cards;
 	}
 
 	public int getPlayerID() {
