@@ -5,6 +5,10 @@ import java.util.Random;
 
 import Model.Card;
 
+/**
+ * 
+ * @author AHasheminezhad
+ */
 public class CardController {
 	
 	
