@@ -1,4 +1,4 @@
-package Manager;
+package View;
 
 /**
  * This interface has the structure of the UI to show outputs
@@ -65,12 +65,6 @@ public interface IConquestUI {
 	 * @param playerCountries this is a list of countries
 	 */
 	public void conquestUIGetCountryIdForAttack(List<Country> playerCountries);
-
-	/**
-	 * Show the whole map in console. Content map converted to a table which can be
-	 * shown in the console
-	 */
-	public void showMap();
 
 	/**
 	 * numberOfPlayer method will ask the player to enter an integer for number of

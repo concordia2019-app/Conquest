@@ -1,4 +1,4 @@
-package Manager;
+package View;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -44,6 +44,7 @@ public class ConquestUI implements IConquestUI {
 	private Map map = new Map();
 	final int FirstArmiesNumberReinforcement = 3;
 	private MapGenerator mapGenerator = new MapGenerator();
+	private String ErrorFileRead = "Your file not found or maybe is not in correct format. please check and try again.";
 
 	public ConquestUI() {
 		scanner = new Scanner(System.in);
@@ -81,29 +82,39 @@ public class ConquestUI implements IConquestUI {
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
-					while(true) {
+					while (true) {
 						attackPlayer(Players, Countries);
 						movePlayer(Players, Countries);
 					}
-					//break;
+					// break;
 				case 2:
 					System.out.println("Loading new map.");
-					getFilePathForLoadingMap();
-					System.out.println("**   Game is started   **");
-					PlayerNumber = getNumberOfPlayer();
-					ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
-					map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
-					Countries = map.getCountries();
-					Players = map.getPlayers();
-					for (Player playerItem : Players) {
-						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
+					boolean readFileStatus = getFilePathForLoadingMap();
+					while (true) {
+						if (readFileStatus) {
+							System.out.println("**   Game is started   **");
+							PlayerNumber = getNumberOfPlayer();
+							ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
+							map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
+							Countries = map.getCountries();
+							Players = map.getPlayers();
+							for (Player playerItem : Players) {
+								reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
+							}
+
+							while (true) {
+								attackPlayer(Players, Countries);
+								movePlayer(Players, Countries);
+								//TODO check game is finished or not
+								break;
+							}
+							break;
+						} else {
+							System.out.println(ErrorFileRead);
+						}
 					}
 
-					while(true) {
-						attackPlayer(Players, Countries);
-						movePlayer(Players, Countries);
-					}
-					//break;
+					// break;
 				case 3:
 					System.out.println("quit.");
 					System.exit(0);
@@ -120,12 +131,16 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
-	private void getFilePathForLoadingMap() {
+	private boolean getFilePathForLoadingMap() {
 		System.out.println("Your file should be in this path : " + System.getProperty("user.dir")
 				+ "\\bin\\ResourceProject\\CountrySample.json");
 		String filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
-		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);
+		ArrayList<Country> loadingListCountries = mapGenerator.MapReader(filePath);
 		map.setCountries(loadingListCountries);
+		if (loadingListCountries.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -229,15 +244,6 @@ public class ConquestUI implements IConquestUI {
 		System.out.println(SelectYourCountryID);
 		String countryId = scanner.nextLine();
 		// TODO Implement Attack and call it
-	}
-
-	/**
-	 * Show the whole map in console. Content map converted to a table which can be
-	 * shown in the console
-	 */
-	@Override
-	public void showMap() {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -351,12 +357,7 @@ public class ConquestUI implements IConquestUI {
 
 					while (true) {
 						if (adjacaniesIds.size() > 0) {
-							// map.moveMap(playerItem, chosenPlayerCountry);
-							for (int cAdj = 0; cAdj < adjacaniesIds.size(); cAdj++) {
-								System.out.println("Country Name: " + adjacaniesIds.get(cAdj).getCountryName()
-										+ "Country Id: " + adjacaniesIds.get(cAdj).getCountryID() + "Number of armies: "
-										+ adjacaniesIds.get(cAdj).getArmy());
-							}
+							map.printMoveMap(playerItem, chosenPlayerCountry);
 							System.out.println("Choose your country as a target country with enter the Id:");
 							enteredCountryIdForMove = scanner.next();
 							if (enteredCountryIdForMove != "" && enteredCountryIdForMove != null

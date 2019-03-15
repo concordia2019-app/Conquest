@@ -1,6 +1,6 @@
 package conquestgame;
-import Manager.ConquestUI;
 import Model.*;
+import View.ConquestUI;
 
 public class MainConquest {
 
