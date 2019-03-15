@@ -12,7 +12,7 @@ import View.MapView;
 /**
  * This class is for the attack phase.
  * 
- * @author Amirhossein
+ * @author AHasheminezhad
  */
 public class Player {
 	private String MoveQuestion = "Do you want to Move?(Y/N)";
