@@ -64,6 +64,12 @@ public class Player {
 	 * @return resultOfAttack Result of the process.
 	 */
 
+	/**
+	 * @param attackerCountryArmy get the number of attacker army 
+	 * @param defenderCountryArmy get the number of defender army 
+	 * @param fightStatus show who win or lost. 
+	 * @return fight status returns to attackResponse class. 
+	 */
 	public AttackResponse attackCalculation(int attackerCountryArmy, int defenderCountryArmy, boolean fightStatus) {
         int diceValueAttacker;
 		int diceValueDefender;
@@ -82,13 +88,12 @@ public class Player {
 
 			// if the armies of defender or attacker got ZERO, war finishes.
 			if (defenderCountryArmy == 0 || attackerCountryArmy == 0) {
-				
-				if(defenderCountryArmy == 0) {
-				//status[1] shows remain attacker army 
+				//when defender army equals to zero this return True and show the number of the armies left(Attacker wins)
+				if(defenderCountryArmy == 0) { 
 					attackResponse.setAttackStatus(true);
 					attackResponse.setRestOfArmies(attackerCountryArmy);
-				}
-				//status[1] shows remain defender army 
+				} 
+				//Defender won and return false and show the number of armies that left.
 				else {
 					attackResponse.setAttackStatus(false);
 					attackResponse.setRestOfArmies(attackerCountryArmy);
@@ -96,7 +101,7 @@ public class Player {
 				break;
 			}
 		}
-
+		// return the value to the attackResponse class. 
 		return attackResponse;
 	}
 
