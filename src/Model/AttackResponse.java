@@ -14,4 +14,12 @@ public class AttackResponse {
 	//restOfArmies is an integer property to return the rest of armies of attack
 	private int restOfArmies;
 	
+	public void setRestOfArmies(int restOfArmies) {
+		this.restOfArmies = restOfArmies;
+	}
+	
+	public void setAttackStatus(Boolean attackStatus) {
+		this.attackStatus = attackStatus;
+	}
+	
 }
