@@ -1,4 +1,4 @@
-package Manager;
+package Controller;
 
 public class ConquestController {
 

@@ -48,25 +48,6 @@ public interface IConquestUI {
 	public boolean conquestUiYesNoQuestion(String strQuestion);
 
 	/**
-	 * This method just ask from player if player want to move Y => to agree that
-	 * want to move N => to skip the move
-	 */
-	public void conquestUIMove();
-
-	/**
-	 * This method shows that the attack is finished and call the move method
-	 */
-	public void conquestUIFinish();
-
-	/**
-	 * This method give the country Id from player and check the validity of it.
-	 * Then call the attack method.
-	 * 
-	 * @param playerCountries this is a list of countries
-	 */
-	public void conquestUIGetCountryIdForAttack(List<Country> playerCountries);
-
-	/**
 	 * numberOfPlayer method will ask the player to enter an integer for number of
 	 * players and save the number for the next part to ask the player for their
 	 * names. if the player enter a number more than 5 or less than 2 he will get an
@@ -84,15 +65,6 @@ public interface IConquestUI {
 	 *         country
 	 */
 	public LeftArmiesResponse numberOfArmiesToleave(Country country);
-
-	/**
-	 * This method manage the attack of players
-	 * 
-	 * @param playerList  list of players to play one by one
-	 * @param countryList list of countries to retrieve player's countries and
-	 *                    adjacencies
-	 */
-	public void attackPlayer(Player[] playerList, ArrayList<Country> countryList);
 
 	/**
 	 * This method give N number of armies to the players and they are able to add
