@@ -52,8 +52,16 @@ public class Player {
 		return cards;
 	}
 	
-	public void setCards(cardTypes.INFANTRY) {
-		card
+	public void setCards(int cardTypeIndex) {
+		//cards.add(CardController)
+	}
+	
+	public boolean isMoreThanFive() {
+		
+		if(cards.size() >= 5)
+			return true;
+		else
+			return false;
 	}
 	/**
 	 * This method will generate a random number between two integers.
