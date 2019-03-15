@@ -6,6 +6,7 @@ import java.util.Scanner;
 import Helper.PlayerHelper;
 import Helper.UIHelper;
 import View.ConquestUI;
+import View.MapView;
 
 /**
  * This class is for the attack phase.
@@ -123,6 +124,7 @@ public class Player {
 	 */
 	public void attackPlayer(ArrayList<Country> countryList) {
 		Map map = new Map();
+		MapView mapView = new MapView();
 		ConquestUI conquestUI = new ConquestUI();
 		UIHelper uiHelper = new UIHelper();
 		Player playerItem = this;
@@ -144,7 +146,7 @@ public class Player {
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
-					map.printPlayerMap(playerItem);
+					mapView.printPlayerMap(playerItem,countryList);
 					System.out.println("Choose your country Id to attack:");
 					enteredPlayerCountryId = scanner.next();
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -160,7 +162,7 @@ public class Player {
 				int[] adjacaniesIds = chosenPlayerCountry.getAdjacentCountriesID();
 
 				while (true) {
-					map.printAttackMap(playerItem, chosenPlayerCountry);
+					mapView.printAttackMap(playerItem, chosenPlayerCountry,countryList);
 					System.out.println("Choose your enemy with enter the country Id:");
 					enteredEnemyCountryId = scanner.next();
 					if (enteredEnemyCountryId != "" && enteredEnemyCountryId != null
@@ -186,6 +188,7 @@ public class Player {
 
 	public void movePlayer(ArrayList<Country> countryList) {
 		UIHelper uiHelper = new UIHelper();
+		MapView mapView = new MapView();
 		PlayerHelper playerHelper = new PlayerHelper();
 		Map map = new Map();
 		ConquestUI conquestUI = new ConquestUI();
@@ -208,7 +211,7 @@ public class Player {
 			System.out.println("Mmove is started for player => " + playerItem.getPlayerName());
 			while (movementIsFinished) {
 				while (true) {
-					map.printPlayerMap(playerItem);
+					mapView.printPlayerMap(playerItem,countryList);
 					System.out.println("Choose your country Id to move:");
 					enteredPlayerCountryId = scanner.next();
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -226,7 +229,7 @@ public class Player {
 
 				while (true) {
 					if (adjacaniesIds.size() > 0) {
-						map.printMoveMap(playerItem, chosenPlayerCountry);
+						mapView.printMoveMap(playerItem, chosenPlayerCountry,countryList);
 						System.out.println("Choose your country as a target country with enter the Id:");
 						enteredCountryIdForMove = scanner.next();
 						if (enteredCountryIdForMove != "" && enteredCountryIdForMove != null

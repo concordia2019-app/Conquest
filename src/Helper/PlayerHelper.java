@@ -15,6 +15,13 @@ import Model.Map;
  */
 public class PlayerHelper {
 
+	/**
+	 * This method is calculating number of armies for increase and decrease form and to a country
+	 * @param fromCountryId ID of source country
+	 * @param toCountryId ID of target country
+	 * @param armyNumbToMove number of armies to decrease or increase
+	 * @return
+	 */
 	public boolean calculationOfMovement(int fromCountryId, int toCountryId, int armyNumbToMove) {
 		UIHelper uiHelper = new UIHelper();
 		Map map = new Map();
@@ -22,7 +29,6 @@ public class PlayerHelper {
 		Country sourceCountry = uiHelper.getCountryById(countries, fromCountryId);
 		int sourceCountryArmies = sourceCountry.getArmy();
 		Country targegCountry = uiHelper.getCountryById(countries, toCountryId);
-		int targetCountryArmies = targegCountry.getArmy();
 
 		if ((sourceCountryArmies - 1) < armyNumbToMove) {
 			return false;
@@ -34,6 +40,11 @@ public class PlayerHelper {
 
 	}
 
+	/**
+	 * This method increase armies of country which retrieved by Cid (Country ID)
+	 * @param Cid Country ID
+	 * @param armiesNumber Number of Armies for increasing
+	 */
 	public void increaseCountryArmies(int Cid, int armiesNumber) {
 		Map map = new Map();
 		ArrayList<Country> countries = map.getCountries();
@@ -47,6 +58,11 @@ public class PlayerHelper {
 		}
 	}
 
+	/**
+	 * This method decrease armies of country which retrieved by Cid (Country ID)
+	 * @param Cid Country ID
+	 * @param armiesNumber Number of Armies for decreasing
+	 */
 	public void decreaseCountryArmies(int Cid, int armiesNumber) {
 		Map map = new Map();
 		ArrayList<Country> countries = map.getCountries();

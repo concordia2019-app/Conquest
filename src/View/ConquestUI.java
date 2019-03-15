@@ -25,7 +25,7 @@ import Model.*;
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
-	
+
 	private String MoveQuestion = "Do you want to Move?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
 	private String AttackIsFinished = "The attack is finished.";
@@ -36,6 +36,7 @@ public class ConquestUI implements IConquestUI {
 	private String AttackFinishQuestion = "Is attack finished ?(Y/N)";
 	private Scanner scanner;
 
+	private MapView mapView = new MapView();
 	private Player[] Players;
 	private ArrayList<Country> Countries;
 	private Integer PlayerNumber;
@@ -45,7 +46,7 @@ public class ConquestUI implements IConquestUI {
 	final int FirstArmiesNumberReinforcement = 3;
 	private MapGenerator mapGenerator;
 	private String ErrorFileRead = "Your file not found or maybe is not in correct format. please check and try again.";
-	
+
 	public ConquestUI() {
 		mapGenerator = new MapGenerator();
 		map = new Map();
@@ -85,8 +86,12 @@ public class ConquestUI implements IConquestUI {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
 					while (true) {
-						attackPlayer(Players, Countries);
-						movePlayer(Players, Countries);
+						for (Player playerItem : Players) {
+							playerItem.attackPlayer(Countries);
+							playerItem.movePlayer(Countries);
+						}
+						// attackPlayer(Players, Countries);
+						// movePlayer(Players, Countries);
 					}
 					// break;
 				case 2:
@@ -105,9 +110,9 @@ public class ConquestUI implements IConquestUI {
 							}
 
 							while (true) {
-								attackPlayer(Players, Countries);
-								movePlayer(Players, Countries);
-								//TODO check game is finished or not
+								// attackPlayer(Players, Countries);
+								// movePlayer(Players, Countries);
+								// TODO check game is finished or not
 								break;
 							}
 							break;
@@ -293,7 +298,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
-			map.printPlayerMap(player);
+			mapView.printPlayerMap(player,Countries);
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
@@ -315,7 +320,7 @@ public class ConquestUI implements IConquestUI {
 							if (armiesNumberReinforcement < 1) {
 								System.out.println(
 										"Reinforcement for player " + player.getPlayerName() + " is finished.");
-								map.printMainMap();
+								mapView.printMainMap(Countries);
 								break;
 							}
 						} else
