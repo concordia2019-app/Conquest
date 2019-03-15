@@ -2,7 +2,7 @@ package Model;
 
 /**
  * This class is for return number of armies that player want to left in country
- * @author F.S
+ * @author FarzadShamriz
  *
  */
 public class LeftArmiesResponse {

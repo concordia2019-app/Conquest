@@ -3,7 +3,7 @@ package Model;
 /**
  * This class is using for returning attack status
  * 
- * @author farzad
+ * @author FarzadShamriz
  *
  */
 public class AttackResponse {

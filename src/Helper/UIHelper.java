@@ -7,7 +7,7 @@ import Model.Country;
  * Parsing and calculation that needs in UI class will be proceeded in this
  * class
  * 
- * @author F.S
+ * @author FarzadShamriz
  *
  */
 public class UIHelper {
