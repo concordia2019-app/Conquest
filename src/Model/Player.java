@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 import Helper.PlayerHelper;
 import Helper.UIHelper;
+import Model.Card.cardTypes;
 import View.ConquestUI;
 
 /**
@@ -16,17 +17,18 @@ public class Player {
 	private String MoveQuestion = "Do you want to Move?(Y/N)";
 	private String AttackQuestion = "Do you want to Attack?(Y/N)";
 	private String ErrorEnteredValue = "Entered value is not acceptable.";
-	private Scanner scanner;
+	private Scanner scanner= new Scanner(System.in);
 	private int playerID;
 	private String playerName;
 	private int[] countryID;
 	private ArrayList<Card> cards;
 
-	public Player(int playerID, String playerName, int[] countryID) {
+	
+	public Player(int playerID, String playerName, int[] countryID, ArrayList<Card> cards) {
 		this.playerID = playerID;
 		this.playerName = playerName;
 		this.countryID = countryID;
-		this.scanner = new Scanner(System.in);
+		this.cards = cards;
 	}
 
 	public int getPlayerID() {
@@ -44,7 +46,14 @@ public class Player {
 	public void setCountryId(int[] countriesIds) {
 		this.countryID = countriesIds;
 	}
-
+	
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+	
+	public void setCards(cardTypes.INFANTRY) {
+		card
+	}
 	/**
 	 * This method will generate a random number between two integers.
 	 * 
