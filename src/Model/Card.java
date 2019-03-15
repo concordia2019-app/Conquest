@@ -7,7 +7,7 @@ package Model;
  */
 public class Card {
 	
-	private enum cardTypes { INFANTRY, CAVALRY, ARTILLERY };
+	private enum cardTypes { INFANTRY , CAVALRY , ARTILLERY  };
 	
 	private cardTypes cardType;
 	
