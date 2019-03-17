@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Model.Card;
+import Model.CardType;
 
 /**
  * 
@@ -11,31 +12,38 @@ import Model.Card;
  */
 public class CardController {
 	
-	
-	public Card randomCardAssigner() {
+	/**
+ *     Randomly return a new card and assign it
+ */
+	public Card cardAssigner() {
 		Random random = new Random();
-		int rnd = random.nextInt(3);
-		Card card = new Card(rnd + 1);
-		
-		return card;
-	}
+		int number = random.nextInt(3);
+                 switch(number)
+                        {
+                            case 0:
+                            	  return new Card(CardType.INFANTRY );
+                            case 1:
+                                  return  new Card(CardType.CAVALRY );
+                            case 2:
+                                  return new Card(CardType.ARTILLERY ); 
+                        } 
+            return new Card(CardType.ARTILLERY ); 
+ 	}
 	
-	public void searchForCards(ArrayList<Card> cards) {
+	public int searchForCards(ArrayList<Card> cards) {
 		for(int i = 0; i < cards.size(); i++) {
-			int counterInfantry = 0;
-			int counterCavalry = 0;
-			int counterArtillery = 0;
+	
 			
-			if(cards.get(i).checkCardType(1)) 
+			if(cards.get(i).checkCardType(CardType.INFANTRY)) {
 				counterInfantry++;
-			else if(cards.get(i).checkCardType(2))
+                                cards.remove(i);
+                        }
+			else if(cards.get(i).checkCardType(CardType.CAVALRY))
 				counterCavalry++;
-		    else  if(cards.get(i).checkCardType(3))	
+		        else if(cards.get(i).checkCardType(CardType.ARTILLERY))	
 				counterArtillery++;
 		    
 		}
 	}
-	
-	  
 	
 }
