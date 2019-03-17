@@ -14,6 +14,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 
+import View.MapView;
+
 /**
  * This class read and write a map from the JSON file.
  * 
@@ -108,12 +110,9 @@ public class MapGenerator {
 					Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
 					importedCountries.add(c);
 				}
-			} else {
-			}
-			for (Country ct : importedCountries) {
-				System.out.println(
-						"armies:" + ct.getArmy() + "--CId:" + ct.getCountryID() + "--Name" + ct.getCountryName());
-			}
+			} else {}
+			MapView map = new MapView();
+			map.printMainMap(importedCountries);
 		} catch (NumberFormatException e) {
 			printException(e.getMessage());
 		} catch (Exception e) {
