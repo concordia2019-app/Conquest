@@ -5,6 +5,7 @@ import java.util.Random;
 
 import Model.Card;
 import Model.CardType;
+import Model.CardsCounter;
 
 /**
  * 
@@ -30,20 +31,30 @@ public class CardController {
             return new Card(CardType.ARTILLERY ); 
  	}
 	
-	public int searchForCards(ArrayList<Card> cards) {
+	public CardsCounter defineCardsType(ArrayList<Card> cards) {
+            
+            	CardsCounter cardCounter= new  CardsCounter();
+                
 		for(int i = 0; i < cards.size(); i++) {
-	
-			
-			if(cards.get(i).checkCardType(CardType.INFANTRY)) {
-				counterInfantry++;
-                                cards.remove(i);
-                        }
+			if(cards.get(i).checkCardType(CardType.INFANTRY)) 
+				cardCounter.increaseInfantrycounter(); 
 			else if(cards.get(i).checkCardType(CardType.CAVALRY))
-				counterCavalry++;
+				cardCounter.increaseCavalrycounter();
 		        else if(cards.get(i).checkCardType(CardType.ARTILLERY))	
-				counterArtillery++;
-		    
+				cardCounter.increaseArtillerycounter();
 		}
+                return cardCounter;
+	}
+        public int calculateArmiesCount(CardsCounter cardsCounter , ArrayList<Card> cards) {
+            int armiesCount=0;
+            int pairInfantry=cardsCounter.getInfantrycounter()/3;
+            int pairCavalry=cardsCounter.getCavalrycounter()/3;             
+            int pairArtillery=cardsCounter.getArtillerycounter()/3;
+
+		armiesCount+= pairInfantry *5;
+                armiesCount+=pairCavalry*5;	                 
+                armiesCount+=pairArtillery*5;
+            return armiesCount;
 	}
 	
 }
