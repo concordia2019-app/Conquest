@@ -24,8 +24,8 @@ public class CardsCounter {
     /**
      * @param infantrycounter the infantrycounter to set
      */
-    public void setInfantrycounter(int infantrycounter) {
-        this.infantrycounter = infantrycounter;
+    public void increaseInfantrycounter() {
+        this.infantrycounter ++;
     }
 
     /**
@@ -38,8 +38,8 @@ public class CardsCounter {
     /**
      * @param cavalrycounter the cavalrycounter to set
      */
-    public void setCavalrycounter(int cavalrycounter) {
-        this.cavalrycounter = cavalrycounter;
+    public void increaseCavalrycounter() {
+        this.cavalrycounter ++;
     }
 
     /**
@@ -52,8 +52,8 @@ public class CardsCounter {
     /**
      * @param artillerycounter the artillerycounter to set
      */
-    public void setArtillerycounter(int artillerycounter) {
-        this.artillerycounter = artillerycounter;
+    public void increaseArtillerycounter() {
+        this.artillerycounter ++;
     }
  
 }
