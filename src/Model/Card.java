@@ -7,37 +7,35 @@ package Model;
  */
 public class Card {
 	
-	private enum cardTypes { INFANTRY , CAVALRY , ARTILLERY  };
 	
-	private cardTypes cardType;
-	private int cardTypeNumber;
+	private CardType cardType; 
 		
-	
-	public Card(int cardTypeIndex) {
-		switch (cardTypeIndex) {
-		case 1:
-			this.cardType = cardTypes.INFANTRY;
+	/**
+ * This function is is a constructor for initializing cardType.
+ * 
+ * @author Amirhossein
+ */
+	public Card(CardType card) {
+		switch (card) {
+		case INFANTRY:
+			this.cardType = CardType.INFANTRY;
 			break;
-		case 2:
-			this.cardType = cardTypes.CAVALRY;
+		case  CAVALRY:
+			this.cardType = CardType.CAVALRY;
 			break;
-		case 3:
-			this.cardType = cardTypes.ARTILLERY;
-			break;
-
-		default:
-			System.out.println("Input index for typeCard is wrong.");
+		case  ARTILLERY:
+			this.cardType = CardType.ARTILLERY;
+			break; 
 		}
-		cardTypeNumber= cardTypeIndex;
 	}
 	
-	public cardTypes getCardType() {
+	public CardType getCardType() {
 		return cardType;
 	}
 	
-	public boolean checkCardType(int cardTypeIndex)
+	public boolean checkCardType(CardType card)
 	{
-		if(cardTypeNumber == cardTypeIndex)
+		if(this.cardType == card)
 			return true;
 		else {
 			return false;
