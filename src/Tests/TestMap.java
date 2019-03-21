@@ -16,7 +16,7 @@ public class TestMap {
 	 */
 	@Test
 	public void testGetPlayerCorrespondingCountries() {
-		Map map = new Map();
+		Map map = Map.getInstance();
 		map.setCountries();
 		
 		int[] countriesID = {1};
@@ -31,7 +31,7 @@ public class TestMap {
 	 */
 	@Test
 	public void testGetSpecificCountryAdjacentsForAttack() {
-		Map map = new Map();
+		Map map = Map.getInstance();
 		map.setCountries();
 		
 		int[] playerCountriesID = {1, 2, 3};
