@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
@@ -39,6 +40,7 @@ public class ConquestUI implements IConquestUI {
 	private Scanner scanner;
 
 	private MapView mapView = new MapView();
+	private ConquestController conquestController = ConquestController.getInstance();
 	private CountryHelper countryHelper;
 	private Player[] Players;
 	private ArrayList<Country> Countries;
@@ -93,9 +95,17 @@ public class ConquestUI implements IConquestUI {
 					while (true && syncCountriesDataStatus) {
 						for (Player playerItem : Players) {
 							playerItem.attackPlayer(Countries);
+							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
 							mapView.printMainMap(map.getCountries());
 							playerItem.movePlayer(Countries);
+							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
 							mapView.printMainMap(map.getCountries());
+							boolean finishGameStatus = conquestController.isGameFinish();
+							if (finishGameStatus) {
+								//showFinishGame();
+								//TODO implement something to print won
+								break;
+							}
 						}
 						// attackPlayer(Players, Countries);
 						// movePlayer(Players, Countries);
