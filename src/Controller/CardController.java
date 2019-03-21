@@ -31,6 +31,10 @@ public class CardController {
             return new Card(CardType.ARTILLERY ); 
  	}
 	
+        	/**
+ *     give the types of cards and counts them  the 
+ *     @param cards  player cards which this function calculating 
+ */
 	public CardsCounter defineCardsType(ArrayList<Card> cards) {
             
             	CardsCounter cardCounter= new  CardsCounter();
@@ -45,6 +49,12 @@ public class CardController {
 		}
                 return cardCounter;
 	}
+        
+        	/**
+        	/**
+ *     give the types of cards and counts them  the 
+ *     @param cards  player cards which this function calculating 
+ */
         public int calculateArmiesCount(CardsCounter cardsCounter , ArrayList<Card> cards) {
             
              int pairInfantry=(int)cardsCounter.getInfantrycounter()/3;
