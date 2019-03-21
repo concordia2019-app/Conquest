@@ -17,10 +17,24 @@ public class Map {
 	public Player[] Players;
 	private MapView mapView = new MapView();
 	public ArrayList<Country> CountriesList = new ArrayList<Country>();
+	private static Map instance;
 
-	public Map() {
+	private Map() {
 		setCountries();
 	}
+	public static Map getInstance()
+    {
+        if(instance==null)
+        {
+            instance=new Map();
+            return instance;
+        }
+        else
+        {
+            return instance;
+        }
+             
+    }
 
 	public void assigningPlayerCountries(ArrayList<String> playerNames, int playerCount) {
 		Players = new Player[playerCount];
