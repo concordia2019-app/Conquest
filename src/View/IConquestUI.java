@@ -1,19 +1,16 @@
 package View;
 
-/**
- * This interface has the structure of the UI to show outputs
- * This interface has been implemented in ConquestUI class 
- * 
- * @author F.S
- */
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 import Model.Country;
 import Model.LeftArmiesResponse;
 import Model.Player;
 
+/**
+ * This interface has the structure of the UI to show outputs
+ * This interface has been implemented in ConquestUI class 
+ * 
+ * @author FarzadShamriz
+ */
 public interface IConquestUI {
 	/**
 	 * <p>

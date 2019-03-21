@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
 
@@ -18,10 +18,9 @@ import Model.*;
  * <li>showing the list of countries and adjacencies</li>
  * </ul>
  * 
- * @author F.S
+ * @author FarzadShamriz
  *
  */
-
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
@@ -49,7 +48,7 @@ public class ConquestUI implements IConquestUI {
 
 	public ConquestUI() {
 		mapGenerator = new MapGenerator();
-		map = new Map();
+		map = Map.getInstance();
 		scanner = new Scanner(System.in);
 		uiHelper = new UIHelper();
 	}
