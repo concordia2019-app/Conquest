@@ -24,7 +24,7 @@ public class PlayerHelper {
 	 */
 	public boolean calculationOfMovement(int fromCountryId, int toCountryId, int armyNumbToMove) {
 		UIHelper uiHelper = new UIHelper();
-		Map map = new Map();
+		Map map = Map.getInstance();
 		ArrayList<Country> countries = map.getCountries();
 		Country sourceCountry = uiHelper.getCountryById(countries, fromCountryId);
 		int sourceCountryArmies = sourceCountry.getArmy();
@@ -46,13 +46,13 @@ public class PlayerHelper {
 	 * @param armiesNumber Number of Armies for increasing
 	 */
 	public void increaseCountryArmies(int Cid, int armiesNumber) {
-		Map map = new Map();
+		Map map = Map.getInstance();
 		ArrayList<Country> countries = map.getCountries();
 		for (Country country : countries) {
 			int currentCountryId = country.getCountryID();
 			int currentCountryArmies = country.getArmy();
 			if (currentCountryId == Cid) {
-				int calculatedArmies = currentCountryArmies - armiesNumber;
+				int calculatedArmies = currentCountryArmies + armiesNumber;
 				country.setArmy(calculatedArmies);
 			}
 		}
@@ -64,13 +64,13 @@ public class PlayerHelper {
 	 * @param armiesNumber Number of Armies for decreasing
 	 */
 	public void decreaseCountryArmies(int Cid, int armiesNumber) {
-		Map map = new Map();
+		Map map = Map.getInstance();
 		ArrayList<Country> countries = map.getCountries();
 		for (Country country : countries) {
 			int currentCountryId = country.getCountryID();
 			int currentCountryArmies = country.getArmy();
 			if (currentCountryId == Cid) {
-				int calculatedArmies = currentCountryArmies + armiesNumber;
+				int calculatedArmies = currentCountryArmies - armiesNumber;
 				country.setArmy(calculatedArmies);
 			}
 		}

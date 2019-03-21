@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
 
@@ -37,6 +39,7 @@ public class ConquestUI implements IConquestUI {
 	private Scanner scanner;
 
 	private MapView mapView = new MapView();
+	private CountryHelper countryHelper;
 	private Player[] Players;
 	private ArrayList<Country> Countries;
 	private Integer PlayerNumber;
@@ -49,9 +52,10 @@ public class ConquestUI implements IConquestUI {
 
 	public ConquestUI() {
 		mapGenerator = new MapGenerator();
-		map = new Map();
+		map = Map.getInstance();
 		scanner = new Scanner(System.in);
 		uiHelper = new UIHelper();
+		countryHelper = new CountryHelper();
 	}
 
 	/**
@@ -85,10 +89,13 @@ public class ConquestUI implements IConquestUI {
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
-					while (true) {
+					boolean syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+					while (true && syncCountriesDataStatus) {
 						for (Player playerItem : Players) {
 							playerItem.attackPlayer(Countries);
+							mapView.printMainMap(map.getCountries());
 							playerItem.movePlayer(Countries);
+							mapView.printMainMap(map.getCountries());
 						}
 						// attackPlayer(Players, Countries);
 						// movePlayer(Players, Countries);
@@ -298,7 +305,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
-			mapView.printPlayerMap(player,Countries);
+			mapView.printPlayerMap(player, Countries);
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
