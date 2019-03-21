@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
@@ -18,9 +20,10 @@ import Model.*;
  * <li>showing the list of countries and adjacencies</li>
  * </ul>
  * 
- * @author FarzadShamriz
+ * @author F.S
  *
  */
+
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
@@ -36,6 +39,7 @@ public class ConquestUI implements IConquestUI {
 	private Scanner scanner;
 
 	private MapView mapView = new MapView();
+	private CountryHelper countryHelper;
 	private Player[] Players;
 	private ArrayList<Country> Countries;
 	private Integer PlayerNumber;
@@ -51,6 +55,7 @@ public class ConquestUI implements IConquestUI {
 		map = Map.getInstance();
 		scanner = new Scanner(System.in);
 		uiHelper = new UIHelper();
+		countryHelper = new CountryHelper();
 	}
 
 	/**
@@ -84,10 +89,13 @@ public class ConquestUI implements IConquestUI {
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
-					while (true) {
+					boolean syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+					while (true && syncCountriesDataStatus) {
 						for (Player playerItem : Players) {
 							playerItem.attackPlayer(Countries);
+							mapView.printMainMap(map.getCountries());
 							playerItem.movePlayer(Countries);
+							mapView.printMainMap(map.getCountries());
 						}
 						// attackPlayer(Players, Countries);
 						// movePlayer(Players, Countries);
@@ -297,7 +305,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
-			mapView.printPlayerMap(player,Countries);
+			mapView.printPlayerMap(player, Countries);
 			// Show list of player's countries
 
 			System.out.println("-- Reinforcement for player " + player.getPlayerName() + " is started.");
