@@ -106,4 +106,22 @@ public class CountryHelper {
 		return true;
 	}
 
+	
+	public boolean updateCountryArmiesByObject(Country countryForUpdate) {
+		Map map = Map.getInstance();
+		ArrayList<Country> countryList = map.getCountries();
+		ArrayList<Country> updatedCountries = new ArrayList<Country>();
+		for(Country countryItem:countryList) {
+			if(countryItem.getCountryID() == countryForUpdate.getCountryID()) {
+				countryItem.setArmy(countryForUpdate.getArmy());
+			}
+			updatedCountries.add(countryItem);
+		}
+		map.setCountries(updatedCountries);
+		countryList = map.getCountries();
+		if(isTheCountryListUpToDate(countryList, updatedCountries)) {
+			return true;
+		}
+		return false;
+	}
 }

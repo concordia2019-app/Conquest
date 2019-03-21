@@ -153,7 +153,8 @@ public class Player {
 
 	public ArrayList<Country> updateCountriesAfterAttack(ArrayList<Country> countryList, Country attackerCountry,
 			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse) {
-
+		
+		CountryHelper countryHelper = new CountryHelper();
 		int restOfArmies = attackResponse.getRestOfArmies();
 		boolean attackState = attackResponse.getAttackStatus();
 
@@ -162,6 +163,7 @@ public class Player {
 			for (Country country : countryList) {
 				if (country.getCountryID() == attackerCountry.getCountryID()) {
 					country.setArmy(1);
+					countryHelper.updateCountryArmiesByObject(country);
 					break;
 				}
 			}
@@ -169,37 +171,46 @@ public class Player {
 				if (country.getCountryID() == defenderCountry.getCountryID()) {
 					country.setArmy(restOfArmies);
 					country.setPlayer(attackerPlayer.getPlayerID(), attackerPlayer.getPlayerName());
+					countryHelper.updateCountryArmiesByObject(country);
 					break;
 				}
 			}
 			// update this player countries
 			int countOfThisPlayerCountries = this.getCountryID().length;
 			int[] countriesOfCurrentPlayer = this.getCountryID();
-			countriesOfCurrentPlayer[countOfThisPlayerCountries] = attackerCountry.getCountryID();
-			this.setCountryId(countriesOfCurrentPlayer);
+			int[] updatedCountriesIdsForCurrentPlayer = new int[(countOfThisPlayerCountries+1)];
+			
+			//update current player countries ids list
+			for(int i=0;i<countOfThisPlayerCountries;i++) {
+				updatedCountriesIdsForCurrentPlayer[i] = countriesOfCurrentPlayer[i];
+			}
+			updatedCountriesIdsForCurrentPlayer[countOfThisPlayerCountries] = attackerCountry.getCountryID();
+			this.setCountryId(updatedCountriesIdsForCurrentPlayer);
 
-			// update defender player countrie - the country which is attacked should be
+			// update defender player countries - the country which is attacked should be
 			// removed from the list
 			Map map = Map.getInstance();
 			Player[] players = map.getPlayers();
-			Player[] updatedPlayers = null;
-			int countOfPlayers = 0;
+			Player[] updatedPlayers = new Player[(players.length)];
+			int countOfPlayers = 1;
 			for (Player playerItem : players) {
-				int[] updatedPlayerCountriesIds = null;
-				int counterCountryPlayer = 0;
+				
+				int counterCountryPlayer = playerItem.getCountryID().length;
 				int[] playersCountriesIds = playerItem.getCountryID();
 				int attackerPlayerId = attackerPlayer.getPlayerID();
 				int currentPlayerId = playerItem.getPlayerID();
 				int defenderPlayerId = defenderCountry.getPlayerID();
+				int[] updatedPlayerCountriesIds = new int[(counterCountryPlayer)];
 				if (defenderPlayerId == currentPlayerId) {
 					for (int i = 0; i < playersCountriesIds.length; i++) {
 						if (playersCountriesIds[i] != defenderCountry.getCountryID()) {
-							updatedPlayerCountriesIds[counterCountryPlayer] = playersCountriesIds[i];
+							updatedPlayerCountriesIds[i] = playersCountriesIds[i];
 						}
 					}
 					playerItem.setCountryId(updatedPlayerCountriesIds);
 				}
 				updatedPlayers[countOfPlayers-1] = playerItem;
+				countOfPlayers++;
 			}
 			map.setPlayers(updatedPlayers);
 
@@ -209,6 +220,7 @@ public class Player {
 				if (country.getCountryID() == attackerCountry.getCountryID()) {
 					country.setArmy(1);
 					break;
+					
 				}
 			}
 			for (Country country : countryList) {
