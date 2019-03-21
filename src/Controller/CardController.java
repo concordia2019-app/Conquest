@@ -46,14 +46,35 @@ public class CardController {
                 return cardCounter;
 	}
         public int calculateArmiesCount(CardsCounter cardsCounter , ArrayList<Card> cards) {
-            int armiesCount=0;
-            int pairInfantry=cardsCounter.getInfantrycounter()/3;
-            int pairCavalry=cardsCounter.getCavalrycounter()/3;             
-            int pairArtillery=cardsCounter.getArtillerycounter()/3;
-
-		armiesCount+= pairInfantry *5;
-                armiesCount+=pairCavalry*5;	                 
-                armiesCount+=pairArtillery*5;
+            
+             int pairInfantry=(int)cardsCounter.getInfantrycounter()/3;
+            int pairCavalry=(int)cardsCounter.getCavalrycounter()/3;             
+            int pairArtillery=(int)cardsCounter.getArtillerycounter()/3;
+            int armiesCount=( pairInfantry + pairCavalry + pairArtillery) * 5 ;
+            
+            
+            
+            int tempInfantry=pairInfantry*3; int tempCavalry=pairCavalry*3; int tempArtillery=pairArtillery*3;
+            
+            if(tempInfantry>0)
+             for(int i=0 ;i<cards.size(); i++)
+                   if(cards.get(i).checkCardType(CardType.INFANTRY) && tempInfantry>0)
+                   {
+                       tempInfantry--;
+                   }
+              
+                 if(tempCavalry>0)
+             for(int i=0 ;i<cards.size(); i++)
+                   if(cards.get(i).checkCardType(CardType.CAVALRY) && tempCavalry>0)
+                   {
+                       tempCavalry--;
+                   }
+                      if(tempArtillery>0)
+             for(int i=0 ;i<cards.size(); i++)
+                   if(cards.get(i).checkCardType(CardType.ARTILLERY) && tempArtillery>0)
+                   {
+                       tempArtillery--;
+                   } 
             return armiesCount;
 	}
 	
