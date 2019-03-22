@@ -73,7 +73,12 @@ public class PlayerHelper {
              }
             return tempPlayers;
         }
-        
+        /**
+        * Remove countryId from the players array and decrease the countriesID
+        * @param countrID the id of the country 
+        * @param playerID the id of the player
+        * @param players it is the array of players for modifications
+        */
         public Player[] removeCountryIDToPlayer( Player[] players, int countryID , int playerID)
         {
             if (players== null)  
