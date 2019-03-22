@@ -26,7 +26,7 @@ public class Player {
 	private String playerName;
 	private int[] countryID;
 	private ArrayList<Card> cards;
-        private CardsCounter cardsCounter;
+	private CardsCounter cardsCounter;
 	private ConquestController conquestController = ConquestController.getInstance();
 
 	public Player(int playerID, String playerName, int[] countryID) {
@@ -42,10 +42,11 @@ public class Player {
 	public String getPlayerName() {
 		return playerName;
 	}
-        
-        public CardsCounter getCardCounts() {
+
+	public CardsCounter getCardCounts() {
 		return cardsCounter;
 	}
+
 	public int[] getCountryID() {
 		return countryID;
 	}
@@ -145,8 +146,8 @@ public class Player {
 				int numberOfArmiesForAttack = getNumberOfArmiesToAttack(countryList,
 						chosenPlayerCountry.getCountryID());
 				AttackResponse attackResponse = conquestController
-						.attackCalculation((chosenPlayerCountry.getArmy() - 1), numberOfArmiesForAttack);
-				int leftArmiesForAttackerCountry = ((chosenPlayerCountry.getArmy() - 1) - numberOfArmiesForAttack);
+						.attackCalculation(numberOfArmiesForAttack, chosenEnemyCountry.getArmy());
+				int leftArmiesForAttackerCountry = ((chosenPlayerCountry.getArmy()) - numberOfArmiesForAttack);
 				ArrayList<Country> updatedCountriesList = updateCountriesAfterAttack(countryList, chosenPlayerCountry,
 						chosenEnemyCountry, playerItem, attackResponse, leftArmiesForAttackerCountry);
 
@@ -169,6 +170,7 @@ public class Player {
 	public int getNumberOfArmiesToAttack(ArrayList<Country> countriesList, int countryId) {
 		int armiyNumbers = 0;
 		int currentArmies = 0;
+		UIHelper uiHelper = new UIHelper();
 		for (Country countryItem : countriesList) {
 			int countryItemID = countryItem.getCountryID();
 			if (countryItemID == countryId) {
@@ -178,11 +180,16 @@ public class Player {
 		}
 		while (true) {
 			System.out.print("Enter number of armies to attack: ");
-			armiyNumbers = scanner.nextInt();
-			if (currentArmies >= armiyNumbers) {
-				System.out.print(ErrorEnteredValue);
+			String armiyNumbersString = scanner.next();
+			if (uiHelper.tryParseInt(armiyNumbersString)) {
+				armiyNumbers = Integer.parseInt(armiyNumbersString);
+				if (currentArmies <= armiyNumbers) {
+					System.out.print(ErrorEnteredValue);
+				} else
+					break;
 			} else
-				break;
+				System.out.print(ErrorEnteredValue);
+			System.out.println();
 		}
 		return armiyNumbers;
 	}
