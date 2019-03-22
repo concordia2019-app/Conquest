@@ -1,9 +1,10 @@
 package Model;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
@@ -12,7 +13,7 @@ import View.ConquestUI;
 import View.MapView;
 
 /**
- * This class is for the attack phase.
+ * This class is related to player, related attributes and behavior.
  * 
  * @author AHasheminezhad
  */
@@ -83,7 +84,7 @@ public class Player {
 	 * 
 	 * @param playerList  list of players to play one by one
 	 * @param countryList list of countries to retrieve player's countries and
-	 *                    adjacencies
+	 *                    Adjacent
 	 */
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
 		Map map = Map.getInstance();
@@ -139,12 +140,15 @@ public class Player {
 					break;
 				}
 
-				System.out.println("You chose to attack to No." + convertedEnemyCId + " with country No."
+				System.out.println("You choose to attack to No." + convertedEnemyCId + " with country No."
 						+ convertedPlayerCId + "   It will be calculated.");
-				AttackResponse attackResponse = conquestController.attackCalculation(chosenPlayerCountry.getArmy(),
-						chosenEnemyCountry.getArmy());
+				int numberOfArmiesForAttack = getNumberOfArmiesToAttack(countryList,
+						chosenPlayerCountry.getCountryID());
+				AttackResponse attackResponse = conquestController
+						.attackCalculation((chosenPlayerCountry.getArmy() - 1), numberOfArmiesForAttack);
+				int leftArmiesForAttackerCountry = ((chosenPlayerCountry.getArmy() - 1) - numberOfArmiesForAttack);
 				ArrayList<Country> updatedCountriesList = updateCountriesAfterAttack(countryList, chosenPlayerCountry,
-						chosenEnemyCountry, playerItem, attackResponse);
+						chosenEnemyCountry, playerItem, attackResponse, leftArmiesForAttackerCountry);
 
 				attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
 				if (!attackAnswer) {
@@ -155,22 +159,54 @@ public class Player {
 		return countryList;
 	}
 
+	/**
+	 * this method give number of armies to attack and check the validity
+	 * 
+	 * @param countriesList - list of countries
+	 * @param countryId     - id of country which is waiting to attack
+	 * @return number of player as an integer
+	 */
+	public int getNumberOfArmiesToAttack(ArrayList<Country> countriesList, int countryId) {
+		int armiyNumbers = 0;
+		int currentArmies = 0;
+		for (Country countryItem : countriesList) {
+			int countryItemID = countryItem.getCountryID();
+			if (countryItemID == countryId) {
+				currentArmies = countryItem.getArmy();
+				break;
+			}
+		}
+		while (true) {
+			System.out.print("Enter number of armies to attack: ");
+			armiyNumbers = scanner.nextInt();
+			if (currentArmies >= armiyNumbers) {
+				System.out.print(ErrorEnteredValue);
+			} else
+				break;
+		}
+		return armiyNumbers;
+	}
+
 	public ArrayList<Country> updateCountriesAfterAttack(ArrayList<Country> countryList, Country attackerCountry,
-			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse) {
-		
+			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse,
+			int leftArmiesForAttackerCountry) {
+
+		Map map = Map.getInstance();
+		Player[] players = map.getPlayers();
 		CountryHelper countryHelper = new CountryHelper();
 		int restOfArmies = attackResponse.getRestOfArmies();
 		boolean attackState = attackResponse.getAttackStatus();
 
+		for (Country country : countryList) {
+			if (country.getCountryID() == attackerCountry.getCountryID()) {
+				country.setArmy(leftArmiesForAttackerCountry);
+				countryHelper.updateCountryArmiesByObject(country);
+				break;
+			}
+		}
 		if (attackState) {
 			// it means that the attacker is win
-			for (Country country : countryList) {
-				if (country.getCountryID() == attackerCountry.getCountryID()) {
-					country.setArmy(1);
-					countryHelper.updateCountryArmiesByObject(country);
-					break;
-				}
-			}
+
 			for (Country country : countryList) {
 				if (country.getCountryID() == defenderCountry.getCountryID()) {
 					country.setArmy(restOfArmies);
@@ -179,60 +215,21 @@ public class Player {
 					break;
 				}
 			}
-			// update this player countries
-			int countOfThisPlayerCountries = this.getCountryID().length;
-			int[] countriesOfCurrentPlayer = this.getCountryID();
-			int[] updatedCountriesIdsForCurrentPlayer = new int[(countOfThisPlayerCountries+1)];
-			
-			//update current player countries ids list
-			for(int i=0;i<countOfThisPlayerCountries;i++) {
-				updatedCountriesIdsForCurrentPlayer[i] = countriesOfCurrentPlayer[i];
-			}
-			updatedCountriesIdsForCurrentPlayer[countOfThisPlayerCountries] = attackerCountry.getCountryID();
-			this.setCountryId(updatedCountriesIdsForCurrentPlayer);
-
-			// update defender player countries - the country which is attacked should be
-			// removed from the list
-			Map map = Map.getInstance();
-			Player[] players = map.getPlayers();
-			Player[] updatedPlayers = new Player[(players.length)];
-			int countOfPlayers = 1;
-			for (Player playerItem : players) {
-				
-				int counterCountryPlayer = playerItem.getCountryID().length;
-				int[] playersCountriesIds = playerItem.getCountryID();
-				int attackerPlayerId = attackerPlayer.getPlayerID();
-				int currentPlayerId = playerItem.getPlayerID();
-				int defenderPlayerId = defenderCountry.getPlayerID();
-				int[] updatedPlayerCountriesIds = new int[(counterCountryPlayer)];
-				if (defenderPlayerId == currentPlayerId) {
-					for (int i = 0; i < playersCountriesIds.length; i++) {
-						if (playersCountriesIds[i] != defenderCountry.getCountryID()) {
-							updatedPlayerCountriesIds[i] = playersCountriesIds[i];
-						}
-					}
-					playerItem.setCountryId(updatedPlayerCountriesIds);
-				}
-				updatedPlayers[countOfPlayers-1] = playerItem;
-				countOfPlayers++;
-			}
-			map.setPlayers(updatedPlayers);
 
 		} else {
 			// it means that the attacker is loose
-			for (Country country : countryList) {
-				if (country.getCountryID() == attackerCountry.getCountryID()) {
-					country.setArmy(1);
-					break;
-					
-				}
-			}
 			for (Country country : countryList) {
 				if (country.getCountryID() == defenderCountry.getCountryID()) {
 					country.setArmy(restOfArmies);
 					break;
 				}
 			}
+		}
+
+		// UpdateCountries
+		boolean syncCountriesStatus = false;
+		while (!syncCountriesStatus) {
+			syncCountriesStatus = countryHelper.updateSourceCountriesArmies(countryList);
 		}
 
 		return countryList;
@@ -258,8 +255,8 @@ public class Player {
 		}
 
 		mapView.printMainMap(countryList);
-		boolean attackAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
-		if (attackAnswer) {
+		boolean moveAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
+		if (moveAnswer) {
 			String enteredPlayerCountryId = "";
 			int convertedPlayerCId = -1;
 			String enteredCountryIdForMove = "";
@@ -318,8 +315,8 @@ public class Player {
 				}
 
 				// End move
-				attackAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
-				if (!attackAnswer) {
+				moveAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
+				if (!moveAnswer) {
 					break;
 				}
 			}
