@@ -25,6 +25,7 @@ public class Player {
 	private String playerName;
 	private int[] countryID;
 	private ArrayList<Card> cards;
+        private CardsCounter cardsCounter;
 	private ConquestController conquestController = ConquestController.getInstance();
 
 	public Player(int playerID, String playerName, int[] countryID) {
@@ -40,7 +41,10 @@ public class Player {
 	public String getPlayerName() {
 		return playerName;
 	}
-
+        
+        public CardsCounter getCardCounts() {
+		return cardsCounter;
+	}
 	public int[] getCountryID() {
 		return countryID;
 	}
