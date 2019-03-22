@@ -57,8 +57,8 @@ public class PlayerHelper {
             {
              if(players[i].getPlayerID()== playerID)  
               {
-                  Player player= new Player();
-                  player=players[i];
+                 Player player= players[i];
+                  
                  int[] countriesID= new int[player.getCountryID().length+1];
                  for(int j=0 ; j<player.getCountryID().length;j++)
                   {
@@ -73,14 +73,39 @@ public class PlayerHelper {
              }
             return tempPlayers;
         }
-      //  public Player[] removeCountryIDToPlayer( Player[] players, int countrId , int playerID)
-        //{
         
-           // Create another array of size one less 
-  //            Player[] tempPlayers= new Player[players.length+1];
-  
+        public Player[] removeCountryIDToPlayer( Player[] players, int countryID , int playerID)
+        {
+            if (players== null)  
+                   return null; 
+              
+            Player[] tempPlayers=new Player[players.length];
             
-        //}
+            for(int i=0 ; i<players.length;i++)
+            {
+             if(players[i].getPlayerID()== playerID)  
+              {
+                  Player player= players[i];
+                 
+                 int[] countriesID= new int[player.getCountryID().length-1];
+                 int countryIndex=0;
+                 for(int j=0 ; j<player.getCountryID().length;j++)
+                  {
+                      if( player.getCountryID()[j]!= countryID)
+                      {
+                           countriesID[countryIndex]=player.getCountryID()[j];
+                           countryIndex++;
+                       }
+                  }
+               player.setCountryId(countriesID);
+               tempPlayers[i]=player;
+              }
+             else
+                 tempPlayers[i]=players[i];
+             }
+            return tempPlayers;
+            
+        }
 	/**
 	 * This method increase armies of country which retrieved by Cid (Country ID)
 	 * @param Cid Country ID
