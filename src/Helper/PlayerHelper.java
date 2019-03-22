@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Model.Country;
 import Model.Editor;
 import Model.Map;
+import Model.Player;
 
 /**
  * This class is created for most of calculations and processing of Player
@@ -39,7 +40,47 @@ public class PlayerHelper {
 		}
 
 	}
-
+        /**
+        * Create and add a countryid to the player array and increase the countriesID
+        * @param countrID the id of country 
+        * @param playerID the id of player
+        * @param players it is the array of players for modifications
+        */
+        public Player[] addCountryIDToPlayer( Player[] players, int countryID , int playerID)
+        {
+              if (players== null)  
+                   return null; 
+              
+            Player[] tempPlayers=new Player[players.length];
+            
+            for(int i=0 ; i<players.length;i++)
+            {
+             if(players[i].getPlayerID()== playerID)  
+              {
+                  Player player= new Player();
+                  player=players[i];
+                 int[] countriesID= new int[player.getCountryID().length+1];
+                 for(int j=0 ; j<player.getCountryID().length;j++)
+                  {
+                      countriesID[j]=player.getCountryID()[j];
+                  }
+               countriesID[player.getCountryID().length]=countryID;
+               player.setCountryId(countriesID);
+               tempPlayers[i]=player;
+              }
+             else
+                 tempPlayers[i]=players[i];
+             }
+            return tempPlayers;
+        }
+      //  public Player[] removeCountryIDToPlayer( Player[] players, int countrId , int playerID)
+        //{
+        
+           // Create another array of size one less 
+  //            Player[] tempPlayers= new Player[players.length+1];
+  
+            
+        //}
 	/**
 	 * This method increase armies of country which retrieved by Cid (Country ID)
 	 * @param Cid Country ID
