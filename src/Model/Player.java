@@ -28,11 +28,14 @@ public class Player {
 	private ArrayList<Card> cards;
 	private CardsCounter cardsCounter;
 	private ConquestController conquestController = ConquestController.getInstance();
+	private boolean allowToGetCard;
 
 	public Player(int playerID, String playerName, int[] countryID) {
 		this.playerID = playerID;
 		this.playerName = playerName;
 		this.countryID = countryID;
+		allowToGetCard = false;
+		cards = new ArrayList<Card>();
 	}
 
 	public int getPlayerID() {
@@ -59,8 +62,15 @@ public class Player {
 		return cards;
 	}
 
-	public void setCards(int cardTypeIndex) {
-		// cards.add(CardController)
+	public void setCards(ArrayList<Card> cardList) {
+		cards.clear();
+		for(Card cardItem : cardList) {
+			cards.add(cardItem);
+		}
+	}
+
+	public void addCard(Card cardToAdd) {
+		this.cards.add(cardToAdd);
 	}
 
 	public boolean isMoreThanFive() {
@@ -69,6 +79,14 @@ public class Player {
 			return true;
 		else
 			return false;
+	}
+
+	public boolean getAllowingCardStatus() {
+		return this.allowToGetCard;
+	}
+
+	public void setAllowingStatus(boolean status) {
+		this.allowToGetCard = status;
 	}
 
 	public void resultOfAttack(boolean resultOfAttack) {
@@ -99,7 +117,7 @@ public class Player {
 			attackInfoTitle += "=";
 		}
 		System.out.println(attackInfoTitle);
-
+		mapView.printMainMap(map.getCountries());
 		boolean attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
 		if (attackAnswer) {
 			String enteredPlayerCountryId = "";
@@ -108,6 +126,7 @@ public class Player {
 			int convertedEnemyCId = -1;
 			int[] relatedCountryIds = playerItem.getCountryID();
 			boolean attackIsFinished = true;
+			mapView.printMainMap(map.getCountries());
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
@@ -145,12 +164,12 @@ public class Player {
 						+ convertedPlayerCId + "   It will be calculated.");
 				int numberOfArmiesForAttack = getNumberOfArmiesToAttack(countryList,
 						chosenPlayerCountry.getCountryID());
-				AttackResponse attackResponse = conquestController
-						.attackCalculation(numberOfArmiesForAttack, chosenEnemyCountry.getArmy());
+				AttackResponse attackResponse = conquestController.attackCalculation(numberOfArmiesForAttack,
+						chosenEnemyCountry.getArmy());
 				int leftArmiesForAttackerCountry = ((chosenPlayerCountry.getArmy()) - numberOfArmiesForAttack);
 				ArrayList<Country> updatedCountriesList = updateCountriesAfterAttack(countryList, chosenPlayerCountry,
 						chosenEnemyCountry, playerItem, attackResponse, leftArmiesForAttackerCountry);
-
+				mapView.printMainMap(map.getCountries());
 				attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
 				if (!attackAnswer) {
 					break;
@@ -179,10 +198,12 @@ public class Player {
 			}
 		}
 		while (true) {
-			System.out.print("Enter number of armies to attack: ");
-			String armiyNumbersString = scanner.next();
-			if (uiHelper.tryParseInt(armiyNumbersString)) {
-				armiyNumbers = Integer.parseInt(armiyNumbersString);
+			System.out.print("Enter number of armies to attack or enter all to attack with all armies: ");
+			String armyNumbersString = scanner.next();
+			if (armyNumbersString.equalsIgnoreCase("all"))
+				armyNumbersString = Integer.toString(currentArmies - 1);
+			if (uiHelper.tryParseInt(armyNumbersString)) {
+				armiyNumbers = Integer.parseInt(armyNumbersString);
 				if (currentArmies <= armiyNumbers) {
 					System.out.print(ErrorEnteredValue);
 				} else
@@ -198,6 +219,7 @@ public class Player {
 			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse,
 			int leftArmiesForAttackerCountry) {
 
+		PlayerHelper playerHelper = new PlayerHelper();
 		Map map = Map.getInstance();
 		Player[] players = map.getPlayers();
 		CountryHelper countryHelper = new CountryHelper();
@@ -213,7 +235,7 @@ public class Player {
 		}
 		if (attackState) {
 			// it means that the attacker is win
-
+			allowToGetCard = true;
 			for (Country country : countryList) {
 				if (country.getCountryID() == defenderCountry.getCountryID()) {
 					country.setArmy(restOfArmies);
@@ -222,7 +244,11 @@ public class Player {
 					break;
 				}
 			}
-
+			Player[] newPlayerArray = playerHelper.addCountryIDToPlayer(players, defenderCountry.getCountryID(),
+					this.playerID);
+			Player[] playerForUpdate = playerHelper.removeCountryIDToPlayer(newPlayerArray,
+					defenderCountry.getCountryID(), defenderCountry.getPlayerID());
+			map.setPlayers(playerForUpdate);
 		} else {
 			// it means that the attacker is loose
 			for (Country country : countryList) {
@@ -324,6 +350,7 @@ public class Player {
 				// End move
 				moveAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
 				if (!moveAnswer) {
+					mapView.printMainMap(map.getCountries());
 					break;
 				}
 			}

@@ -3,6 +3,7 @@ package Controller;
 import java.util.Random;
 
 import Model.AttackResponse;
+import Model.Card;
 import Model.Map;
 import Model.Player;
 
@@ -22,6 +23,18 @@ public class ConquestController {
 			return instance;
 		}
 
+	}
+
+	/**
+	 * This method get player and set random card to player object
+	 * 
+	 * @param currentPlayer
+	 */
+	public Player setCardToPlayer(Player currentPlayer) {
+		CardController cardController = new CardController();
+		Card cardToAssign = cardController.cardAssigner();
+		currentPlayer.addCard(cardToAssign);
+		return currentPlayer;
 	}
 
 	/**
@@ -108,7 +121,7 @@ public class ConquestController {
 				numberOfArmiesOfDefender--;
 
 			// if the armies of defender or attacker got ZERO, war finishes.
-			if (numberOfArmiesOfDefender == 0 || numberOfArmiesOfAttacker == 0)
+			if (numberOfArmiesOfDefender < 1 || numberOfArmiesOfAttacker < 1)
 				break;
 		}
 

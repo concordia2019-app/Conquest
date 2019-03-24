@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import Controller.CardController;
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.UIHelper;
@@ -38,7 +39,22 @@ public class ConquestUI implements IConquestUI {
 	private String ErrorInputNumberOfPlayers = "Your input number is not acceptable. Please enter a number between 2..5";
 	private String AttackFinishQuestion = "Is attack finished ?(Y/N)";
 	private Scanner scanner;
-
+	private String FinishGame = " ||==================================================||\n"
+			+ " ||**************************************************||\n"
+			+ " ||                                                  ||\n"
+			+ " ||    =======       /\\      |\\      /|  |*****    ||\n"
+			+ " ||    ||  ___      /__\\     | \\    / |  |         ||\n"
+			+ " ||    ||    ||    /    \\    |  \\  /  |  |*****    ||\n"
+			+ " ||    ||____||   /      \\   |   \\/   |  |         ||\n"
+			+ " ||                                       *****      ||\n"
+			+ " ||     =====    \\       //  |*****      ||****|    ||\n"
+			+ " ||    ||   ||    \\     //   |           ||    |    ||\n"
+			+ " ||    ||   ||     \\   //    |*****      ||*****    ||\n"
+			+ " ||    ||   ||      \\ //     |           ||  \\     ||\n"
+			+ " ||     =====        ---      |*****      ||   \\    ||\n"
+			+ " ||                                                  ||\n"
+			+ " ||**************************************************||\n"
+			+ " ||==================================================||\n";
 	private MapView mapView = new MapView();
 	private ConquestController conquestController = ConquestController.getInstance();
 	private CountryHelper countryHelper;
@@ -51,6 +67,7 @@ public class ConquestUI implements IConquestUI {
 	final int FirstArmiesNumberReinforcement = 3;
 	private MapGenerator mapGenerator;
 	private String ErrorFileRead = "Your file not found or maybe is not in correct format. please check and try again.";
+	private CardController cardController;
 
 	public ConquestUI() {
 		mapGenerator = new MapGenerator();
@@ -58,6 +75,7 @@ public class ConquestUI implements IConquestUI {
 		scanner = new Scanner(System.in);
 		uiHelper = new UIHelper();
 		countryHelper = new CountryHelper();
+		cardController = new CardController();
 	}
 
 	/**
@@ -82,6 +100,7 @@ public class ConquestUI implements IConquestUI {
 				Integer parsedInputValue = Integer.parseInt(startMenuInput);
 				switch (parsedInputValue) {
 				case 1:
+					java.awt.Toolkit.getDefaultToolkit().beep();
 					System.out.println("**   Game is started   **");
 					PlayerNumber = getNumberOfPlayer();
 					ArrayList<String> playerNames = getPlayernames(PlayerNumber);
@@ -94,16 +113,27 @@ public class ConquestUI implements IConquestUI {
 					boolean syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
 					while (true && syncCountriesDataStatus) {
 						for (Player playerItem : Players) {
+							Countries = map.getCountries();
 							playerItem.attackPlayer(Countries);
 							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+							Countries = map.getCountries();
 							mapView.printMainMap(map.getCountries());
 							playerItem.movePlayer(Countries);
 							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+							Countries = map.getCountries();
 							mapView.printMainMap(map.getCountries());
+							if (playerItem.getAllowingCardStatus()) {
+								Player updatedCardPlayer = conquestController.setCardToPlayer(playerItem);
+								playerItem.setCards(updatedCardPlayer.getCards());
+								CardView cardView = new CardView();
+								cardView.printCardsPlayer(playerItem);
+								// TODO give a card to player
+								playerItem.setAllowingStatus(false);
+							}
 							boolean finishGameStatus = conquestController.isGameFinish();
 							if (finishGameStatus) {
-								//showFinishGame();
-								//TODO implement something to print won
+								printFinishGame();
+								// TODO implement something to print won
 								break;
 							}
 						}
@@ -352,4 +382,7 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
+	public void printFinishGame() {
+		System.out.print(FinishGame);
+	}
 }

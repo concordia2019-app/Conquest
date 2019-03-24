@@ -72,7 +72,7 @@ public class MapView {
 				"+------------------------+--------------------------+-----------------------------------------+-----------------------+%n");
 
 		ArrayList<Country> specificCountryAdjacentsForAttack = getSpecificCountryAdjacentsForAttack(
-				player.getCountryID(), country.getCountryID(), countriesList);
+				player.getCountryID(), country.getCountryID(), countriesList, player);
 
 		for (int i = 0; i < specificCountryAdjacentsForAttack.size(); i++)
 			System.out.format(table, showCountryID(specificCountryAdjacentsForAttack, i),
@@ -91,7 +91,7 @@ public class MapView {
 	 *         attack.
 	 */
 	public ArrayList<Country> getSpecificCountryAdjacentsForAttack(int[] playerCountries, int specificCountryID,
-			ArrayList<Country> countriesList) {
+			ArrayList<Country> countriesList, Player attackerPlayer) {
 
 		ArrayList<Country> specificCountryAdjacentsForAttack = new ArrayList<Country>();
 
@@ -100,10 +100,16 @@ public class MapView {
 				if (showAdjacentCountriesID(countriesList, i)[j] == specificCountryID)
 					specificCountryAdjacentsForAttack.add(countriesList.get(i));
 
-		for (int i = 0; i < specificCountryAdjacentsForAttack.size(); i++)
-			for (int j = 0; j < playerCountries.length; j++)
-				if (showCountryID(specificCountryAdjacentsForAttack, i) == playerCountries[j])
-					specificCountryAdjacentsForAttack.remove(i);
+		// for (int i = 0; i < specificCountryAdjacentsForAttack.size(); i++)
+		// for (int j = 0; j < playerCountries.length; j++)
+		// if (showCountryID(specificCountryAdjacentsForAttack, i) ==
+		// playerCountries[j])
+		for (int i = 0; i < countriesList.size(); i++)
+			for (int j = 0; j < specificCountryAdjacentsForAttack.size(); j++)
+				if ((countriesList.get(i).getCountryID() == showCountryID(specificCountryAdjacentsForAttack, j)
+						&& (countriesList.get(i).getPlayerID() == attackerPlayer.getPlayerID()))) {
+					specificCountryAdjacentsForAttack.remove(j);
+				}
 
 		return specificCountryAdjacentsForAttack;
 	}

@@ -5,6 +5,7 @@
  */
 package View;
 
+import Model.Card;
 import Model.Country;
 import Model.Player;
 import java.util.ArrayList;
@@ -15,16 +16,14 @@ import java.util.Arrays;
  * @author Amirhossein
  */
 public class CardView {
-    
-    
-    public void printCards(ArrayList<Player> players) {
- 
+
+	public void printCards(ArrayList<Player> players) {
+
 		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
 
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
-		System.out.format(
-				"| Player Name | INFANTRY Cards |  CAVALRY Cards | ARTILLERY Cards |%n");
+		System.out.format("| Player Name | INFANTRY Cards |  CAVALRY Cards | ARTILLERY Cards |%n");
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 
@@ -39,5 +38,18 @@ public class CardView {
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 	}
 
+	public void printCardsPlayer(Player player) {
+
+		ArrayList<Card> playercards = player.getCards();
+		String table = "|%-14d|%-16s|%n";
+
+		System.out.format("+--------------+----------------+%n");
+		System.out.format("| Player Name | Card type ");
+		System.out.format("+--------------+----------------+%n");
+		for (Card cardItem : playercards) {
+			System.out.format(table, player.getPlayerName(), cardItem.getCardType().name());
+		}
+		System.out.format("+--------------+----------------+%n");
+	}
 
 }
