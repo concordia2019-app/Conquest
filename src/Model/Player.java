@@ -49,6 +49,10 @@ public class Player {
 	public CardsCounter getCardCounts() {
 		return cardsCounter;
 	}
+	
+	public void setCardCounts(CardsCounter playerCardsStatus) {
+		this.cardsCounter = playerCardsStatus;
+	}
 
 	public int[] getCountryID() {
 		return countryID;
