@@ -13,6 +13,7 @@ import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
+import sun.security.util.Length;
 
 /**
  * This is a class to show messages below
@@ -38,6 +39,7 @@ public class ConquestUI implements IConquestUI {
 	private String ErrorEnteredValue = "Entered value is not acceptable.";
 	private String ErrorInputNumberOfPlayers = "Your input number is not acceptable. Please enter a number between 2..5";
 	private String AttackFinishQuestion = "Is attack finished ?(Y/N)";
+	private String UsePlayerCardQuestion = "Do you want to use your cards?";
 	private Scanner scanner;
 	private String FinishGame = " ||==================================================||\n"
 			+ " ||**************************************************||\n"
@@ -123,17 +125,21 @@ public class ConquestUI implements IConquestUI {
 							Countries = map.getCountries();
 							mapView.printMainMap(map.getCountries());
 							if (playerItem.getAllowingCardStatus()) {
-								Player updatedCardPlayer = conquestController.setCardToPlayer(playerItem);
-								playerItem.setCards(updatedCardPlayer.getCards());
+								CardController cardController = new CardController();
+								Card cardToAssign = cardController.cardAssigner();
+								playerItem.addCard(cardToAssign);
 								CardView cardView = new CardView();
 								cardView.printCardsPlayer(playerItem);
 								// TODO give a card to player
 								playerItem.setAllowingStatus(false);
+								addCardToPlayer(Players,playerItem);
+							}
+							if(playerItem.getCards().size()>0) {
+								conquestUiYesNoQuestion(UsePlayerCardQuestion);
 							}
 							boolean finishGameStatus = conquestController.isGameFinish();
 							if (finishGameStatus) {
 								printFinishGame();
-								// TODO implement something to print won
 								break;
 							}
 						}
@@ -183,6 +189,18 @@ public class ConquestUI implements IConquestUI {
 				System.out.println("Entered value is not acceptable.[0..2]");
 		}
 
+	}
+
+	private void addCardToPlayer(Player[] playersFORupdate,Player playerItem) {
+		Player[] gamePlayers = map.getPlayers();
+		for (int i = 0; i < gamePlayers.length; i++) {
+			for(int j=0;j<playersFORupdate.length;j++) {
+				if(gamePlayers[i].getPlayerID() == playerItem.getPlayerID()) {
+					gamePlayers[i].setCards(playerItem.getCards());
+					break;
+				}
+			}
+		}
 	}
 
 	private boolean getFilePathForLoadingMap() {

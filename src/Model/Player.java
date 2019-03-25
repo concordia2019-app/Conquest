@@ -63,9 +63,9 @@ public class Player {
 	}
 
 	public void setCards(ArrayList<Card> cardList) {
-		cards.clear();
+		this.cards.clear();
 		for(Card cardItem : cardList) {
-			cards.add(cardItem);
+			this.cards.add(cardItem);
 		}
 	}
 
@@ -116,8 +116,9 @@ public class Player {
 		for (int i = 0; i < attackInfoTitleLength; i++) {
 			attackInfoTitle += "=";
 		}
-		System.out.println(attackInfoTitle);
+		
 		mapView.printMainMap(map.getCountries());
+		System.out.println(attackInfoTitle);
 		boolean attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
 		if (attackAnswer) {
 			String enteredPlayerCountryId = "";
@@ -288,6 +289,7 @@ public class Player {
 		}
 
 		mapView.printMainMap(countryList);
+		System.out.println("Move phase is started for player => " + playerItem.getPlayerName());
 		boolean moveAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
 		if (moveAnswer) {
 			String enteredPlayerCountryId = "";

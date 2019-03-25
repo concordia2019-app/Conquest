@@ -41,15 +41,15 @@ public class CardView {
 	public void printCardsPlayer(Player player) {
 
 		ArrayList<Card> playercards = player.getCards();
-		String table = "|%-14d|%-16s|%n";
+		String table = "|%-14s|%-16s|%n";
 
-		System.out.format("+--------------+----------------+%n");
-		System.out.format("| Player Name | Card type ");
-		System.out.format("+--------------+----------------+%n");
+		System.out.format("+--------------+----------------+|%n");
+		System.out.format("| Player Name | Card type |%n");
+		System.out.format("+--------------+----------------+|%n");
 		for (Card cardItem : playercards) {
 			System.out.format(table, player.getPlayerName(), cardItem.getCardType().name());
 		}
-		System.out.format("+--------------+----------------+%n");
+		System.out.format("+--------------+----------------+|%n");
 	}
 
 }

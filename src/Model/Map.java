@@ -378,4 +378,5 @@ public class Map {
 		// status of the fight.
 		return StatusFight;
 	}
+	
 }
