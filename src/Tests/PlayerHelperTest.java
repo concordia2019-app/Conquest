@@ -49,7 +49,7 @@ public class PlayerHelperTest {
 	public void testAddCountryIDToPlayer() {
 		
  		Player[] players= new Player[1];
-		players[0]=new Player(1,"player1",new int[] {1,2});;
+		players[0]=new Player(1,"player1",new int[] {1,2});
 		PlayerHelper helper=new PlayerHelper();
 		assertEquals( helper.addCountryIDToPlayer(players,3,1)[0].getCountryID()[2],3);
  	}
@@ -60,7 +60,7 @@ public class PlayerHelperTest {
  	@Test
  	public void testRemoveCountryIDToPlayer() {
  		Player[] players= new Player[1];
-		players[0]=new Player(1,"player1",new int[] {1,2});;
+		players[0]=new Player(1,"player1",new int[] {1,2});
 		PlayerHelper helper=new PlayerHelper();
 		assertEquals( helper.removeCountryIDToPlayer(players, 1, 1)[0].getCountryID()[0],2);
 		}
