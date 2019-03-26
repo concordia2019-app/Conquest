@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * 
  * @author AHasheminezhad
  */
-
 public class Editor {
 
 	public ArrayList<Country> setCountries(ArrayList<Country> country) {

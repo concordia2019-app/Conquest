@@ -86,7 +86,7 @@ public class MapGenerator {
 	 * @param filePath this is a path of the JSON file.
 	 * @return (ArrayList<Country>) importedCountries.
 	 */
-	public ArrayList<Country> MapReader(String filePath) {
+	public ArrayList<Country> mapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {

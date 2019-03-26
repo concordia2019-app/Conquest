@@ -49,6 +49,7 @@ public interface IConquestUI {
 	/**
 	 * This method just ask from player if player want to attack Y => to agree that
 	 * want to attack N => to skip the attack
+	 * 
 	 * @param strQuestion String to show the message
 	 * @return if player pass n , then return false, on the other hand, if pass y,
 	 *         then return true

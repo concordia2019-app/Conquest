@@ -18,7 +18,7 @@ public class TestMapGenerator {
 	public void testMapIsLoadedProperlyOrNot() {
 		MapGenerator mapGenerator = new MapGenerator();
 		boolean status = true;
-		ArrayList<Country> allCountries = mapGenerator.MapReader(System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		ArrayList<Country> allCountries = mapGenerator.mapReader(System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
 		
 		if(allCountries.isEmpty())
 			status = false;

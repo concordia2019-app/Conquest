@@ -140,7 +140,7 @@ public class Player {
 			int convertedEnemyCId = -1;
 			int[] relatedCountryIds = playerItem.getCountryID();
 			boolean attackIsFinished = true;
-			
+
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
@@ -239,6 +239,19 @@ public class Player {
 		return armiyNumbers;
 	}
 
+	/**
+	 * this method update all countries one by one after completing attack phase
+	 * 
+	 * @param countryList                  - list of country to update
+	 * @param attackerCountry              - the country that player chose to attack
+	 * @param defenderCountry              - the enemy of attacker
+	 * @param attackerPlayer               - player that want to attack
+	 * @param attackResponse               - result of attack calculation
+	 * @param leftArmiesForAttackerCountry - rest of armies of attack
+	 * @param winnerPlayerId               - id winner player
+	 * @param winnerplayerName             - name of winner player
+	 * @return list of updated countries
+	 */
 	public ArrayList<Country> updateCountriesAfterAttack(ArrayList<Country> countryList, Country attackerCountry,
 			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse,
 			int leftArmiesForAttackerCountry, int winnerPlayerId, String winnerplayerName) {
