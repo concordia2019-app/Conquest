@@ -11,6 +11,17 @@ import Model.Country;
 import Model.LeftArmiesResponse;
 import Model.Player;
 
+/**
+ * This is a class to show messages below
+ * <ul>
+ * <li>Showing the map with related adjacencies</li>
+ * <li>showing the menu to select map, attach or move of player</li>
+ * <li>showing the list of countries and adjacencies</li>
+ * </ul>
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public interface IConquestUI {
 	/**
 	 * <p>
