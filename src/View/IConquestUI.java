@@ -69,7 +69,8 @@ public interface IConquestUI {
 	 * 
 	 * @param armiesNumber number of armies
 	 * @player current player to separate countries and assign armies
+	 * @return rest of armies
 	 */
-	public void reinforcementOfPlayer(int armiesNumber, Player player);
+	public int reinforcementOfPlayer(int armiesNumber, Player player);
 
 }

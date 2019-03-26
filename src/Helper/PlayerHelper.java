@@ -17,9 +17,11 @@ import Model.Player;
 public class PlayerHelper {
 
 	/**
-	 * This method is calculating number of armies for increase and decrease form and to a country
-	 * @param fromCountryId ID of source country
-	 * @param toCountryId ID of target country
+	 * This method is calculating number of armies for increase and decrease form
+	 * and to a country
+	 * 
+	 * @param fromCountryId  ID of source country
+	 * @param toCountryId    ID of target country
 	 * @param armyNumbToMove number of armies to decrease or increase
 	 * @return
 	 */
@@ -40,80 +42,91 @@ public class PlayerHelper {
 		}
 
 	}
-        /**
-        * Create and add a countryid to the player array and increase the countriesID
-        * @param countrID the id of country 
-        * @param playerID the id of player
-        * @param players it is the array of players for modifications
-        */
-        public Player[] addCountryIDToPlayer( Player[] players, int countryID , int playerID)
-        {
-              if (players== null)  
-                   return null; 
-              
-            Player[] tempPlayers=new Player[players.length];
-            
-            for(int i=0 ; i<players.length;i++)
-            {
-             if(players[i].getPlayerID()== playerID)  
-              {
-                 Player player= players[i];
-                  
-                 int[] countriesID= new int[player.getCountryID().length+1];
-                 for(int j=0 ; j<player.getCountryID().length;j++)
-                  {
-                      countriesID[j]=player.getCountryID()[j];
-                  }
-               countriesID[player.getCountryID().length]=countryID;
-               player.setCountryId(countriesID);
-               tempPlayers[i]=player;
-              }
-             else
-                 tempPlayers[i]=players[i];
-             }
-            return tempPlayers;
-        }
-        /**
-        * Remove countryId from the players array and decrease the countriesID
-        * @param countrID the id of the country 
-        * @param playerID the id of the player
-        * @param players it is the array of players for modifications
-        */
-        public Player[] removeCountryIDToPlayer( Player[] players, int countryID , int playerID)
-        {
-            if (players== null)  
-                   return null; 
-              
-            Player[] tempPlayers=new Player[players.length];
-            
-            for(int i=0 ; i<players.length;i++)
-            {
-             if(players[i].getPlayerID()== playerID)  
-              {
-                  Player player= players[i];
-                 
-                 int[] countriesID= new int[player.getCountryID().length-1];
-                 int countryIndex=0;
-                 for(int j=0 ; j<player.getCountryID().length;j++)
-                  {
-                      if( player.getCountryID()[j]!= countryID)
-                      {
-                           countriesID[countryIndex]=player.getCountryID()[j];
-                           countryIndex++;
-                       }
-                  }
-               player.setCountryId(countriesID);
-               tempPlayers[i]=player;
-              }
-             else
-                 tempPlayers[i]=players[i];
-             }
-            return tempPlayers;
-            
-        }
+
+	/**
+	 * this method update cardsCounter of layer which find by id
+	 * @param playerItem player which should update
+	 * @param playerArray list of players to find player
+	 * @return updated player array
+	 */
+	public Player[] updatePlayerCardsCounterById(Player playerItem, Player[] playerArray) {
+		for (int i = 0; i < playerArray.length; i++) {
+			if (playerItem.getPlayerID() == playerArray[i].getPlayerID()) {
+				playerArray[i].setCardCounts(playerItem.getCardCounts());
+				break;
+			}
+		}
+		return playerArray;
+	}
+
+	/**
+	 * Create and add a countryid to the player array and increase the countriesID
+	 * 
+	 * @param countrID the id of country
+	 * @param playerID the id of player
+	 * @param players  it is the array of players for modifications
+	 */
+	public Player[] addCountryIDToPlayer(Player[] players, int countryID, int playerID) {
+		if (players == null)
+			return null;
+
+		Player[] tempPlayers = new Player[players.length];
+
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].getPlayerID() == playerID) {
+				Player player = players[i];
+
+				int[] countriesID = new int[player.getCountryID().length + 1];
+				for (int j = 0; j < player.getCountryID().length; j++) {
+					countriesID[j] = player.getCountryID()[j];
+				}
+				countriesID[player.getCountryID().length] = countryID;
+				player.setCountryId(countriesID);
+				tempPlayers[i] = player;
+			} else
+				tempPlayers[i] = players[i];
+		}
+		return tempPlayers;
+	}
+
+	/**
+	 * Remove countryId from the players array and decrease the countriesID
+	 * 
+	 * @param countrID the id of the country
+	 * @param playerID the id of the player
+	 * @param players  it is the array of players for modifications
+	 */
+	public Player[] removeCountryIDToPlayer(Player[] players, int countryID, int playerID) {
+		if (players == null)
+			return null;
+
+		Player[] tempPlayers = new Player[players.length];
+
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].getPlayerID() == playerID) {
+				Player player = players[i];
+
+				int[] countriesID = new int[player.getCountryID().length - 1];
+				int countryIndex = 0;
+				for (int j = 0; j < player.getCountryID().length; j++) {
+					if (player.getCountryID()[j] != countryID) {
+						countriesID[countryIndex] = player.getCountryID()[j];
+						countryIndex++;
+					}
+				}
+				player.setCountryId(countriesID);
+				tempPlayers[i] = player;
+			} else
+				tempPlayers[i] = players[i];
+		}
+		return tempPlayers;
+
+	}
+
 	/**
 	 * This method increase armies of country which retrieved by Cid (Country ID)
-	 * @param Cid Country ID
+	 * 
+	 * @param Cid          Country ID
 	 * @param armiesNumber Number of Armies for increasing
 	 */
 	public void increaseCountryArmies(int Cid, int armiesNumber) {
@@ -131,7 +144,8 @@ public class PlayerHelper {
 
 	/**
 	 * This method decrease armies of country which retrieved by Cid (Country ID)
-	 * @param Cid Country ID
+	 * 
+	 * @param Cid          Country ID
 	 * @param armiesNumber Number of Armies for decreasing
 	 */
 	public void decreaseCountryArmies(int Cid, int armiesNumber) {
