@@ -29,6 +29,7 @@ public class Player {
 	private CardsCounter cardsCounter;
 	private ConquestController conquestController = ConquestController.getInstance();
 	private boolean allowToGetCard;
+	private int reinforcementPlayerArmies;
 
 	public Player(int playerID, String playerName, int[] countryID) {
 		this.playerID = playerID;
@@ -42,6 +43,14 @@ public class Player {
 		return playerID;
 	}
 
+	public int getReinforcementPlayerArmies() {
+		return this.reinforcementPlayerArmies;
+	}
+
+	public void setReinforcementPlayerArmies(int reinforcementArmiesCount) {
+		this.reinforcementPlayerArmies = reinforcementArmiesCount;
+	}
+
 	public String getPlayerName() {
 		return playerName;
 	}
@@ -49,7 +58,7 @@ public class Player {
 	public CardsCounter getCardCounts() {
 		return cardsCounter;
 	}
-	
+
 	public void setCardCounts(CardsCounter playerCardsStatus) {
 		this.cardsCounter = playerCardsStatus;
 	}
@@ -68,7 +77,7 @@ public class Player {
 
 	public void setCards(ArrayList<Card> cardList) {
 		this.cards.clear();
-		for(Card cardItem : cardList) {
+		for (Card cardItem : cardList) {
 			this.cards.add(cardItem);
 		}
 	}
@@ -120,7 +129,7 @@ public class Player {
 		for (int i = 0; i < attackInfoTitleLength; i++) {
 			attackInfoTitle += "=";
 		}
-		
+
 		mapView.printMainMap(map.getCountries());
 		System.out.println(attackInfoTitle);
 		boolean attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
@@ -131,7 +140,7 @@ public class Player {
 			int convertedEnemyCId = -1;
 			int[] relatedCountryIds = playerItem.getCountryID();
 			boolean attackIsFinished = true;
-			mapView.printMainMap(map.getCountries());
+			
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
@@ -172,8 +181,18 @@ public class Player {
 				AttackResponse attackResponse = conquestController.attackCalculation(numberOfArmiesForAttack,
 						chosenEnemyCountry.getArmy());
 				int leftArmiesForAttackerCountry = ((chosenPlayerCountry.getArmy()) - numberOfArmiesForAttack);
+				int winnerPlayer;
+				String winnerplayerName;
+				if (attackResponse.getAttackStatus()) {
+					winnerPlayer = chosenPlayerCountry.getPlayerID();
+					winnerplayerName = chosenPlayerCountry.getPlayerName();
+				} else {
+					winnerPlayer = chosenEnemyCountry.getPlayerID();
+					winnerplayerName = chosenEnemyCountry.getPlayerName();
+				}
 				ArrayList<Country> updatedCountriesList = updateCountriesAfterAttack(countryList, chosenPlayerCountry,
-						chosenEnemyCountry, playerItem, attackResponse, leftArmiesForAttackerCountry);
+						chosenEnemyCountry, playerItem, attackResponse, leftArmiesForAttackerCountry, winnerPlayer,
+						winnerplayerName);
 				mapView.printMainMap(map.getCountries());
 				attackAnswer = conquestUI.conquestUiYesNoQuestion(AttackQuestion);
 				if (!attackAnswer) {
@@ -222,7 +241,7 @@ public class Player {
 
 	public ArrayList<Country> updateCountriesAfterAttack(ArrayList<Country> countryList, Country attackerCountry,
 			Country defenderCountry, Player attackerPlayer, AttackResponse attackResponse,
-			int leftArmiesForAttackerCountry) {
+			int leftArmiesForAttackerCountry, int winnerPlayerId, String winnerplayerName) {
 
 		PlayerHelper playerHelper = new PlayerHelper();
 		Map map = Map.getInstance();
@@ -348,13 +367,12 @@ public class Player {
 						System.out.println(ErrorEnteredValue);
 					} else {
 						ArrayList<Country> updatedCountryList = map.getCountries();
-						mapView.printMainMap(updatedCountryList);
 						break;
 					}
 				}
 
 				// End move
-				moveAnswer = conquestUI.conquestUiYesNoQuestion(MoveQuestion);
+				moveAnswer = false;
 				if (!moveAnswer) {
 					mapView.printMainMap(map.getCountries());
 					break;
