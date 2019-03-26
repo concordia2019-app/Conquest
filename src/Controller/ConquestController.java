@@ -4,13 +4,15 @@ import java.util.Random;
 
 import Model.AttackResponse;
 import Model.Card;
+import Model.Country;
 import Model.Map;
 import Model.Player;
+import java.util.ArrayList;
 
 public class ConquestController {
 
 	private static ConquestController instance;
-
+ 
 	private ConquestController() {
 
 	}
@@ -25,6 +27,9 @@ public class ConquestController {
 
 	}
 
+        public float playerPercentageCalculation(Player player, ArrayList<Country> countries ){
+         return   ((float)player.getCountryID().length/countries.size())*100;            
+        }
 	/**
 	 * This method get player and set random card to player object
 	 * 
