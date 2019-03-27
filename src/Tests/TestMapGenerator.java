@@ -40,5 +40,22 @@ public class TestMapGenerator {
 	
 		assertFalse(status);
 	}
+	/**
+	 * This will test if the map is written properly or not. 
+	 */
+	@Test
+	public void testMapIsWrittenProperlyOrNot() {
+		MapGenerator mapGenerator = new MapGenerator();
+		int[] adj = {1,2,3};
+		Country c = new Country("Iran", 1, 1, 3, adj, 1,"Pegah");
+		Country c1 = new Country("Iraq", 1, 1, 3, adj, 1,"Pegah");
+		ArrayList<Country> allCountries = new ArrayList<Country>();
+		allCountries.add(c);
+		allCountries.add(c1);
+		String obj = mapGenerator.writeMap(allCountries,System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		File tempFile = new File(System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		boolean exists = tempFile.exists();
+		assertTrue(exists);
+	}
 
 }
