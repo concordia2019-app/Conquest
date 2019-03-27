@@ -1,4 +1,4 @@
-package Tests;
+package Tests.Model;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,7 +9,7 @@ import org.junit.Test;
 import Model.Country;
 import Model.Map;
 
-public class TestMap {
+public class MapTest {
 
 	/**
 	 * This test is to check whether the player country ids are corresponding to the actual country.

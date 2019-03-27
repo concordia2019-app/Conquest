@@ -1,9 +1,6 @@
 package Model;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import Controller.ConquestController;
 import Helper.CountryHelper;
@@ -140,13 +137,12 @@ public class Player {
 			int convertedPlayerCId = -1;
 			String enteredEnemyCountryId = "";
 			int convertedEnemyCId = -1;
-			int[] relatedCountryIds = playerItem.getCountryID();
 			boolean attackIsFinished = true;
 
 			System.out.println("Attack is started for player => " + playerItem.getPlayerName());
 			while (attackIsFinished) {
 				while (true) {
-					mapView.printPlayerMap(playerItem, countryList);
+					mapView.printPlayerMap(playerItem, Map.getInstance().getCountries());
 					System.out.println("Choose your country Id to attack:");
 					enteredPlayerCountryId = scanner.next();
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
@@ -279,7 +275,7 @@ public class Player {
 				if (country.getCountryID() == defenderCountry.getCountryID()) {
 					country.setArmy(restOfArmies);
 					country.setPlayer(attackerPlayer.getPlayerID(), attackerPlayer.getPlayerName());
-					countryHelper.updateCountryArmiesByObject(country);
+					countryHelper.updateCountryPlayerIdByObject(country);
 					break;
 				}
 			}

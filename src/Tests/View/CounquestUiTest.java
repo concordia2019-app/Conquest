@@ -15,7 +15,7 @@ public class CounquestUiTest {
 	Country countryTest;
 	@Test
 	@Before
-	public void cntextMaker() {
+	public void contextMaker() {
 		conquestUI = ConquestUI.getInstance();
 		countryTest = new Country("TestCountry", 1, 1, 10, null, 1, "playerTest");
 	}

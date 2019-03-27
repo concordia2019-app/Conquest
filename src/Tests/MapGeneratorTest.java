@@ -11,7 +11,7 @@ import org.junit.Test;
 import Model.Country;
 import Model.MapGenerator;
 
-public class TestMapGenerator {
+public class MapGeneratorTest {
 
 	/**
 	 * This will test if the map is loaded properly or not. #1

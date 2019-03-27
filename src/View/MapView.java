@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import Model.Country;
+import Model.Map;
 import Model.Player;
 
 /**
@@ -36,8 +37,8 @@ public class MapView {
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 
-		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getCountryID(),
-				country.getCountryID(), countriesList);
+		ArrayList<Country> specificCountryAdjacentsForMove = getSpecificCountryAdjacentsForMove(player.getPlayerID(),
+				player.getCountryID(), country.getCountryID(), countriesList);
 
 		for (int i = 0; i < specificCountryAdjacentsForMove.size(); i++)
 			System.out.format(table, showCountryID(specificCountryAdjacentsForMove, i),
@@ -130,7 +131,7 @@ public class MapView {
 		System.out.format(
 				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
 
-		ArrayList<Country> playerCountries = getPlayerCorrespondingCountries(player.getCountryID(), countriesList);
+		ArrayList<Country> playerCountries = getPlayerCorrespondingCountries(player.getPlayerID(), countriesList);
 
 		for (int i = 0; i < playerCountries.size(); i++)
 			System.out.format(table, showCountryID(playerCountries, i), showCountryName(playerCountries, i),
@@ -172,9 +173,16 @@ public class MapView {
 	 * @return ArrayList of all of the ajdacencies that the player is able to
 	 *         fortify.
 	 */
-	public ArrayList<Country> getSpecificCountryAdjacentsForMove(int[] playerCountries, int specificCountryID,
-			ArrayList<Country> countriesList) {
+	public ArrayList<Country> getSpecificCountryAdjacentsForMove(int playerId, int[] playerCountries,
+			int specificCountryID, ArrayList<Country> countriesList) {
 
+		Player[] playersArray = Map.getInstance().getPlayers();
+		for (int k = 0; k < playersArray.length; k++) {
+			if (playersArray[k].getPlayerID() == playerId) {
+				playerCountries = playersArray[k].getCountryID();
+				break;
+			}
+		}
 		ArrayList<Country> specificCountryAdjacentsForMove = new ArrayList<Country>();
 		ArrayList<Country> myCountries = new ArrayList<Country>();
 
@@ -197,13 +205,12 @@ public class MapView {
 	 * @param countriesList List of countries
 	 * @return ArrayList of corresponding countries objects
 	 */
-	public ArrayList<Country> getPlayerCorrespondingCountries(int[] countriesID, ArrayList<Country> countriesList) {
+	public ArrayList<Country> getPlayerCorrespondingCountries(int playerId, ArrayList<Country> countriesList) {
 		ArrayList<Country> playerCountries = new ArrayList<Country>();
 
-		for (int i = 0; i < countriesID.length; i++)
-			for (int j = 0; j < countriesList.size(); j++)
-				if (showCountryID(countriesList, j) == countriesID[i])
-					playerCountries.add(countriesList.get(j));
+		for (int i = 0; i < countriesList.size(); i++)
+			if (countriesList.get(i).getPlayerID() == playerId)
+				playerCountries.add(countriesList.get(i));
 
 		return playerCountries;
 	}

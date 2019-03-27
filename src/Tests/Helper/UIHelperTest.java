@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Tests;
+package Tests.Helper;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import org.junit.Test;
 import Helper.UIHelper;
 import Model.Country;
 import Model.Map;
+
 import java.util.ArrayList;
 
 /**
