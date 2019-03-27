@@ -183,7 +183,6 @@ public class ConquestUI implements IConquestUI {
 									calculatedArmiesForReinforcement = cardController
 											.calculateArmiesCount(playerCardsCounter, playerCards);
 									playerCardsCounter = cardController.defineCardsType(playerCards);
-
 									playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
 									playerReinforcementArmyCount += calculatedArmiesForReinforcement;
 									playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
@@ -194,7 +193,6 @@ public class ConquestUI implements IConquestUI {
 										playerCardsCounter = cardController.defineCardsType(playerCards);
 										calculatedArmiesForReinforcement = cardController
 												.calculateArmiesCount(playerCardsCounter, playerCards);
-
 										playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
 										playerReinforcementArmyCount += calculatedArmiesForReinforcement;
 										playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
