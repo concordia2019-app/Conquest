@@ -25,9 +25,14 @@ import View.MapView;
 public class MapGenerator {
 
 	Scanner input;
+	private boolean readFileStatus = true;
 
 	public MapGenerator() {
 		input = new Scanner(System.in);
+	}
+
+	public boolean getReadMapStatus() {
+		return this.readFileStatus;
 	}
 
 	/**
@@ -41,24 +46,24 @@ public class MapGenerator {
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
-			try {
-				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(new FileReader(filePath));
-				JSONObject jsonObject = (JSONObject) obj;
-				// we put the details of an object to the data response.
-				response.put("data", (JSONArray) jsonObject.get(name));
-				response.put("status", 1);
-				
-			} catch (FileNotFoundException e) {
-				printException(e.getMessage());
-			} catch (IOException e) {
-				printException(e.getMessage());
-			} catch (ParseException e) {
-				printException(e.getMessage());
-			} catch (Exception e) {
-				printException(e.getMessage());
-			}
-			return response;
+		try {
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(new FileReader(filePath));
+			JSONObject jsonObject = (JSONObject) obj;
+			// we put the details of an object to the data response.
+			response.put("data", (JSONArray) jsonObject.get(name));
+			response.put("status", 1);
+
+		} catch (FileNotFoundException e) {
+			printException(e.getMessage());
+		} catch (IOException e) {
+			printException(e.getMessage());
+		} catch (ParseException e) {
+			printException(e.getMessage());
+		} catch (Exception e) {
+			printException(e.getMessage());
+		}
+		return response;
 	}
 
 	/**
@@ -88,7 +93,7 @@ public class MapGenerator {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
-			
+
 			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
 			if ((int) allCountryDetailsResponse.get("status") == 1) {
 				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
@@ -109,12 +114,16 @@ public class MapGenerator {
 					Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
 					importedCountries.add(c);
 				}
-			} else {}
+			} else {
+				readFileStatus = false;
+			}
 			MapView map = new MapView();
 			map.printMainMap(importedCountries);
 		} catch (NumberFormatException e) {
+			readFileStatus = false;
 			printException(e.getMessage());
 		} catch (Exception e) {
+			readFileStatus = false;
 			printException(e.getMessage());
 		}
 		return importedCountries;
@@ -129,22 +138,22 @@ public class MapGenerator {
 	 */
 	public static String writeMap(ArrayList<Country> countries, String filePath) {
 		Gson gson = new Gson();
-		String obj = "{\"Countries\":"+gson.toJson(countries)+"}";
+		String obj = "{\"Countries\":" + gson.toJson(countries) + "}";
 		File file = new File(filePath);
 		try {
 			if (file.createNewFile()) {
 				int writeStatus = fileWriter(file, obj);
-				if(writeStatus == 1) {
+				if (writeStatus == 1) {
 					System.out.println("File is created!");
-				}else {
+				} else {
 					System.out.println("Error while creating the file!");
 				}
 			} else {
 				file.delete();
-				int writeStatus = fileWriter(file,obj);
-				if(writeStatus == 1) {
+				int writeStatus = fileWriter(file, obj);
+				if (writeStatus == 1) {
 					System.out.println("File is updated!");
-				}else {
+				} else {
 					System.out.println("Error while updating the file!");
 				}
 			}
@@ -156,10 +165,11 @@ public class MapGenerator {
 
 	/**
 	 * This function writes the file.
+	 * 
 	 * @param file this is the input file object.
-	 * @param obj this is the input object to write into the file.
+	 * @param obj  this is the input object to write into the file.
 	 * @return (int) status.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static int fileWriter(File file, String obj) throws IOException {
 		int status = 0;

@@ -1,4 +1,4 @@
-package Tests;
+package Tests.Model;
 
 import static org.junit.Assert.*;
 
@@ -42,10 +42,10 @@ public class MapGeneratorTest {
 	public void testInvalidMap() {
 		MapGenerator mapGenerator = new MapGenerator();
 		boolean status = false;
-		/*ArrayList<Country> allCountries = mapGenerator.mapReader(System.getProperty("user.dir") + "\\bin\\ResourceProject\\WrongCountrySample.json");
+		ArrayList<Country> allCountries = mapGenerator.mapReader(System.getProperty("user.dir") + "\\bin\\ResourceProject\\WrongCountrySample.json");
 		
-		if(mapGenerator.returnValidMapStatus())
-			status = true;*/
+		if(mapGenerator.getReadMapStatus())
+			status = true;
 	
 		assertFalse(status);
 	}
