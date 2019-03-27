@@ -50,12 +50,14 @@ public class PlayerHelper {
 	 * @return updated player array
 	 */
 	public Player[] updatePlayerCardsCounterById(Player playerItem, Player[] playerArray) {
+		playerArray = Map.getInstance().getPlayers();
 		for (int i = 0; i < playerArray.length; i++) {
 			if (playerItem.getPlayerID() == playerArray[i].getPlayerID()) {
 				playerArray[i].setCardCounts(playerItem.getCardCounts());
 				break;
 			}
 		}
+		Map.getInstance().setPlayers(playerArray);
 		return playerArray;
 	}
 

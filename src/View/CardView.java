@@ -7,6 +7,7 @@ package View;
 
 import Model.Card;
 import Model.Country;
+import Model.Map;
 import Model.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,12 @@ public class CardView {
 	}
 
 	public void printCardsPlayer(Player player) {
-
+		Player[] playersArray = Map.getInstance().getPlayers();
+		for(Player playerItem : playersArray) {
+			if(playerItem.getPlayerID() == player.getPlayerID()) {
+				player = playerItem;
+			}
+		}
 		ArrayList<Card> playercards = player.getCards();
 		String table = "|%-14s|%-16s|%n";
 

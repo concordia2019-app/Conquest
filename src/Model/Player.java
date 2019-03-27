@@ -76,7 +76,9 @@ public class Player {
 	}
 
 	public void setCards(ArrayList<Card> cardList) {
-		this.cards.clear();
+		for (int i = 0; i < cardList.size(); i++) {
+			cardList.remove(i);
+		}
 		for (Card cardItem : cardList) {
 			this.cards.add(cardItem);
 		}
@@ -121,7 +123,7 @@ public class Player {
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
 		Map map = Map.getInstance();
 		MapView mapView = new MapView();
-		ConquestUI conquestUI = new ConquestUI();
+		ConquestUI conquestUI = ConquestUI.getInstance();
 		UIHelper uiHelper = new UIHelper();
 		Player playerItem = this;
 		String attackInfoTitle = "Attack for player - " + playerItem.getPlayerName() + " - \r\n";
@@ -316,7 +318,7 @@ public class Player {
 		MapView mapView = new MapView();
 		PlayerHelper playerHelper = new PlayerHelper();
 		Map map = Map.getInstance();
-		ConquestUI conquestUI = new ConquestUI();
+		ConquestUI conquestUI = ConquestUI.getInstance();
 		Player playerItem = this;
 		String attackInfoTitle = "Attack for player - " + playerItem.getPlayerName() + " - \r\n";
 		int attackInfoTitleLength = ("Attack for player - " + playerItem.getPlayerName() + " - \r\n").length();
