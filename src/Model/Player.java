@@ -338,6 +338,16 @@ public class Player {
 					mapView.printPlayerMap(playerItem, countryList);
 					System.out.println("Choose your country Id to move:");
 					enteredPlayerCountryId = scanner.next();
+					convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
+					Country chosenPlayerCountry = uiHelper.getCountryById(countryList, convertedPlayerCId);
+					ArrayList<Country> adjacaniesIds = map.getSpecificCountryAdjacentsForMove(playerItem.getCountryID(),
+							chosenPlayerCountry.getCountryID());
+					ArrayList<Country> playerAdjFamilyCountries = new ArrayList<Country>();
+					for (Country adjCountryFamily : adjacaniesIds) {
+						if (adjCountryFamily.getPlayerID() == this.getPlayerID()) {
+							playerAdjFamilyCountries.add(adjCountryFamily);
+						}
+					}
 					if (enteredPlayerCountryId != "" && enteredPlayerCountryId != null
 							&& uiHelper.tryParseInt(enteredPlayerCountryId)) {
 						convertedPlayerCId = Integer.parseInt(enteredPlayerCountryId);
@@ -352,7 +362,14 @@ public class Player {
 						chosenPlayerCountry.getCountryID());
 
 				while (true) {
-					if (adjacaniesIds.size() > 0) {
+					ArrayList<Country> playerAdjFamilyCountries = new ArrayList<Country>();
+					for (Country adjCountryFamily : adjacaniesIds) {
+						if (adjCountryFamily.getPlayerID() == this.getPlayerID()) {
+							playerAdjFamilyCountries.add(adjCountryFamily);
+						}
+					}
+
+					if (playerAdjFamilyCountries.size() > 0) {
 						mapView.printMoveMap(playerItem, chosenPlayerCountry, countryList);
 						System.out.println("Choose your country as a target country with enter the Id:");
 						enteredCountryIdForMove = scanner.next();
