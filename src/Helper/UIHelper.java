@@ -2,6 +2,8 @@ package Helper;
 
 import java.util.ArrayList;
 import Model.Country;
+import Model.Map;
+import Model.Player;
 
 /**
  * Parsing and calculation that needs in UI class will be proceeded in this
@@ -88,5 +90,13 @@ public class UIHelper {
 			}
 		}
 		return false;
+	}
+
+	public Player getPlayerById(int playerId) {
+		Player[] playerArray = Map.getInstance().getPlayers();
+		for(int i = 0; i< playerArray.length;i++) {
+			if(playerArray[i].getPlayerID() == playerId) return playerArray[i];
+		}
+		return null;
 	}
 }
