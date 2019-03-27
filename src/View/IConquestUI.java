@@ -11,6 +11,17 @@ import Model.Country;
 import Model.LeftArmiesResponse;
 import Model.Player;
 
+/**
+ * This is a class to show messages below
+ * <ul>
+ * <li>Showing the map with related adjacencies</li>
+ * <li>showing the menu to select map, attach or move of player</li>
+ * <li>showing the list of countries and adjacencies</li>
+ * </ul>
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public interface IConquestUI {
 	/**
 	 * <p>
@@ -38,6 +49,7 @@ public interface IConquestUI {
 	/**
 	 * This method just ask from player if player want to attack Y => to agree that
 	 * want to attack N => to skip the attack
+	 * 
 	 * @param strQuestion String to show the message
 	 * @return if player pass n , then return false, on the other hand, if pass y,
 	 *         then return true
@@ -69,7 +81,8 @@ public interface IConquestUI {
 	 * 
 	 * @param armiesNumber number of armies
 	 * @player current player to separate countries and assign armies
+	 * @return rest of armies
 	 */
-	public void reinforcementOfPlayer(int armiesNumber, Player player);
+	public int reinforcementOfPlayer(int armiesNumber, Player player);
 
 }

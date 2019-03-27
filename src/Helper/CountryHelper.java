@@ -23,7 +23,7 @@ public class CountryHelper {
 		ArrayList<Country> sourceCountries = map.getCountries();
 		map.setCountries(countriesForUpdate);
 		boolean isCountriesUpToDate = isTheCountryListUpToDate(sourceCountries, countriesForUpdate);
-		if(!isCountriesUpToDate) {
+		if (!isCountriesUpToDate) {
 			map.setCountries(countriesForUpdate);
 		}
 		sourceCountries = map.getCountries();
@@ -85,12 +85,15 @@ public class CountryHelper {
 
 	/**
 	 * check the adjacancies of country is up to date
+	 * 
 	 * @param sourceAdjacencies
 	 * @param targetAdjacencies
 	 * @return
 	 */
 	public boolean isCountryAdjacenciesTheSame(int[] sourceAdjacencies, int[] targetAdjacencies) {
 		boolean countryAdjacenciesSyncStatus = false;
+		if (sourceAdjacencies == null && targetAdjacencies == null)
+			return true;
 		for (int i = 0; i < sourceAdjacencies.length; i++) {
 			for (int j = 0; j < targetAdjacencies.length; j++) {
 				if (sourceAdjacencies[i] == targetAdjacencies[j]) {
@@ -106,4 +109,39 @@ public class CountryHelper {
 		return true;
 	}
 
+	public boolean updateCountryArmiesByObject(Country countryForUpdate) {
+		Map map = Map.getInstance();
+		ArrayList<Country> countryList = map.getCountries();
+		ArrayList<Country> updatedCountries = new ArrayList<Country>();
+		for (Country countryItem : countryList) {
+			if (countryItem.getCountryID() == countryForUpdate.getCountryID()) {
+				countryItem.setArmy(countryForUpdate.getArmy());
+			}
+			updatedCountries.add(countryItem);
+		}
+		map.setCountries(updatedCountries);
+		countryList = map.getCountries();
+		if (isTheCountryListUpToDate(countryList, updatedCountries)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean updateCountryPlayerIdByObject(Country countryForUpdate) {
+		Map map = Map.getInstance();
+		ArrayList<Country> countryList = map.getCountries();
+		ArrayList<Country> updatedCountries = new ArrayList<Country>();
+		for (Country countryItem : countryList) {
+			if (countryItem.getCountryID() == countryForUpdate.getCountryID()) {
+				countryItem.setPlayer(countryForUpdate.getPlayerID(), countryForUpdate.getPlayerName());
+			}
+			updatedCountries.add(countryItem);
+		}
+		map.setCountries(updatedCountries);
+		countryList = map.getCountries();
+		if (isTheCountryListUpToDate(countryList, updatedCountries)) {
+			return true;
+		}
+		return false;
+	}
 }

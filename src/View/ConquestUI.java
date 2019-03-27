@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
+import Controller.CardController;
+import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
@@ -20,25 +20,40 @@ import Model.*;
  * <li>showing the list of countries and adjacencies</li>
  * </ul>
  * 
- * @author F.S
+ * @author FarzadShamriz
  *
  */
-
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
 
-	private String MoveQuestion = "Do you want to Move?(Y/N)";
+	private String ContinueReinforcementMessage = "Do you want to finish the reinforcement phase?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
-	private String AttackIsFinished = "The attack is finished.";
-	private String SelectYourCountryID = "Please select your country ID.";
 	private String InputNumberOfPlayers = "Enter bumber of players [2..5]:";
 	private String ErrorEnteredValue = "Entered value is not acceptable.";
 	private String ErrorInputNumberOfPlayers = "Your input number is not acceptable. Please enter a number between 2..5";
-	private String AttackFinishQuestion = "Is attack finished ?(Y/N)";
+	private String SaveAndExitQuestion = "Do you want to save and exit the Game ?(Y/N)";
+	private String UsePlayerCardQuestion = "Do you want to use your cards?(Y/N)";
+	private String HandInCardsForceMessage = "Your cards will be converted to armies,\n because you have more than 4 cards.";
 	private Scanner scanner;
-
+	private String FinishGame = " ||==================================================||\n"
+			+ " ||**************************************************||\n"
+			+ " ||                                                  ||\n"
+			+ " ||    =======       /\\      |\\      /|  |*****    ||\n"
+			+ " ||    ||  ___      /__\\     | \\    / |  |         ||\n"
+			+ " ||    ||    ||    /    \\    |  \\  /  |  |*****    ||\n"
+			+ " ||    ||____||   /      \\   |   \\/   |  |         ||\n"
+			+ " ||                                       *****      ||\n"
+			+ " ||     =====    \\       //  |*****      ||****|    ||\n"
+			+ " ||    ||   ||    \\     //   |           ||    |    ||\n"
+			+ " ||    ||   ||     \\   //    |*****      ||*****    ||\n"
+			+ " ||    ||   ||      \\ //     |           ||  \\     ||\n"
+			+ " ||     =====        ---      |*****      ||   \\    ||\n"
+			+ " ||                                                  ||\n"
+			+ " ||**************************************************||\n"
+			+ " ||==================================================||\n";
 	private MapView mapView = new MapView();
+	private ConquestController conquestController = ConquestController.getInstance();
 	private CountryHelper countryHelper;
 	private Player[] Players;
 	private ArrayList<Country> Countries;
@@ -47,15 +62,29 @@ public class ConquestUI implements IConquestUI {
 	UIHelper uiHelper;
 	private Map map;
 	final int FirstArmiesNumberReinforcement = 3;
+	private int calculatedArmiesForReinforcement = 0;
 	private MapGenerator mapGenerator;
-	private String ErrorFileRead = "Your file not found or maybe is not in correct format. please check and try again.";
+	private CardController cardController;
 
-	public ConquestUI() {
+	private static ConquestUI instance;
+
+	public static ConquestUI getInstance() {
+		if (instance == null) {
+			instance = new ConquestUI();
+			return instance;
+		} else {
+			return instance;
+		}
+
+	}
+
+	private ConquestUI() {
 		mapGenerator = new MapGenerator();
 		map = Map.getInstance();
 		scanner = new Scanner(System.in);
 		uiHelper = new UIHelper();
 		countryHelper = new CountryHelper();
+		cardController = new CardController();
 	}
 
 	/**
@@ -92,10 +121,99 @@ public class ConquestUI implements IConquestUI {
 					boolean syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
 					while (true && syncCountriesDataStatus) {
 						for (Player playerItem : Players) {
+
+							System.out.println("Playr " + playerItem.getPlayerName() + " has "
+									+ conquestController.playerPercentageCalculation(playerItem, Countries)
+									+ " percentage of the map");
+
+							int restOfReinforcementArmies = 0;
+							CardsCounter playerCardsCounter = new CardsCounter();
+							Countries = map.getCountries();
+							if (playerItem.getReinforcementPlayerArmies() > 0) {
+								restOfReinforcementArmies = reinforcementOfPlayer(
+										playerItem.getReinforcementPlayerArmies(), playerItem);
+								playerItem.setReinforcementPlayerArmies(restOfReinforcementArmies);
+								calculatedArmiesForReinforcement = 0;
+							}
+
 							playerItem.attackPlayer(Countries);
+							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+							Countries = map.getCountries();
 							mapView.printMainMap(map.getCountries());
+
+							int playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+							playerReinforcementArmyCount += FirstArmiesNumberReinforcement;
+							playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+							playerReinforcementArmyCount = 0;
+							ArrayList<Card> playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+							mapView.printMainMap(map.getCountries());
+							CardView cardView = new CardView();
+							if (playerItem.getAllowingCardStatus()) {
+								CardController cardController = new CardController();
+								Card cardToAssign = cardController.cardAssigner();
+								Player CurrentSourcePlayer = uiHelper.getPlayerById(playerItem.getPlayerID());
+								ArrayList<Card> playerItemCards = new ArrayList<Card>();
+								for (Card cardItem : CurrentSourcePlayer.getCards()) {
+									playerItemCards.add(cardItem);
+								}
+								playerItemCards.add(cardToAssign);
+								playerItem.addCard(cardToAssign);
+								playerItem.setCardCounts(playerCardsCounter);
+								map.setPlayers(Players);
+								playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+								playerItem.setAllowingStatus(false);
+								playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+							}
+
 							playerItem.movePlayer(Countries);
-							mapView.printMainMap(map.getCountries());
+							syncCountriesDataStatus = countryHelper.updateSourceCountriesArmies(Countries);
+							Countries = map.getCountries();
+
+							Player currentPlayerItem = uiHelper.getPlayerById(playerItem.getPlayerID());
+							if (currentPlayerItem.getCards().size() > 0) {
+								cardView.printCardsPlayer(currentPlayerItem);
+							}
+
+							playerCardsCounter = cardController.defineCardsType(playerItem.getCards());
+							playerItem.setCardCounts(playerCardsCounter);
+
+							if (playerCards.size() > 2) {
+								boolean cardHandInAnswer = conquestUiYesNoQuestion(UsePlayerCardQuestion);
+								if (cardHandInAnswer) {
+									calculatedArmiesForReinforcement = cardController
+											.calculateArmiesCount(playerCardsCounter, playerCards);
+									playerCardsCounter = cardController.defineCardsType(playerCards);
+									playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+									playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+									playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+									playerReinforcementArmyCount = 0;
+								} else {
+									if (playerItem.getCards().size() >= 5) {
+										System.out.println(HandInCardsForceMessage);
+										playerCardsCounter = cardController.defineCardsType(playerCards);
+										calculatedArmiesForReinforcement = cardController
+												.calculateArmiesCount(playerCardsCounter, playerCards);
+										playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+										playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+										playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+										playerReinforcementArmyCount = 0;
+									}
+
+								}
+							}
+							if (playerItem.getPlayerID() == Players[Players.length - 1].getPlayerID()) {
+								boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
+								if (saveAndExitGame) {
+									mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+									System.exit(0);
+								}
+							}
+							boolean finishGameStatus = conquestController.isGameFinish();
+							if (finishGameStatus) {
+								printFinishGame();
+								break;
+							}
+
 						}
 						// attackPlayer(Players, Countries);
 						// movePlayer(Players, Countries);
@@ -104,27 +222,118 @@ public class ConquestUI implements IConquestUI {
 				case 2:
 					System.out.println("Loading new map.");
 					boolean readFileStatus = getFilePathForLoadingMap();
-					while (true) {
-						if (readFileStatus) {
-							System.out.println("**   Game is started   **");
-							PlayerNumber = getNumberOfPlayer();
-							ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
-							map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
-							Countries = map.getCountries();
-							Players = map.getPlayers();
+					if (readFileStatus) {
+						System.out.println("**   Game is started   **");
+						PlayerNumber = getNumberOfPlayer();
+						ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
+						map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
+						Countries = map.getCountries();
+						Players = map.getPlayers();
+						for (Player playerItem : Players) {
+							reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
+						}
+						boolean syncCountriesDataStatusInLoadMap = countryHelper.updateSourceCountriesArmies(Countries);
+						while (true && syncCountriesDataStatusInLoadMap) {
 							for (Player playerItem : Players) {
-								reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
-							}
 
-							while (true) {
-								// attackPlayer(Players, Countries);
-								// movePlayer(Players, Countries);
-								// TODO check game is finished or not
-								break;
+								System.out.println("Playr " + playerItem.getPlayerName() + " has "
+										+ conquestController.playerPercentageCalculation(playerItem, Countries)
+										+ " percentage of the map");
+
+								int restOfReinforcementArmies = 0;
+								CardsCounter playerCardsCounter = new CardsCounter();
+								Countries = map.getCountries();
+								if (playerItem.getReinforcementPlayerArmies() > 0) {
+									restOfReinforcementArmies = reinforcementOfPlayer(
+											playerItem.getReinforcementPlayerArmies(), playerItem);
+									playerItem.setReinforcementPlayerArmies(restOfReinforcementArmies);
+									calculatedArmiesForReinforcement = 0;
+								}
+								playerItem.attackPlayer(Countries);
+								syncCountriesDataStatusInLoadMap = countryHelper.updateSourceCountriesArmies(Countries);
+								Countries = map.getCountries();
+								mapView.printMainMap(map.getCountries());
+
+								int playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+								playerReinforcementArmyCount += FirstArmiesNumberReinforcement;
+								playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+								playerReinforcementArmyCount = 0;
+								ArrayList<Card> playerCards = uiHelper.getPlayerById(playerItem.getPlayerID())
+										.getCards();
+								mapView.printMainMap(map.getCountries());
+								CardView cardView = new CardView();
+								if (playerItem.getAllowingCardStatus()) {
+									CardController cardController = new CardController();
+									Card cardToAssign = cardController.cardAssigner();
+									Player CurrentSourcePlayer = uiHelper.getPlayerById(playerItem.getPlayerID());
+									ArrayList<Card> playerItemCards = new ArrayList<Card>();
+									for (Card cardItem : CurrentSourcePlayer.getCards()) {
+										playerItemCards.add(cardItem);
+									}
+									playerItemCards.add(cardToAssign);
+									playerItem.addCard(cardToAssign);
+									playerItem.setCardCounts(playerCardsCounter);
+									map.setPlayers(Players);
+									playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+									playerItem.setAllowingStatus(false);
+
+									playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+								}
+
+								playerItem.movePlayer(Countries);
+								syncCountriesDataStatusInLoadMap = countryHelper.updateSourceCountriesArmies(Countries);
+								Countries = map.getCountries();
+
+								Player currentPlayerItem = uiHelper.getPlayerById(playerItem.getPlayerID());
+								if (currentPlayerItem.getCards().size() > 0) {
+									cardView.printCardsPlayer(currentPlayerItem);
+								}
+
+								playerCardsCounter = cardController.defineCardsType(playerItem.getCards());
+								playerItem.setCardCounts(playerCardsCounter);
+
+								if (playerCards.size() > 2) {
+									boolean cardHandInAnswer = conquestUiYesNoQuestion(UsePlayerCardQuestion);
+									if (cardHandInAnswer) {
+										calculatedArmiesForReinforcement = cardController
+												.calculateArmiesCount(playerCardsCounter, playerCards);
+										playerCardsCounter = cardController.defineCardsType(playerCards);
+
+										playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+										playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+										playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+										playerReinforcementArmyCount = 0;
+									} else {
+										if (playerItem.getCards().size() >= 5) {
+											System.out.println(HandInCardsForceMessage);
+											playerCardsCounter = cardController.defineCardsType(playerCards);
+											calculatedArmiesForReinforcement = cardController
+													.calculateArmiesCount(playerCardsCounter, playerCards);
+
+											playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+											playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+											playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+											playerReinforcementArmyCount = 0;
+										}
+
+									}
+								}
+								if (playerItem.getPlayerID() == Players[Players.length - 1].getPlayerID()) {
+									boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
+									if (saveAndExitGame) {
+										mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+										System.exit(0);
+									}
+								}
+								boolean finishGameStatus = conquestController.isGameFinish();
+								if (finishGameStatus) {
+									printFinishGame();
+									break;
+								}
+
 							}
-							break;
-						} else {
-							System.out.println(ErrorFileRead);
+							// attackPlayer(Players, Countries);
+							// movePlayer(Players, Countries);
 						}
 					}
 
@@ -145,16 +354,43 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
+	public Player[] addCardToPlayer(Player[] playersForUpdate, Player playerItem) {
+		Player[] updatedPlayers = new Player[playersForUpdate.length];
+		for (int j = 0; j < playersForUpdate.length; j++) {
+			updatedPlayers[j] = playersForUpdate[j];
+			ArrayList<Card> calculatedPlayerCards = playerItem.getCards();
+			if (playersForUpdate[j].getPlayerID() == playerItem.getPlayerID()) {
+				for (Card cardItem : calculatedPlayerCards) {
+					updatedPlayers[j].addCard(cardItem);
+				}
+			}
+		}
+		return updatedPlayers;
+	}
+
+	public Player[] resetAllowingCardToPlayerStatus(Player[] playersFORupdate, Player playerItem) {
+		for (int j = 0; j < playersFORupdate.length; j++) {
+			if (playersFORupdate[j].getPlayerID() == playerItem.getPlayerID()) {
+				playersFORupdate[j].setAllowingStatus(false);
+			}
+		}
+		return playersFORupdate;
+	}
+
 	private boolean getFilePathForLoadingMap() {
 		System.out.println("Your file should be in this path : " + System.getProperty("user.dir")
 				+ "\\bin\\ResourceProject\\CountrySample.json");
 		String filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
-		ArrayList<Country> loadingListCountries = mapGenerator.MapReader(filePath);
+		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);
 		map.setCountries(loadingListCountries);
 		if (loadingListCountries.size() > 0) {
 			return true;
 		}
 		return false;
+	}
+
+	private String getFilePathForWritingMap() {
+		return (System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
 	}
 
 	/**
@@ -226,7 +462,7 @@ public class ConquestUI implements IConquestUI {
 		while (true) {
 			System.out.print(InputNumberOfPlayers);
 			int num = scanner.nextInt();
-			if (checkPlayerNumber(num)) {
+			if (!checkPlayerNumber(num)) {
 				System.out.println(ErrorInputNumberOfPlayers);
 			} else
 				return num;
@@ -234,7 +470,7 @@ public class ConquestUI implements IConquestUI {
 	}
 
 	public boolean checkPlayerNumber(int number) {
-		if (number < 1 || number >= 5) {
+		if (number > 1 && number <= 5) {
 			return true;
 		} else
 			return false;
@@ -292,16 +528,21 @@ public class ConquestUI implements IConquestUI {
 	 * 
 	 * @param armiesNumber number of armies
 	 * @player current player to separate countries and assign armies
+	 * @return rest of armies
 	 */
 	@Override
-	public void reinforcementOfPlayer(int armiesNumber, Player player) {
+	public int reinforcementOfPlayer(int armiesNumber, Player player) {
+
 		String inputArmiesNumberReinforcementStr = "";
 		int inputArmiesNumberReinforcement = -1;
 		int armiesNumberReinforcement = armiesNumber;
 		int[] playerCountriesIdList = player.getCountryID();
 		String countryIdStr = "";
 		int countryId = -1;
-
+		boolean finishReinforcementAnswer = conquestUiYesNoQuestion(ContinueReinforcementMessage);
+		if (finishReinforcementAnswer) {
+			return armiesNumber;
+		}
 		while (true) {
 			countryIdStr = "";
 			// Show list of player's countries
@@ -324,11 +565,20 @@ public class ConquestUI implements IConquestUI {
 								&& inputArmiesNumberReinforcement <= armiesNumberReinforcement) {
 							uiHelper.addArmiesToCountryById(countryId, Countries, inputArmiesNumberReinforcement);
 							armiesNumberReinforcement -= inputArmiesNumberReinforcement;
+
 							if (armiesNumberReinforcement < 1) {
 								System.out.println(
 										"Reinforcement for player " + player.getPlayerName() + " is finished.");
 								mapView.printMainMap(Countries);
-								break;
+								return armiesNumberReinforcement;
+							} else {
+								finishReinforcementAnswer = conquestUiYesNoQuestion(ContinueReinforcementMessage);
+								if (finishReinforcementAnswer) {
+									System.out.println(
+											"Reinforcement for player " + player.getPlayerName() + " is finished.");
+									mapView.printMainMap(Countries);
+									return armiesNumberReinforcement;
+								}
 							}
 						} else
 							System.out.println(ErrorEnteredValue);
@@ -342,4 +592,7 @@ public class ConquestUI implements IConquestUI {
 
 	}
 
+	public void printFinishGame() {
+		System.out.print(FinishGame);
+	}
 }

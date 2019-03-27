@@ -25,9 +25,14 @@ import View.MapView;
 public class MapGenerator {
 
 	Scanner input;
+	private boolean readFileStatus = true;
 
 	public MapGenerator() {
 		input = new Scanner(System.in);
+	}
+
+	public boolean getReadMapStatus() {
+		return this.readFileStatus;
 	}
 
 	/**
@@ -41,26 +46,24 @@ public class MapGenerator {
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
-		while (true) {
-			try {
-				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(new FileReader(filePath));
-				JSONObject jsonObject = (JSONObject) obj;
-				// we put the details of an object to the data response.
-				response.put("data", (JSONArray) jsonObject.get(name));
-				response.put("status", 1);
-				return response;
-			} catch (FileNotFoundException e) {
-				printException(e.getMessage());
-			} catch (IOException e) {
-				printException(e.getMessage());
-			} catch (ParseException e) {
-				printException(e.getMessage());
-			} catch (Exception e) {
-				printException(e.getMessage());
-			}
+		try {
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(new FileReader(filePath));
+			JSONObject jsonObject = (JSONObject) obj;
+			// we put the details of an object to the data response.
+			response.put("data", (JSONArray) jsonObject.get(name));
+			response.put("status", 1);
 
+		} catch (FileNotFoundException e) {
+			printException(e.getMessage());
+		} catch (IOException e) {
+			printException(e.getMessage());
+		} catch (ParseException e) {
+			printException(e.getMessage());
+		} catch (Exception e) {
+			printException(e.getMessage());
 		}
+		return response;
 	}
 
 	/**
@@ -86,21 +89,22 @@ public class MapGenerator {
 	 * @param filePath this is a path of the JSON file.
 	 * @return (ArrayList<Country>) importedCountries.
 	 */
-	public ArrayList<Country> MapReader(String filePath) {
+	public ArrayList<Country> mapReader(String filePath) {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
+
 			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
 			if ((int) allCountryDetailsResponse.get("status") == 1) {
 				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
 				Object[] jsonCountries = allCountryDetails.toArray();
 				for (int i = 0; i < allCountryDetails.size(); i++) {
 					JSONObject countryDetails = (JSONObject) jsonCountries[i];
-					String name = (String) countryDetails.get("name");
-					Integer id = Integer.parseInt(countryDetails.get("id").toString());
-					Integer continentId = Integer.parseInt(countryDetails.get("continent").toString());
-					Integer army = Integer.parseInt(countryDetails.get("numberOfArmies").toString());
-					JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountries");
+					String name = (String) countryDetails.get("countryName");
+					Integer id = Integer.parseInt(countryDetails.get("countryID").toString());
+					Integer continentId = Integer.parseInt(countryDetails.get("continentID").toString());
+					Integer army = Integer.parseInt(countryDetails.get("army").toString());
+					JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountriesID");
 					int[] numbers = new int[adjacentCountriesId.size()];
 					// Extract numbers from JSON array.
 					int[] adjCountries = new int[numbers.length];
@@ -110,12 +114,16 @@ public class MapGenerator {
 					Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
 					importedCountries.add(c);
 				}
-			} else {}
+			} else {
+				readFileStatus = false;
+			}
 			MapView map = new MapView();
 			map.printMainMap(importedCountries);
 		} catch (NumberFormatException e) {
+			readFileStatus = false;
 			printException(e.getMessage());
 		} catch (Exception e) {
+			readFileStatus = false;
 			printException(e.getMessage());
 		}
 		return importedCountries;
@@ -130,22 +138,22 @@ public class MapGenerator {
 	 */
 	public static String writeMap(ArrayList<Country> countries, String filePath) {
 		Gson gson = new Gson();
-		String obj = gson.toJson(countries);
+		String obj = "{\"Countries\":" + gson.toJson(countries) + "}";
 		File file = new File(filePath);
 		try {
 			if (file.createNewFile()) {
 				int writeStatus = fileWriter(file, obj);
-				if(writeStatus == 1) {
+				if (writeStatus == 1) {
 					System.out.println("File is created!");
-				}else {
+				} else {
 					System.out.println("Error while creating the file!");
 				}
 			} else {
 				file.delete();
-				int writeStatus = fileWriter(file,obj);
-				if(writeStatus == 1) {
+				int writeStatus = fileWriter(file, obj);
+				if (writeStatus == 1) {
 					System.out.println("File is updated!");
-				}else {
+				} else {
 					System.out.println("Error while updating the file!");
 				}
 			}
@@ -157,10 +165,11 @@ public class MapGenerator {
 
 	/**
 	 * This function writes the file.
+	 * 
 	 * @param file this is the input file object.
-	 * @param obj this is the input object to write into the file.
+	 * @param obj  this is the input object to write into the file.
 	 * @return (int) status.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static int fileWriter(File file, String obj) throws IOException {
 		int status = 0;
