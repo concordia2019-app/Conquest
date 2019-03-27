@@ -41,7 +41,6 @@ public class MapGenerator {
 		JSONObject response = new JSONObject();
 		response.put("status", 0);
 		response.put("data", "");
-		while (true) {
 			try {
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(new FileReader(filePath));
@@ -49,7 +48,7 @@ public class MapGenerator {
 				// we put the details of an object to the data response.
 				response.put("data", (JSONArray) jsonObject.get(name));
 				response.put("status", 1);
-				return response;
+				
 			} catch (FileNotFoundException e) {
 				printException(e.getMessage());
 			} catch (IOException e) {
@@ -59,8 +58,7 @@ public class MapGenerator {
 			} catch (Exception e) {
 				printException(e.getMessage());
 			}
-
-		}
+			return response;
 	}
 
 	/**
@@ -90,17 +88,18 @@ public class MapGenerator {
 
 		ArrayList<Country> importedCountries = new ArrayList<Country>();
 		try {
+			
 			JSONObject allCountryDetailsResponse = getObjectbyName("Countries", filePath);
 			if ((int) allCountryDetailsResponse.get("status") == 1) {
 				JSONArray allCountryDetails = (JSONArray) allCountryDetailsResponse.get("data");
 				Object[] jsonCountries = allCountryDetails.toArray();
 				for (int i = 0; i < allCountryDetails.size(); i++) {
 					JSONObject countryDetails = (JSONObject) jsonCountries[i];
-					String name = (String) countryDetails.get("name");
-					Integer id = Integer.parseInt(countryDetails.get("id").toString());
-					Integer continentId = Integer.parseInt(countryDetails.get("continent").toString());
-					Integer army = Integer.parseInt(countryDetails.get("numberOfArmies").toString());
-					JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountries");
+					String name = (String) countryDetails.get("countryName");
+					Integer id = Integer.parseInt(countryDetails.get("countryID").toString());
+					Integer continentId = Integer.parseInt(countryDetails.get("continentID").toString());
+					Integer army = Integer.parseInt(countryDetails.get("army").toString());
+					JSONArray adjacentCountriesId = (JSONArray) countryDetails.get("adjacentCountriesID");
 					int[] numbers = new int[adjacentCountriesId.size()];
 					// Extract numbers from JSON array.
 					int[] adjCountries = new int[numbers.length];
@@ -130,7 +129,7 @@ public class MapGenerator {
 	 */
 	public static String writeMap(ArrayList<Country> countries, String filePath) {
 		Gson gson = new Gson();
-		String obj = gson.toJson(countries);
+		String obj = "{\"Countries\":"+gson.toJson(countries)+"}";
 		File file = new File(filePath);
 		try {
 			if (file.createNewFile()) {
