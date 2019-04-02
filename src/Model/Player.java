@@ -27,6 +27,7 @@ public class Player {
 	private ConquestController conquestController = ConquestController.getInstance();
 	private boolean allowToGetCard;
 	private int reinforcementPlayerArmies;
+	private PlayerType playerType;
 
 	public Player(int playerID, String playerName, int[] countryID) {
 		this.playerID = playerID;
@@ -34,6 +35,14 @@ public class Player {
 		this.countryID = countryID;
 		allowToGetCard = false;
 		cards = new ArrayList<Card>();
+	}
+
+	public PlayerType getPlayerType() {
+		return this.playerType;
+	}
+
+	public void setPlayerType(PlayerType playerType) {
+		this.playerType = playerType;
 	}
 
 	public int getPlayerID() {

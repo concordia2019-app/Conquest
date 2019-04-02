@@ -10,7 +10,7 @@ public class PlayerNameAndType {
 		this.playerType = playerType;
 	}
 
-	public String PlayerNameAndType() {
+	public String getPlayeName() {
 		return this.PlayerName;
 	}
 

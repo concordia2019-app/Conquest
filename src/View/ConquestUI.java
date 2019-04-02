@@ -124,7 +124,7 @@ public class ConquestUI implements IConquestUI {
 			System.out.println(StartGameMenuMessage);
 			startMenuInput = scanner.nextLine();
 			if ((uiHelper.tryParseInt(startMenuInput)
-					&& (Integer.parseInt(startMenuInput) >= 1 && Integer.parseInt(startMenuInput) < 4))) {
+					&& (Integer.parseInt(startMenuInput) >= 1 && Integer.parseInt(startMenuInput) < 6))) {
 				Integer parsedInputValue = Integer.parseInt(startMenuInput);
 				switch (parsedInputValue) {
 				case 1:
@@ -363,7 +363,7 @@ public class ConquestUI implements IConquestUI {
 				case 4:
 					PlayerNumber = getNumberOfPlayer();
 					ArrayList<PlayerNameAndType> playerNamesAndTypes = getPlayerNamesAndTypes(PlayerNumber);
-					
+					map.assigningPlayerCountries(playerNamesAndTypes);
 					// TODO run Tournament
 					break;
 				case 5:
@@ -400,9 +400,9 @@ public class ConquestUI implements IConquestUI {
 			while (true) {
 				System.out.format("Enter name of player %d: ", i + 1);
 				playerName = scanner.nextLine();
-				System.out.format("Enter type of player %d: ", i + 1);
-				playerTypeID = Integer.parseInt(scanner.nextLine());
 				System.out.print(PlayerTypeTable);
+				System.out.format("Choose type of player %d: ", i + 1);
+				playerTypeID = Integer.parseInt(scanner.nextLine());
 				if ((playerName.isEmpty() || playerName.length() > 16) && (playerTypeID > 0 && playerTypeID < 6)) {
 					System.out.println(ErrorEnteredValue);
 				} else {
@@ -423,7 +423,7 @@ public class ConquestUI implements IConquestUI {
 						playerType = PlayerType.HUMAN;
 						break;
 					}
-					PlayerNameAndType playerAttr = new PlayerNameAndType(playerName, null);
+					PlayerNameAndType playerAttr = new PlayerNameAndType(playerName, playerType);
 					playerAttrList.add(playerAttr);
 					break;
 				}
