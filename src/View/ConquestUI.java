@@ -363,7 +363,7 @@ public class ConquestUI implements IConquestUI {
 				case 4:
 					PlayerNumber = getNumberOfPlayer();
 					ArrayList<PlayerNameAndType> playerNamesAndTypes = getPlayerNamesAndTypes(PlayerNumber);
-
+					
 					// TODO run Tournament
 					break;
 				case 5:
