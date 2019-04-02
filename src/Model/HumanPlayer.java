@@ -9,6 +9,9 @@ package Model;
  *
  * @author Amirhossein
  */
-public class HumanPlayer {
-    
+public class HumanPlayer extends Player {
+
+    public HumanPlayer(int playerID, String playerName, int[] countryID) {
+        super(playerID, playerName, countryID);
+}
 }

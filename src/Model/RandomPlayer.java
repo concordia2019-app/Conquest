@@ -9,6 +9,10 @@ package Model;
  *
  * @author Amirhossein
  */
-public class RandomPlayer {
-    
+public class RandomPlayer extends Player {
+
+    public RandomPlayer(int playerID, String playerName, int[] countryID) {
+        super(playerID, playerName, countryID);
+    }
+ 
 }

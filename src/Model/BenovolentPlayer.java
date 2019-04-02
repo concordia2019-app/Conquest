@@ -9,6 +9,11 @@ package Model;
  *
  * @author Amirhossein
  */
-public class BenovolentPlayer {
-    
+public class BenovolentPlayer extends Player {
+
+    public BenovolentPlayer(int playerID, String playerName, int[] countryID) {
+        super(playerID, playerName, countryID);
+    }
+ 
+     
 }
