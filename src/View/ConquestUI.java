@@ -25,7 +25,7 @@ import Model.*;
  */
 public class ConquestUI implements IConquestUI {
 
-	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Quit";
+	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Play Sing;le Mode\r\n4.Run Tornoment\r\n5.Quit";
 
 	private String ContinueReinforcementMessage = "Do you want to finish the reinforcement phase?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
@@ -36,19 +36,37 @@ public class ConquestUI implements IConquestUI {
 	private String UsePlayerCardQuestion = "Do you want to use your cards?(Y/N)";
 	private String HandInCardsForceMessage = "Your cards will be converted to armies,\n because you have more than 4 cards.";
 	private Scanner scanner;
+	private String PlayerTypeTable = "1.Aggressive \r\n2.Benevolent \r\n3.Random \r\n4.Cheater \r\n5.Human\r\n";
 	private String FinishGame = " ||==================================================||\n"
 			+ " ||**************************************************||\n"
 			+ " ||                                                  ||\n"
-			+ " ||    =======       /\\      |\\      /|  |*****    ||\n"
-			+ " ||    ||  ___      /__\\     | \\    / |  |         ||\n"
-			+ " ||    ||    ||    /    \\    |  \\  /  |  |*****    ||\n"
-			+ " ||    ||____||   /      \\   |   \\/   |  |         ||\n"
+			+ " ||    =======       /\\\\      |\\\\      /|  |*****    ||\n"
+			+ " ||    ||  ___      /__\\\\     | \\\\    / |  |         ||\n"
+			+ " ||    ||    ||    /    \\\\    |  \\\\  /  |  |*****    ||\n"
+			+ " ||    ||____||   /      \\\\   |   \\\\/   |  |         ||\n"
 			+ " ||                                                  ||\n"
-			+ " ||     =====    \\       //  |*****      ||****|    ||\n"
-			+ " ||    ||   ||    \\     //   |           ||    |    ||\n"
-			+ " ||    ||   ||     \\   //    |*****      ||*****    ||\n"
-			+ " ||    ||   ||      \\ //     |           ||  \\     ||\n"
-			+ " ||     =====        ---      |*****      ||   \\    ||\n"
+			+ " ||     =====    \\\\       ////  |*****      ||****|    ||\n"
+			+ " ||    ||   ||    \\\\     ////   |           ||    |    ||\n"
+			+ " ||    ||   ||     \\\\   ////    |*****      ||*****    ||\n"
+			+ " ||    ||   ||      \\\\ ////     |           ||  \\\\     ||\n"
+			+ " ||     =====        ---      |*****      ||   \\\\    ||\n"
+			+ " ||                                                  ||\n"
+			+ " ||**************************************************||\n"
+			+ " ||==================================================||\n";
+	private String StartGame = " ||==================================================||\n"
+			+ " ||**************************************************||\n"
+			+ " ||                                                  ||\n"
+			+ " ||    =======       /\\\\      |\\      /|  |*****     ||\n"
+			+ " ||    ||  ___      /__\\\\     | \\    / |  |          ||\n"
+			+ " ||    ||    ||    /    \\\\    |  \\  /  |  |*****     ||\n"
+			+ " ||    ||____||   /      \\\\   |   \\/   |  |          ||\n"
+			+ "                                           *****     ||\n"
+			+ " ||                                                  ||\n"
+			+ " ||     =====   =======    /\\\\      ||****| =======  ||\n"
+			+ " ||    |           |      /__\\\\     ||    |    |     ||\n"
+			+ " ||    |-----      |     /    \\\\    ||*****    |     ||\n"
+			+ " ||          |     |    /      \\\\   ||  \\\\     |     ||\n"
+			+ " ||     =====      |   /        \\\\  ||   \\\\    |     ||\n"
 			+ " ||                                                  ||\n"
 			+ " ||**************************************************||\n"
 			+ " ||==================================================||\n";
@@ -100,6 +118,7 @@ public class ConquestUI implements IConquestUI {
 	 */
 	@Override
 	public void conquestUIShowStartMenu() {
+		System.out.println(StartGame);
 		String startMenuInput;
 		while (true) {
 			System.out.println(StartGameMenuMessage);
@@ -339,6 +358,15 @@ public class ConquestUI implements IConquestUI {
 
 					// break;
 				case 3:
+					// TODO play Single mood
+					break;
+				case 4:
+					PlayerNumber = getNumberOfPlayer();
+					ArrayList<PlayerNameAndType> playerNamesAndTypes = getPlayerNamesAndTypes(PlayerNumber);
+
+					// TODO run Tournament
+					break;
+				case 5:
 					System.out.println("quit.");
 					System.exit(0);
 					break;
@@ -352,6 +380,57 @@ public class ConquestUI implements IConquestUI {
 				System.out.println("Entered value is not acceptable.[0..2]");
 		}
 
+	}
+
+	/**
+	 * Get name and type of player To make players
+	 * 
+	 * @param numberOfPlayers - number of players for creation
+	 * @return return a class model which is a list of players. Each player has name
+	 *         and type to help to create specific player with specific behaviour.
+	 */
+	public ArrayList<PlayerNameAndType> getPlayerNamesAndTypes(int numberOfPlayers) {
+		ArrayList<PlayerNameAndType> playerAttrList = new ArrayList<PlayerNameAndType>();
+		scanner.nextLine();
+		System.out.format("Enter %d names of your players: \n", numberOfPlayers);
+		for (int i = 0; i < numberOfPlayers; i++) {
+			String playerName = "";
+			int playerTypeID = 0;
+			PlayerType playerType = PlayerType.HUMAN;
+			while (true) {
+				System.out.format("Enter name of player %d: ", i + 1);
+				playerName = scanner.nextLine();
+				System.out.format("Enter type of player %d: ", i + 1);
+				playerTypeID = Integer.parseInt(scanner.nextLine());
+				System.out.print(PlayerTypeTable);
+				if ((playerName.isEmpty() || playerName.length() > 16) && (playerTypeID > 0 && playerTypeID < 6)) {
+					System.out.println(ErrorEnteredValue);
+				} else {
+					switch (playerTypeID) {
+					case 1:
+						playerType = PlayerType.AGGRESSIVE;
+						break;
+					case 2:
+						playerType = PlayerType.BENOVOLENT;
+						break;
+					case 3:
+						playerType = PlayerType.RANDOM;
+						break;
+					case 4:
+						playerType = PlayerType.CHEATER;
+						break;
+					case 5:
+						playerType = PlayerType.HUMAN;
+						break;
+					}
+					PlayerNameAndType playerAttr = new PlayerNameAndType(playerName, null);
+					playerAttrList.add(playerAttr);
+					break;
+				}
+			}
+			PlayerNames.add(playerName);
+		}
+		return playerAttrList;
 	}
 
 	public Player[] addCardToPlayer(Player[] playersForUpdate, Player playerItem) {

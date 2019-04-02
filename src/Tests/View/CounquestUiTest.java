@@ -19,7 +19,7 @@ public class CounquestUiTest {
 		conquestUI = ConquestUI.getInstance();
 		countryTest = new Country("TestCountry", 1, 1, 10, null, 1, "playerTest");
 	}
-	
+	@Test
 	public void checkPlayerNumberTest() {
 		boolean result = conquestUI.checkPlayerNumber(3);
 		assertTrue(result);
