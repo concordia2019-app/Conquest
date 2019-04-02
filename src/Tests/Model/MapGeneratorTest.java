@@ -65,6 +65,8 @@ public class MapGeneratorTest {
 		File tempFile = new File(System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
 		boolean exists = tempFile.exists();
 		assertTrue(exists);
+
+	
 	}
 	
 	@Test
