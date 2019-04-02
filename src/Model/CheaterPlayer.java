@@ -14,3 +14,4 @@ public class CheaterPlayer extends Player {
     public CheaterPlayer(int playerID, String playerName, int[] countryID) {
         super(playerID, playerName, countryID);
 }
+}

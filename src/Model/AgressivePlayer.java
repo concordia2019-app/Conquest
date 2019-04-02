@@ -9,6 +9,15 @@ package Model;
  *
  * @author Amirhossein
  */
-public class AgressivePlayer {
+public class AgressivePlayer extends Player {
+
+    public AgressivePlayer(int playerID, String playerName, int[] countryID) {
+        super(playerID, playerName, countryID);
+    }
+    
+    public void attackPlayer()
+    {
+        
+    }
     
 }
