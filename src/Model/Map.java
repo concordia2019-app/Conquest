@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
+import com.sun.javafx.scene.layout.region.LayeredBackgroundPositionConverter;
 import View.MapView;
 
 /**
@@ -51,7 +51,26 @@ public class Map {
 				countryTempList.remove(randomCountryId);
 				// updateCountryById(i, countriesIds[j]);
 			}
-			Players[i] = new Player(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+			PlayerType currentPlayerType = playerNameAndTypeList.get(i).getPlayerType();
+
+			switch (currentPlayerType) {
+			case AGGRESSIVE:
+				Players[i] = new AgressivePlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				break;
+			case BENOVOLENT:
+				Players[i] = new BenovolentPlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				break;
+			case CHEATER:
+				Players[i] = new CheaterPlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				break;
+			case RANDOM:
+				Players[i] = new RandomPlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				break;
+			default:
+				Players[i] = new Player(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				break;
+			}
+
 			Players[i].setPlayerType(playerNameAndTypeList.get(i).getPlayerType());
 			for (int cCounter = 0; cCounter < countriesIds.length; cCounter++) {
 				updateCountryById(i + 1, countriesIds[cCounter], playerNameAndTypeList.get(i).getPlayeName());

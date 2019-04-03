@@ -6,6 +6,7 @@ import java.util.Arrays;
 import Model.Country;
 import Model.Map;
 import Model.Player;
+import Model.PlayerType;
 
 /**
  * This class is printing tables which is related to the MainMap, MoveMap, and
@@ -148,22 +149,39 @@ public class MapView {
 	 */
 	public void printMainMap(ArrayList<Country> countriesList) {
 
-		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%n";
+		String table = "|%-14d|%-16s|%-15d|%-16d|%-28s|%-15s|%-15s|%n";
 
 		System.out.format(
-				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+---------------+%n");
 		System.out.format(
-				"| Country's ID | Country's name | No. of armies | Continent's ID |   Adjacent countries' ID   | Player's name |%n");
+				"| Country's ID | Country's name | No. of armies | Continent's ID |   Adjacent countries' ID   | Player's name | Player's Type |%n");
 		System.out.format(
-				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+---------------+%n");
 
 		for (int i = 0; i < countriesList.size(); i++)
 			System.out.format(table, showCountryID(countriesList, i), showCountryName(countriesList, i),
 					showArmy(countriesList, i), showContinentID(countriesList, i),
-					Arrays.toString(showAdjacentCountriesID(countriesList, i)), showPlayerName(countriesList, i));
+					Arrays.toString(showAdjacentCountriesID(countriesList, i)), showPlayerName(countriesList, i),
+					showPlayerType(countriesList, countriesList.get(i).getPlayerID()));
 
 		System.out.format(
-				"+--------------+----------------+---------------+----------------+----------------------------+---------------+%n");
+				"+--------------+----------------+---------------+----------------+----------------------------+---------------+---------------+%n");
+	}
+
+	public String showPlayerType(ArrayList<Country> CountryList, int countryId) {
+		Map map = Map.getInstance();
+		Player[] players = map.getPlayers();
+		for (int j = 0; j < CountryList.size(); j++) {
+			if (CountryList.get(j).getCountryID() == countryId) {
+				for (int i = 0; i < players.length; i++) {
+					if (players[i].getPlayerID() == CountryList.get(j).getPlayerID()) {
+						return players[i].getPlayerType().toString();
+					}
+				}
+			}
+		}
+		return "";
+
 	}
 
 	/**
