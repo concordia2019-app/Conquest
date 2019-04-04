@@ -15,7 +15,7 @@ import Tests.Model.MapGeneratorTest;
 import Tests.Model.MapTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ MapTest.class, ConquestControllerTest.class, CountryHelperTest.class, PlayerHelperTest.class,
+@SuiteClasses({ ConquestControllerTest.class, MapTest.class, CountryHelperTest.class, PlayerHelperTest.class,
 		UIHelperTest.class, CardTest.class, FinishGameTest.class, ConquestControllerTest.class,
 		MapGeneratorTest.class })
 public class SuiteClass {

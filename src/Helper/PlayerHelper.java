@@ -2,6 +2,7 @@ package Helper;
 
 import java.util.ArrayList;
 
+import Model.Card;
 import Model.Country;
 import Model.Editor;
 import Model.Map;
@@ -45,7 +46,8 @@ public class PlayerHelper {
 
 	/**
 	 * this method update cardsCounter of layer which find by id
-	 * @param playerItem player which should update
+	 * 
+	 * @param playerItem  player which should update
 	 * @param playerArray list of players to find player
 	 * @return updated player array
 	 */
@@ -163,4 +165,78 @@ public class PlayerHelper {
 		}
 	}
 
+	/**
+	 * Return Player's countries
+	 * 
+	 * @param countryList - list of all countries
+	 * @param playerId    - ID of player
+	 * @return list of player's countries
+	 */
+	public ArrayList<Country> getPlayerCountries(ArrayList<Country> countryList, int playerId) {
+		ArrayList<Country> resultCountries = new ArrayList<Country>();
+		for (Country countryItem : countryList) {
+			if (countryItem.getPlayerID() == playerId) {
+				resultCountries.add(countryItem);
+			}
+		}
+		return resultCountries;
+	}
+
+	/**
+	 * return country from list with the minimum armies
+	 * 
+	 * @param countryList - list of countries
+	 * @return - weaker country with minimum armies
+	 */
+	public Country getWeakerCountry(ArrayList<Country> countryList) {
+		Country weakerCountry = countryList.get(0);
+		for (Country countryItem : countryList) {
+			if (countryItem.getArmy() < weakerCountry.getArmy())
+				weakerCountry = countryItem;
+		}
+		return weakerCountry;
+	}
+
+	public Country getFamilyAdjacentWithMoreThanOneArmy(ArrayList<Country> familyAdjacentCountries, Country country) {
+		for (Country countryFamilyItem : familyAdjacentCountries) {
+			if (checkNumberIsInList(countryFamilyItem.getAdjacentCountriesID(), country.getCountryID())
+					&& countryFamilyItem.getArmy() > 1) {
+				return countryFamilyItem;
+			}
+		}
+		return null;
+	}
+
+	public boolean checkNumberIsInList(int[] intArrays, int specificNumber) {
+		for (int i = 0; i < intArrays.length; i++) {
+			if (intArrays[i] == specificNumber)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean playerUseCardDecide(ArrayList<Card> playerCards) {
+		int infantryCardCounter = 0;
+		int cavalryCardCounter = 0;
+		int artilleryCardCounter = 0;
+		if (playerCards.size() > 5)
+			return true;
+		for (Card card : playerCards) {
+			switch (card.getCardType()) {
+			case ARTILLERY:
+				artilleryCardCounter++;
+				break;
+			case CAVALRY:
+				cavalryCardCounter++;
+				break;
+			case INFANTRY:
+				infantryCardCounter++;
+				break;
+			}
+		}
+		if (artilleryCardCounter >= 3 || infantryCardCounter >= 3 || cavalryCardCounter >= 3) {
+			return true;
+		}
+		return false;
+	}
 }
