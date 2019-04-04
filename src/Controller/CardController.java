@@ -74,7 +74,7 @@ public class CardController {
         
         	/**
         	/**
- *     give the types of cards and counts them  the 
+ *     calculate armies count from the types of cards base on 3 matching 
  *     @param cards  player cards which this function calculating 
  */
         public int calculateArmiesCount(CardsCounter cardsCounter , ArrayList<Card> cards) {
@@ -84,43 +84,48 @@ public class CardController {
             int pairArtillery=(int)cardsCounter.getArtillerycounter()/3;
             int armiesCount=( pairInfantry + pairCavalry + pairArtillery) * 5 ;
             
-            
-            
-            int tempInfantry=pairInfantry*3; int tempCavalry=pairCavalry*3; int tempArtillery=pairArtillery*3;
-            
-            if(armiesCount>0)
-            {
-             for(int i=0 ;i<cards.size(); i++)
-                   if(cards.get(i).checkCardType(CardType.INFANTRY) && tempInfantry>0)
-                   {
-                       tempInfantry--;
-                   }
-              
-                 if(tempCavalry>0)
-             for(int i=0 ;i<cards.size(); i++)
-                   if(cards.get(i).checkCardType(CardType.CAVALRY) && tempCavalry>0)
-                   {
-                       tempCavalry--;
-                   }
-                      if(tempArtillery>0)
-             for(int i=0 ;i<cards.size(); i++)
-                   if(cards.get(i).checkCardType(CardType.ARTILLERY) && tempArtillery>0)
-                   {
-                       tempArtillery--;
-                   }
-            }
-                   else
-                   {
-                	    pairInfantry=(int)cardsCounter.getInfantrycounter();
-                        pairCavalry=(int)cardsCounter.getCavalrycounter();             
-                        pairArtillery=(int)cardsCounter.getArtillerycounter();
-                        
-                        
-                        armiesCount=( pairInfantry + pairCavalry + pairArtillery) * 5 ;
-                       
-                	   
-                   }
             return armiesCount;
-	}
+        }
+        
+
+    	/**
+    	/**
+*     update cards count from the types of cards base on 3 matching 
+*     @param cards  player cards which this function calculating 
+*     @param cardsCounter cards counter
+*/
+        public ArrayList<Card> updateListCards(CardsCounter cardsCounter , ArrayList<Card> cards) {
+
+        	  int pairInfantry=(int)cardsCounter.getInfantrycounter()/3;
+              int pairCavalry=(int)cardsCounter.getCavalrycounter()/3;             
+              int pairArtillery=(int)cardsCounter.getArtillerycounter()/3;
+         int tempInfantry=pairInfantry*3; int tempCavalry=pairCavalry*3; int tempArtillery=pairArtillery*3;
+        
+        
+         for(int i=0 ;i<cards.size(); i++)
+               if(cards.get(i).checkCardType(CardType.INFANTRY) && tempInfantry>=0)
+               {
+                   tempInfantry--;
+                   cards.remove(i);
+               }
+          
+             if(tempCavalry>0)
+         for(int i=0 ;i<cards.size(); i++)
+               if(cards.get(i).checkCardType(CardType.CAVALRY) && tempCavalry>=0)
+               {
+                   tempCavalry--;
+                                          cards.remove(i);
+               }
+                  if(tempArtillery>0)
+         for(int i=0 ;i<cards.size(); i++)
+               if(cards.get(i).checkCardType(CardType.ARTILLERY) && tempArtillery>=0)
+               {
+                   tempArtillery--;
+                                          cards.remove(i);
+               }
+                  return cards;
+        }
+        
+
 	
 }
