@@ -5,19 +5,22 @@
  */
 package Model;
 
+import Controller.ConquestController;
+import java.util.ArrayList;
+
 /**
  *
  * @author Amirhossein
  */
-public class AgressivePlayer extends Player {
+public class AggressivePlayer extends Player {
 
-    public AgressivePlayer(int playerID, String playerName, int[] countryID) {
+    public AggressivePlayer(int playerID, String playerName, int[] countryID) {
         super(playerID, playerName, countryID);
     }
     
-    public void attackPlayer()
-    {
-        
-    }
     
+public void aggressiveAttack()
+{
+ 
+}
 }

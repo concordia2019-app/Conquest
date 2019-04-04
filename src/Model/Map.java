@@ -55,7 +55,7 @@ public class Map {
 
 			switch (currentPlayerType) {
 			case AGGRESSIVE:
-				Players[i] = new AgressivePlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
+				Players[i] = new AggressivePlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
 				break;
 			case BENOVOLENT:
 				Players[i] = new BenovolentPlayer(i + 1, playerNameAndTypeList.get(i).getPlayeName(), countriesIds);
