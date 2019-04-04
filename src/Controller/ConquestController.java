@@ -1,14 +1,12 @@
 package Controller;
 
-import java.util.Random;
-
 import Model.AttackResponse;
 import Model.Card;
 import Model.Country;
 import Model.Map;
 import Model.Player;
-
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ConquestController {
 
@@ -100,6 +98,21 @@ public class ConquestController {
 		int randomNumber = random.nextInt(greatest + 1 - least) + least;
 		return randomNumber;
 	}
+          public ArrayList<Country> getAdjacentCountries(int[] adjacentId)
+        {
+            ArrayList<Country> countries= new  ArrayList<Country> ();
+             for(int i=0;i< adjacentId.length;i++)
+             {
+            for(int j=0; j< Map.getInstance().getCountries().size() ;j++)
+            {
+                  if( Map.getInstance().getCountries().get(j).getPlayerID()==adjacentId[i])
+                    {
+                        countries.add(Map.getInstance().getCountries().get(i));
+                    }
+            }
+             }
+            return countries;
+        }
         public ArrayList<Country> getPlayerCountries(int playerId)
         {
             ArrayList<Country> playerCountries= new  ArrayList<Country> ();
