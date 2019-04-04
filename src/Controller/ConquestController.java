@@ -100,6 +100,18 @@ public class ConquestController {
 		int randomNumber = random.nextInt(greatest + 1 - least) + least;
 		return randomNumber;
 	}
+        public ArrayList<Country> getPlayerCountries(int playerId)
+        {
+            ArrayList<Country> playerCountries= new  ArrayList<Country> ();
+            for(int i=0; i< Map.getInstance().getCountries().size() ;i++)
+            {
+                  if( Map.getInstance().getCountries().get(i).getPlayerID()==playerId)
+                    {
+                        playerCountries.add(Map.getInstance().getCountries().get(i));
+                    }
+            }
+            return playerCountries;
+        }
 
 	/**
 	 * This method will simulate the attack when player attacks an adjacent country.
