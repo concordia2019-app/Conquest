@@ -49,7 +49,30 @@ public class RandomPlayer extends Player {
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
 		ArrayList<Card> playerCards = this.getCards();
 		PlayerHelper playerHelper = new PlayerHelper();
+		Random random = new Random();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
+		int playerReinforcementCountryIndex = random.nextInt(playerCountries.size() - 1);
+		Country playerRandomCountry = playerCountries.get(playerReinforcementCountryIndex);
+		if (playerHelper.playerUseCardDecide(playerCards)) {
+			ArrayList<Country> updatedCountryList = new ArrayList<Country>();
+
+			for (Country countryItem : countryList) {
+				if (countryItem.getCountryID() == playerRandomCountry.getCountryID()) {
+					int selectedCountryArmies = playerRandomCountry.getArmy();
+					int numberRandomArmies = random.nextInt(this.getReinforcementPlayerArmies());
+					this.setReinforcementPlayerArmies((this.getReinforcementPlayerArmies() - numberRandomArmies));
+					int armiesToAdd = (selectedCountryArmies + numberRandomArmies);
+					countryItem.setArmy(armiesToAdd);
+				}
+				updatedCountryList.add(countryItem);
+			}
+
+			boolean updateSucceed = false;
+			CountryHelper countryHelper = new CountryHelper();
+			while (!updateSucceed) {
+				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
+			}
+		}
 
 		return countryList;
 	}

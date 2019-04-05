@@ -54,6 +54,7 @@ public class BenovolentPlayer extends Player {
 				if (countryItem.getCountryID() == playerWeakerCountry.getCountryID()) {
 					int weakerCountryArmies = playerWeakerCountry.getArmy();
 					int armiesToAdd = (weakerCountryArmies + this.getReinforcementPlayerArmies());
+					this.setReinforcementPlayerArmies(0);
 					countryItem.setArmy(armiesToAdd);
 				}
 				updatedCountryList.add(countryItem);
