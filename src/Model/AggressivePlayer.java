@@ -6,6 +6,8 @@
 package Model;
 
 import Controller.ConquestController;
+import Helper.CountryHelper;
+import Helper.PlayerHelper;
 import java.util.ArrayList;
 
 /**
@@ -19,19 +21,19 @@ public class AggressivePlayer extends Player {
 	}
 
 	/*
-	 * aggressive attack behaviosr choosing the best country's army and attack by
-	 * maximum armies
-	 * 
+	 * aggressive attack behaviosr choosing the best country's army and 
+	 * and find the best adjeacent and attack on it
+	 * behavior on maximum armies
 	 */
 	public ArrayList<Country> aggressiveAttack() {
-		ArrayList<Country> playersCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
+		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
 		ArrayList<Country> allCountries = Map.getInstance().getCountries();
 
-		Country maxArmyCountry = playersCountries.get(0);
+		Country maxArmyCountry = playerCountries.get(0);
 		// finding max maxArmyCountry from player countries
-		for (int i = 1; i < playersCountries.size(); i++) {
-			if (playersCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
-				maxArmyCountry = playersCountries.get(i);
+		for (int i = 1; i < playerCountries.size(); i++) {
+			if (playerCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
+				maxArmyCountry = playerCountries.get(i);
 			}
 		}
 		ArrayList<Country> adjacentCountries = ConquestController.getInstance()
@@ -53,5 +55,47 @@ public class AggressivePlayer extends Player {
 		}
 		return allCountries;
 	}
+        /*
+	 * aggressive move behaviosr choosing the best country's army 
+	 * and find the best adjeacent and move on it
+	 * behavior on maximum armies
+	 */
+        public void aggressiveMovePlayer(ArrayList<Country> countryList) {
+		PlayerHelper playerHelper = new PlayerHelper();
+ 
+		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
+                 
+                Country maxArmyCountry = playerCountries.get(0);
+		// finding max maxArmyCountry from player countries
+		for (int i = 1; i < playerCountries.size(); i++) {
+			if (playerCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
+				maxArmyCountry = playerCountries.get(i);
+			}
+		}
+                
+                // finding max adjaecent Country from player countries
 
+ 		int armiesNumberToAdd =  (maxArmyCountry.getArmy() - 1);   //  QUESTION : why should be ( -1 ) and does it check the exceptions
+		CountryHelper countryHelper = new CountryHelper();
+		ArrayList<Country> adjacentCountries = countryHelper.getFamilyCountryAdjacencies(countryList,maxArmyCountry, this);
+
+                
+                Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
+
+		for (int i = 1; i < adjacentCountries.size(); i++) {
+			if (adjacentCountries.get(i).getArmy() > maxAdjeacentArmyCountry.getArmy()) {
+				maxAdjeacentArmyCountry = adjacentCountries.get(i);
+			}
+		}
+                
+ 		ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, maxArmyCountry,
+				maxAdjeacentArmyCountry, armiesNumberToAdd);
+
+		boolean updateSucceed = false;
+		while (!updateSucceed) {
+			updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
+		}
+	}
+
+	 
 }
