@@ -214,7 +214,25 @@ public class PlayerHelper {
 		}
 		return false;
 	}
-	
+
+	public ArrayList<Country> moveCalculationForBenovolentPlayer(ArrayList<Country> countryList,
+			Country sourcePlayerCountry, Country destinationPlayerCountry) {
+		int destinationArmies = destinationPlayerCountry.getArmy();
+		int sourceArmies = sourcePlayerCountry.getArmy();
+		int armiesToAdd = ((sourceArmies - destinationArmies) + destinationArmies);
+		int restOfArmiesForSource = destinationArmies;
+		destinationPlayerCountry.setArmy((armiesToAdd));
+		sourcePlayerCountry.setArmy(restOfArmiesForSource);
+
+		for (Country countryItem : countryList) {
+			if (countryItem.getCountryID() == sourcePlayerCountry.getCountryID())
+				countryItem.setArmy(sourcePlayerCountry.getArmy());
+			if (countryItem.getCountryID() == destinationPlayerCountry.getCountryID())
+				countryItem.setArmy(destinationPlayerCountry.getArmy());
+		}
+		return countryList;
+	}
+
 	public boolean playerUseCardDecide(ArrayList<Card> playerCards) {
 		int infantryCardCounter = 0;
 		int cavalryCardCounter = 0;

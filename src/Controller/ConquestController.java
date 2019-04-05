@@ -26,7 +26,7 @@ public class ConquestController {
 
 	}
 
-        public float playerPercentageCalculation(Player player, ArrayList<Country> countries ){
+	public float playerPercentageCalculation(Player player, ArrayList<Country> countries ){
          return   ((float)player.getCountryID().length/countries.size())*100;            
         }
 	/**

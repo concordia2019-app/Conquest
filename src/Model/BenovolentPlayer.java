@@ -32,7 +32,7 @@ public class BenovolentPlayer extends Player {
 		Country playerSourceCountryForMoving = playerHelper.getFamilyAdjacentWithMoreThanOneArmy(playerCountries,
 				playerWeakerCountry);
 		if (playerSourceCountryForMoving != null) {
-			ArrayList<Country> updatedCountryList = moveCalculationForBenovolentPlayer(countryList,
+			ArrayList<Country> updatedCountryList = playerHelper.moveCalculationForBenovolentPlayer(countryList,
 					playerSourceCountryForMoving, playerWeakerCountry);
 			CountryHelper countryHelper = new CountryHelper();
 			boolean updateSucceed = false;
@@ -40,24 +40,6 @@ public class BenovolentPlayer extends Player {
 				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
 			}
 		}
-	}
-
-	public ArrayList<Country> moveCalculationForBenovolentPlayer(ArrayList<Country> countryList,
-			Country sourcePlayerCountry, Country destinationPlayerCountry) {
-		int destinationArmies = destinationPlayerCountry.getArmy();
-		int sourceArmies = sourcePlayerCountry.getArmy();
-		int armiesToAdd = ((sourceArmies - destinationArmies) + destinationArmies);
-		int restOfArmiesForSource = destinationArmies;
-		destinationPlayerCountry.setArmy((armiesToAdd));
-		sourcePlayerCountry.setArmy(restOfArmiesForSource);
-
-		for (Country countryItem : countryList) {
-			if (countryItem.getCountryID() == sourcePlayerCountry.getCountryID())
-				countryItem.setArmy(sourcePlayerCountry.getArmy());
-			if (countryItem.getCountryID() == destinationPlayerCountry.getCountryID())
-				countryItem.setArmy(destinationPlayerCountry.getArmy());
-		}
-		return countryList;
 	}
 
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {

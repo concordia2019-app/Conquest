@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Model.Country;
 import Model.Map;
+import Model.Player;
 
 /**
  * This class is working for calculating or checking something for countries.
@@ -109,6 +110,23 @@ public class CountryHelper {
 		return true;
 	}
 
+	public ArrayList<Country> getFamilyCountryAdjacencies(ArrayList<Country> countryList, Country country,
+			Player player) {
+
+		ArrayList<Country> familyCountriesAdjacencies = new ArrayList<Country>();
+
+		int[] adjacenciesIds = country.getAdjacentCountriesID();
+		for (Country countryItem : countryList) {
+			for (int i = 0; i < countryList.size(); i++) {
+				if (adjacenciesIds[i] == countryItem.getCountryID()) {
+					familyCountriesAdjacencies.add(countryItem);
+					break;
+				}
+			}
+		}
+		return familyCountriesAdjacencies;
+	}
+
 	public boolean updateCountryArmiesByObject(Country countryForUpdate) {
 		Map map = Map.getInstance();
 		ArrayList<Country> countryList = map.getCountries();
@@ -143,5 +161,18 @@ public class CountryHelper {
 			return true;
 		}
 		return false;
+	}
+
+	public ArrayList<Country> updateCountriesForMove(ArrayList<Country> countryList, Country sourceCountry,
+			Country targetCountry, int numberOfArmiesToMove) {
+		int updatedNumberOfArmiesForSourceCountry = (sourceCountry.getArmy() - numberOfArmiesToMove);
+		int updatedNumberOfArmiesForTargetCountry = (targetCountry.getArmy() + numberOfArmiesToMove);
+		for (Country countryItem : countryList) {
+			if (countryItem.getCountryID() == sourceCountry.getCountryID())
+				countryItem.setArmy(updatedNumberOfArmiesForSourceCountry);
+			if (countryItem.getCountryID() == targetCountry.getCountryID())
+				countryItem.setArmy(updatedNumberOfArmiesForTargetCountry);
+		}
+		return countryList;
 	}
 }
