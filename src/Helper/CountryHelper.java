@@ -175,4 +175,22 @@ public class CountryHelper {
 		}
 		return countryList;
 	}
+
+	/**
+	 * This method will return country which user requested by Id
+	 * 
+	 * @param countryList for searching
+	 * @param countryId   Id of country to search
+	 * @return
+	 */
+	public Country getCountryById(ArrayList<Country> countryList, Integer countryId) {
+
+		for (Country country : countryList) {
+			Integer countryItemId = country.getCountryID();
+			if (countryItemId == countryId) {
+				return country;
+			}
+		}
+		return null;
+	}
 }
