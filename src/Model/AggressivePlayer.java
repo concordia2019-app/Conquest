@@ -25,7 +25,7 @@ public class AggressivePlayer extends Player {
 	 * and find the best adjeacent and attack on it
 	 * behavior on maximum armies
 	 */
-	public ArrayList<Country> aggressiveAttack() {
+	public ArrayList<Country> aggressiveAttackPlayer() {
 		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
 		ArrayList<Country> allCountries = Map.getInstance().getCountries();
 
@@ -97,5 +97,47 @@ public class AggressivePlayer extends Player {
 		}
 	}
 
-	 
+	 /*
+	 * aggressive reinforcement behaviosr choosing the best country's army 
+	 * and find the best country and move on it
+	 * behavior on maximum armies
+	 */
+	public ArrayList<Country> aggressiveReinforcementPlayer(ArrayList<Country> countryList) {
+		ArrayList<Card> playerCards = this.getCards();
+		PlayerHelper playerHelper = new PlayerHelper();
+                ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
+
+                   Country maxArmyCountry = playerCountries.get(0);
+		// finding max maxArmyCountry from player countries
+		for (int i = 1; i < playerCountries.size(); i++) {
+			if (playerCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
+				maxArmyCountry = playerCountries.get(i);
+			}
+		}
+                
+                 
+		if (playerHelper.playerUseCardDecide(playerCards)) {
+			ArrayList<Country> updatedCountryList = new ArrayList<Country>();
+
+			for (Country countryItem : countryList) {
+				if (countryItem.getCountryID() == maxArmyCountry.getCountryID()) {
+					int selectedCountryArmies = maxArmyCountry.getArmy();
+					int numberRandomArmies =  this.getReinforcementPlayerArmies();
+					this.setReinforcementPlayerArmies((this.getReinforcementPlayerArmies() - numberRandomArmies));
+					int armiesToAdd = (selectedCountryArmies + numberRandomArmies);
+					countryItem.setArmy(armiesToAdd);
+				}
+				updatedCountryList.add(countryItem);
+			}
+
+			boolean updateSucceed = false;
+			CountryHelper countryHelper = new CountryHelper();
+			while (!updateSucceed) {
+				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
+			}
+		}
+
+		return countryList;
+	}
+
 }
