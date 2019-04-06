@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
@@ -128,6 +129,96 @@ public class MapGenerator {
 		}
 		return importedCountries;
 
+	}
+
+	public ArrayList<Player> assignePlayers(String filePath) {
+		ArrayList<Player> importedPlayers = new ArrayList<Player>();
+		try {
+			JSONObject allplayerDetailsResponse = getObjectbyName("Players", filePath);
+			if ((int) allplayerDetailsResponse.get("status") == 1) {
+				JSONArray allPlayeryDetails = (JSONArray) allplayerDetailsResponse.get("data");
+				Object[] jsonPlayers = allPlayeryDetails.toArray();
+				for (int i = 0; i < allPlayeryDetails.size(); i++) {
+					JSONObject playerDetails = (JSONObject) jsonPlayers[i];
+					String name = (String) playerDetails.get("playerName");
+					Integer id = Integer.parseInt(playerDetails.get("playerID").toString());
+					JSONArray countriesId = (JSONArray) playerDetails.get("countryID");
+					int[] numbers = new int[countriesId.size()];
+					int[] countryId = new int[numbers.length];
+					for (int j = 0; j < countriesId.size() - 1; ++j) {
+						countryId[j] = (Integer.parseInt((countriesId.get(j)).toString()));
+					}
+					boolean allowToGetCard = Boolean.valueOf((boolean) playerDetails.get("allowToGetCard"));
+					JSONArray cardLists = (JSONArray) playerDetails.get("cards");
+					ArrayList<Card> cardList = new ArrayList<Card>();
+					for (int k = 0; k < cardLists.size() - 1; ++k) {
+						Card c = new Card(CardType.valueOf((cardLists.get(k)).toString()));
+						cardList.add(c);
+					}	
+					Player p = new Player(id, name, countryId);
+					p.setAllowingStatus(allowToGetCard);
+					p.setCards(cardList);
+					importedPlayers.add(p);
+				}
+			} else {
+				readFileStatus = false;
+			}
+		} catch (NumberFormatException e) {
+			readFileStatus = false;
+			printException(e.getMessage());
+		} catch (Exception e) {
+			readFileStatus = false;
+			printException(e.getMessage());
+		}
+		System.out.println(importedPlayers);
+		return importedPlayers;
+	}
+	
+	public static String savePlayers(ArrayList<Player> players, String filePath) {
+		JSONArray playersArray = new JSONArray();
+		for(int i = 0; i<players.size(); i++) {
+			JSONObject playerObject = new JSONObject();
+			int playerId = players.get(i).getPlayerID();
+			String playerName = players.get(i).getPlayerName();
+			int[] countriesId = players.get(i).getCountryID();
+			boolean allowToGetCards = players.get(i).getAllowingCardStatus();
+			ArrayList<Card> cardLists = players.get(i).getCards();
+			JSONArray cards = new JSONArray();
+			for (int j = 0; j < cardLists.size() - 1; ++j) {
+				String cardType = cardLists.get(j).getCardType().toString();
+				cards.add(cardType);
+			}	
+			playerObject.put("playerID", playerId);
+			playerObject.put("playerName", playerName);
+			playerObject.put("countryID",countriesId);
+			playerObject.put("allowToGetCard",allowToGetCards);
+			playerObject.put("cards",cards);
+			playersArray.add(playerObject);
+		}
+		Gson gson = new Gson();
+		String obj = "{\"Players\":" + gson.toJson(playersArray) + "}";
+		File file = new File(filePath);
+		try {
+			if (file.createNewFile()) {
+				int writeStatus = fileWriter(file, obj);
+				if (writeStatus == 1) {
+					System.out.println("File is created!");
+				} else {
+					System.out.println("Error while creating the file!");
+				}
+			} else {
+				file.delete();
+				int writeStatus = fileWriter(file, obj);
+				if (writeStatus == 1) {
+					System.out.println("File is updated!");
+				} else {
+					System.out.println("Error while updating the file!");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return obj;
 	}
 
 	/**
