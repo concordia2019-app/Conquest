@@ -37,6 +37,10 @@ public class Player {
 		cards = new ArrayList<Card>();
 	}
 
+	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
+		return null;
+	}
+
 	public PlayerType getPlayerType() {
 		return this.playerType;
 	}
