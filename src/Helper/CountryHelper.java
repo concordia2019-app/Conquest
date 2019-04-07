@@ -2,6 +2,8 @@ package Helper;
 
 import java.util.ArrayList;
 
+import org.junit.validator.PublicClassValidator;
+
 import Model.Country;
 import Model.Map;
 import Model.Player;
@@ -192,5 +194,21 @@ public class CountryHelper {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<Country> getEnemyAdjacencies(ArrayList<Country> countryList, Country selectedCountry,
+			Player player) {
+		ArrayList<Country> enemyCountryList = new ArrayList<Country>();
+		int[] selectedCountryAdjacenciesIds = selectedCountry.getAdjacentCountriesID();
+		for (Country countryItem : countryList) {
+			for (int i = 0; i < selectedCountryAdjacenciesIds.length; i++) {
+				if ((selectedCountryAdjacenciesIds[i] == countryItem.getCountryID())
+						&& (countryItem.getPlayerID() != player.getPlayerID())) {
+					enemyCountryList.add(countryItem);
+				}
+			}
+		}
+
+		return enemyCountryList;
 	}
 }
