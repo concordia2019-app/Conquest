@@ -13,18 +13,20 @@ import View.ConquestUI;
 public class CounquestUiTest {
 	ConquestUI conquestUI;
 	Country countryTest;
+
 	@Test
 	@Before
 	public void contextMaker() {
 		conquestUI = ConquestUI.getInstance();
 		countryTest = new Country("TestCountry", 1, 1, 10, null, 1, "playerTest");
 	}
+
 	@Test
 	public void checkPlayerNumberTest() {
 		boolean result = conquestUI.checkPlayerNumber(3);
 		assertTrue(result);
 	}
-	
+
 	@Test
 	public void testCheckPlayerNumber() {
 		ConquestUI conquestUI = ConquestUI.getInstance();

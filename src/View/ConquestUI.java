@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import Controller.CardController;
 import Controller.ConquestController;
+import Controller.TournamentController;
 import Helper.CountryHelper;
 import Helper.UIHelper;
 import Model.*;
@@ -361,9 +362,8 @@ public class ConquestUI implements IConquestUI {
 					// TODO play Single mood
 					break;
 				case 4:
-					PlayerNumber = getNumberOfPlayer();
-					ArrayList<PlayerNameAndType> playerNamesAndTypes = getPlayerNamesAndTypes(PlayerNumber);
-					map.assigningPlayerCountries(playerNamesAndTypes);
+					TournamentController tournamentController = TournamentController.getTournamentControllerInstance();
+
 					// TODO run Tournament
 					break;
 				case 5:
@@ -470,6 +470,45 @@ public class ConquestUI implements IConquestUI {
 
 	private String getFilePathForWritingMap() {
 		return (System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+	}
+
+	public int getNumberOfMaps() {
+		int numberOfMaps = 0;
+		while (true) {
+			System.out.print("Select number of tournament maps. [1..5] :");
+			numberOfMaps = scanner.nextInt();
+			if (numberOfMaps > 0 && numberOfMaps <= 5)
+				break;
+			else
+				System.out.println(ErrorEnteredValue);
+		}
+		return numberOfMaps;
+	}
+
+	public int getNumberOfGamesPerMap() {
+		int numberOfGamesPerMap = 0;
+		while (true) {
+			System.out.print("Select number of Games per maps. [1..5] :");
+			numberOfGamesPerMap = scanner.nextInt();
+			if (numberOfGamesPerMap > 0 && numberOfGamesPerMap <= 5)
+				break;
+			else
+				System.out.println(ErrorEnteredValue);
+		}
+		return numberOfGamesPerMap;
+	}
+
+	public int getNumberOfTurnsPerGame() {
+		int numberOfGamesPerMap = 0;
+		while (true) {
+			System.out.print("Select number of Games per maps. [10..50] :");
+			numberOfGamesPerMap = scanner.nextInt();
+			if (numberOfGamesPerMap >= 10 && numberOfGamesPerMap <= 50)
+				break;
+			else
+				System.out.println(ErrorEnteredValue);
+		}
+		return numberOfGamesPerMap;
 	}
 
 	/**
