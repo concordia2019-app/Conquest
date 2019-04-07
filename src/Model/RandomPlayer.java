@@ -8,6 +8,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
 
@@ -20,7 +21,31 @@ public class RandomPlayer extends Player {
 	@Override
 
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
+		PlayerHelper playerHelper = new PlayerHelper();
+		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
+		Random random = new Random();
+		int attackCountryIndex = random.nextInt((playerCountries.size() - 1));
+		Country attackCountry = playerCountries.get(attackCountryIndex);
+		CountryHelper countryHelper = new CountryHelper();
+		ArrayList<Country> enemyCountries = countryHelper.getEnemyAdjacencies(countryList, attackCountry, this);
+		int enemyCountryIndex = random.nextInt((enemyCountries.size() - 1));
+		Country enemyCountry = enemyCountries.get(enemyCountryIndex);
+		int attackerArmies = attackCountry.getArmy();
+		int enemyArmies = enemyCountry.getArmy();
+		int attackerRandomArmy = random.nextInt(attackerArmies - 1);
+		int restOfAttackerRandomArmy = ((attackerRandomArmy + 1));
+		attackCountry.setArmy(restOfAttackerRandomArmy);
+		AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(attackerRandomArmy,
+				enemyArmies);
+		enemyCountry.setArmy(attackResponse.getRestOfArmies());
+		if (attackResponse.getAttackStatus()) {
+			enemyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+		}
 
+		boolean updateSucceed = false;
+		while (!updateSucceed) {
+			updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+		}
 		return countryList;
 	}
 
@@ -53,8 +78,8 @@ public class RandomPlayer extends Player {
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
 		int playerReinforcementCountryIndex = random.nextInt(playerCountries.size() - 1);
 		Country playerRandomCountry = playerCountries.get(playerReinforcementCountryIndex);
+		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
 		if (playerHelper.playerUseCardDecide(playerCards)) {
-			ArrayList<Country> updatedCountryList = new ArrayList<Country>();
 
 			for (Country countryItem : countryList) {
 				if (countryItem.getCountryID() == playerRandomCountry.getCountryID()) {
@@ -74,7 +99,7 @@ public class RandomPlayer extends Player {
 			}
 		}
 
-		return countryList;
+		return updatedCountryList;
 	}
 
 }
