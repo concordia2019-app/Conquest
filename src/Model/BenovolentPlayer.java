@@ -42,6 +42,7 @@ public class BenovolentPlayer extends Player {
 		}
 	}
 
+	@Override
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
 		ArrayList<Card> playerCards = this.getCards();
 		PlayerHelper playerHelper = new PlayerHelper();
