@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -76,11 +74,11 @@ public class MapGenerator {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
 			System.out.println("Check your file. There is something wrong in the content of the file.");
 			System.out.println("Check and press enter");
-			input.nextLine();
+			//input.nextLine();
 		} else {
 			System.out.print(exceptionErrorMessage);
 			System.out.println("Check and press enter");
-			input.nextLine();
+			//input.nextLine();
 		}
 	}
 

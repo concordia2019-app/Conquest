@@ -363,6 +363,7 @@ public class ConquestUI implements IConquestUI {
 					break;
 				case 4:
 					TournamentController tournamentController = TournamentController.getTournamentControllerInstance();
+					tournamentController.tournamentStart();
 
 					// TODO run Tournament
 					break;

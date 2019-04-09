@@ -119,8 +119,9 @@ public class CountryHelper {
 
 		int[] adjacenciesIds = country.getAdjacentCountriesID();
 		for (Country countryItem : countryList) {
-			for (int i = 0; i < countryList.size(); i++) {
-				if (adjacenciesIds[i] == countryItem.getCountryID()) {
+			for (int i = 0; i < adjacenciesIds.length; i++) {
+				if ((adjacenciesIds[i] == countryItem.getCountryID())
+						&& (countryItem.getPlayerID() == player.getPlayerID())) {
 					familyCountriesAdjacencies.add(countryItem);
 					break;
 				}

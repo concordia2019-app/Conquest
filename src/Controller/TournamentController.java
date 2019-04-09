@@ -15,7 +15,6 @@ import Model.PlayerNameAndType;
 import Model.RandomPlayer;
 import View.ConquestUI;
 
-
 public class TournamentController {
 
 	private static TournamentController instance;
@@ -40,7 +39,7 @@ public class TournamentController {
 		// Map Counter loop
 		for (int mapCounter = 0; mapCounter < numberOfMaps; mapCounter++) {
 			boolean readFileStatusMap = getFilePathForLoadingMap(System.getProperty("user.dir")
-					+ "\\bin\\ResourceProject\\CountryTournament" + mapCounter + 1 + ".json");
+					+ "\\bin\\ResourceProject\\CountryTournament" + (mapCounter + 1) + ".json");
 			Map.getInstance().assigningPlayerCountries(playerNamesAndTypes);
 			Player[] players = Map.getInstance().getPlayers();
 
@@ -58,16 +57,14 @@ public class TournamentController {
 							case AGGRESSIVE:
 								AggressivePlayer aggressivePlayer = new AggressivePlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
-								aggressivePlayer
-										.setReinforcementPlayerArmies(playerItem.getReinforcementPlayerArmies());
-								aggressivePlayer.attackPlayer(Map.getInstance().getCountries());
-								aggressivePlayer.movePlayer(Map.getInstance().getCountries());
+								aggressivePlayer.aggressiveReinforcementPlayer(Map.getInstance().getCountries());
+								aggressivePlayer.aggressiveAttackPlayer();
+								aggressivePlayer.aggressiveMovePlayer(Map.getInstance().getCountries());
 								break;
 							case BENOVOLENT:
 								BenovolentPlayer benovolentPlayer = new BenovolentPlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
-								benovolentPlayer
-										.setReinforcementPlayerArmies(playerItem.getReinforcementPlayerArmies());
+								benovolentPlayer.reinforcementPlayer(Map.getInstance().getCountries());
 								benovolentPlayer.attackPlayer(Map.getInstance().getCountries());
 								benovolentPlayer.movePlayer(Map.getInstance().getCountries());
 								break;
@@ -81,7 +78,7 @@ public class TournamentController {
 							case RANDOM:
 								RandomPlayer randomPlayer = new RandomPlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
-								randomPlayer.setReinforcementPlayerArmies(playerItem.getReinforcementPlayerArmies());
+								randomPlayer.reinforcementPlayer(Map.getInstance().getCountries());
 								randomPlayer.attackPlayer(Map.getInstance().getCountries());
 								randomPlayer.movePlayer(Map.getInstance().getCountries());
 								break;

@@ -11,6 +11,8 @@ import java.util.Random;
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
+import View.ConquestUI;
+import View.MapView;
 
 public class RandomPlayer extends Player {
 
@@ -21,31 +23,46 @@ public class RandomPlayer extends Player {
 	@Override
 
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
+		//test
+		MapView mapView = new MapView();
+		mapView.printMainMap(countryList);
+		//test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
 		Random random = new Random();
-		int attackCountryIndex = random.nextInt((playerCountries.size() - 1));
+		int attackCountryIndex = 0;
+		if (playerCountries.size() > 1)
+			attackCountryIndex = random.nextInt((playerCountries.size()));
 		Country attackCountry = playerCountries.get(attackCountryIndex);
 		CountryHelper countryHelper = new CountryHelper();
 		ArrayList<Country> enemyCountries = countryHelper.getEnemyAdjacencies(countryList, attackCountry, this);
-		int enemyCountryIndex = random.nextInt((enemyCountries.size() - 1));
-		Country enemyCountry = enemyCountries.get(enemyCountryIndex);
-		int attackerArmies = attackCountry.getArmy();
-		int enemyArmies = enemyCountry.getArmy();
-		int attackerRandomArmy = random.nextInt(attackerArmies - 1);
-		int restOfAttackerRandomArmy = ((attackerRandomArmy + 1));
-		attackCountry.setArmy(restOfAttackerRandomArmy);
-		AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(attackerRandomArmy,
-				enemyArmies);
-		enemyCountry.setArmy(attackResponse.getRestOfArmies());
-		if (attackResponse.getAttackStatus()) {
-			enemyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+
+		if (enemyCountries.size() > 0) {
+			int enemyCountryIndex = 0;
+			if (enemyCountries.size() > 1)
+				enemyCountryIndex = random.nextInt((enemyCountries.size()));
+			Country enemyCountry = enemyCountries.get(enemyCountryIndex);
+
+			int attackerArmies = attackCountry.getArmy();
+			int enemyArmies = enemyCountry.getArmy();
+			if (enemyArmies > 1) {
+				int attackerRandomArmy = random.nextInt(attackerArmies);
+				int restOfAttackerRandomArmy = ((attackerRandomArmy + 1));
+				attackCountry.setArmy(restOfAttackerRandomArmy);
+				AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(attackerRandomArmy,
+						enemyArmies);
+				enemyCountry.setArmy(attackResponse.getRestOfArmies());
+				if (attackResponse.getAttackStatus()) {
+					enemyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+				}
+
+				boolean updateSucceed = false;
+				while (!updateSucceed) {
+					updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+				}
+			}
 		}
 
-		boolean updateSucceed = false;
-		while (!updateSucceed) {
-			updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
-		}
 		return countryList;
 	}
 

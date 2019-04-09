@@ -175,6 +175,9 @@ public class MapView {
 			if (CountryList.get(j).getCountryID() == countryId) {
 				for (int i = 0; i < players.length; i++) {
 					if (players[i].getPlayerID() == CountryList.get(j).getPlayerID()) {
+						if (players[i].getPlayerType() == null) {
+							return "Human";
+						}
 						return players[i].getPlayerType().toString();
 					}
 				}

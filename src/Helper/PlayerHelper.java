@@ -219,10 +219,10 @@ public class PlayerHelper {
 			Country sourcePlayerCountry, Country destinationPlayerCountry) {
 		int destinationArmies = destinationPlayerCountry.getArmy();
 		int sourceArmies = sourcePlayerCountry.getArmy();
-		int armiesToAdd = ((sourceArmies - destinationArmies) + destinationArmies);
+		int armiesToAdd = ((sourceArmies - 1) + destinationArmies);
 		int restOfArmiesForSource = destinationArmies;
 		destinationPlayerCountry.setArmy((armiesToAdd));
-		sourcePlayerCountry.setArmy(restOfArmiesForSource);
+		sourcePlayerCountry.setArmy(1);
 
 		for (Country countryItem : countryList) {
 			if (countryItem.getCountryID() == sourcePlayerCountry.getCountryID())
