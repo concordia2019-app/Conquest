@@ -24,6 +24,7 @@ public class RandomPlayer extends Player {
 
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
 		// test
+		System.out.print("before attack random");
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
 		// test
@@ -45,15 +46,24 @@ public class RandomPlayer extends Player {
 
 			int attackerArmies = attackCountry.getArmy();
 			int enemyArmies = enemyCountry.getArmy();
-			if (enemyArmies > 1) {
+			if (enemyArmies > 1 && attackerArmies > 1) {
 				int attackerRandomArmy = random.nextInt(attackerArmies);
-				int restOfAttackerRandomArmy = ((attackerRandomArmy + 1));
+				if (attackerRandomArmy == 0)
+					attackerRandomArmy = 1;
+				int restOfAttackerRandomArmy = ((attackerRandomArmy));
 				attackCountry.setArmy(restOfAttackerRandomArmy);
 				AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(attackerRandomArmy,
 						enemyArmies);
 				enemyCountry.setArmy(attackResponse.getRestOfArmies());
 				if (attackResponse.getAttackStatus()) {
 					enemyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+					Player[] players = Map.getInstance().getPlayers();
+					for (Player playerItem : players) {
+						if (playerItem.getPlayerID() == this.getPlayerID()) {
+							playerItem.setCountryId(this.getCountryID());
+						}
+						Map.getInstance().setPlayers(players);
+					}
 				}
 
 				boolean updateSucceed = false;
@@ -62,33 +72,51 @@ public class RandomPlayer extends Player {
 				}
 			}
 		}
-
+		// test
+		System.out.print("after attack random");
+		mapView = new MapView();
+		mapView.printMainMap(countryList);
+		// test
 		return countryList;
 	}
 
 	@Override
 	public void movePlayer(ArrayList<Country> countryList) {
+		// test
+		System.out.print("before move random");
+		MapView mapView = new MapView();
+		mapView.printMainMap(countryList);
+		// test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
 		Random random = new Random();
-		int sourceCountryIndex = random.nextInt((playerCountries.size() - 1));
-		Country sourceCountry = playerCountries.get(sourceCountryIndex);
-		int armiesNumberToAdd = random.nextInt((sourceCountry.getArmy() - 1));
-		CountryHelper countryHelper = new CountryHelper();
-		ArrayList<Country> familyCountryAdjacencies = countryHelper.getFamilyCountryAdjacencies(countryList,
-				sourceCountry, this);
-		
-		if (familyCountryAdjacencies.size() > 0) {
-			int indexForTargetCountry = random.nextInt((familyCountryAdjacencies.size()));
-			Country targetCountry = familyCountryAdjacencies.get(indexForTargetCountry);
-			ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, sourceCountry,
-					targetCountry, armiesNumberToAdd);
+		if (playerCountries.size() > 0) {
+			int sourceCountryIndex = random.nextInt((playerCountries.size()));
+			Country sourceCountry = playerCountries.get(sourceCountryIndex);
+			if (sourceCountry.getArmy() > 0) {
+				int armiesNumberToAdd = random.nextInt((sourceCountry.getArmy()));
+				CountryHelper countryHelper = new CountryHelper();
+				ArrayList<Country> familyCountryAdjacencies = countryHelper.getFamilyCountryAdjacencies(countryList,
+						sourceCountry, this);
 
-			boolean updateSucceed = false;
-			while (!updateSucceed) {
-				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
+				if (familyCountryAdjacencies.size() > 0) {
+					int indexForTargetCountry = random.nextInt((familyCountryAdjacencies.size()));
+					Country targetCountry = familyCountryAdjacencies.get(indexForTargetCountry);
+					ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList,
+							sourceCountry, targetCountry, armiesNumberToAdd);
+
+					boolean updateSucceed = false;
+					while (!updateSucceed) {
+						updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
+					}
+				}
 			}
 		}
+		// test
+		System.out.print("before move random");
+		mapView = new MapView();
+		mapView.printMainMap(countryList);
+		// test
 	}
 
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
