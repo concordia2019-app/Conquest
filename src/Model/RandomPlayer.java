@@ -23,10 +23,10 @@ public class RandomPlayer extends Player {
 	@Override
 
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
-		//test
+		// test
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
-		//test
+		// test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
 		Random random = new Random();
@@ -77,14 +77,17 @@ public class RandomPlayer extends Player {
 		CountryHelper countryHelper = new CountryHelper();
 		ArrayList<Country> familyCountryAdjacencies = countryHelper.getFamilyCountryAdjacencies(countryList,
 				sourceCountry, this);
-		int indexForTargetCountry = random.nextInt((familyCountryAdjacencies.size() - 1));
-		Country targetCountry = familyCountryAdjacencies.get(indexForTargetCountry);
-		ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, sourceCountry,
-				targetCountry, armiesNumberToAdd);
+		
+		if (familyCountryAdjacencies.size() > 0) {
+			int indexForTargetCountry = random.nextInt((familyCountryAdjacencies.size()));
+			Country targetCountry = familyCountryAdjacencies.get(indexForTargetCountry);
+			ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, sourceCountry,
+					targetCountry, armiesNumberToAdd);
 
-		boolean updateSucceed = false;
-		while (!updateSucceed) {
-			updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
+			boolean updateSucceed = false;
+			while (!updateSucceed) {
+				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
+			}
 		}
 	}
 
