@@ -8,6 +8,7 @@ package Model;
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
+import View.MapView;
 import java.util.ArrayList;
 
 /**
@@ -24,10 +25,16 @@ public class AggressivePlayer extends Player {
 	 * aggressive attack behaviosr choosing the best country's army and and find the
 	 * best adjeacent and attack on it behavior on maximum armies
 	 */
-	public ArrayList<Country> aggressiveAttackPlayer() {
+	public ArrayList<Country> aggressiveAttackPlayer(ArrayList<Country> countryList) {
+      
 		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
-		ArrayList<Country> allCountries = Map.getInstance().getCountries();
-
+                // TEST MAP
+		System.out.print("before Attack");
+		MapView mapView = new MapView();
+		mapView.printMainMap(countryList);
+		// TEST MAP
+                CountryHelper countryHelper = new CountryHelper();
+                 
 		Country maxArmyCountry = playerCountries.get(0);
 		// finding max maxArmyCountry from player countries
 		for (int i = 1; i < playerCountries.size(); i++) {
@@ -44,15 +51,43 @@ public class AggressivePlayer extends Player {
 			if (adjacentCountries.get(i).getArmy() > maxAdjeacentArmyCountry.getArmy()) {
 				maxAdjeacentArmyCountry = adjacentCountries.get(i);
 			}
-		}
-		for (int i = 1; i < allCountries.size(); i++) {
-			if (allCountries.get(i).getCountryID() == maxAdjeacentArmyCountry.getCountryID()) {
-				allCountries.get(i).setArmy((allCountries.get(i).getArmy() - maxArmyCountry.getArmy()));
-				// TODO : checking country status and if player wins or not
-				// => GoTo ConquestController.attackCalculation
+		} 
+                 
+                // here is the attacker and enemy which max armt 
+                // from player is attacker and max adjeacent army is enemy
+                        int attackerArmies = maxArmyCountry.getArmy();
+			int enemyArmies = maxAdjeacentArmyCountry.getArmy();
+ 
+                         if (enemyArmies > 1 && attackerArmies > 1) {
+                              
+				maxArmyCountry.setArmy(maxArmyCountry.getArmy() -1);
+				AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(maxArmyCountry.getArmy() -1,
+						enemyArmies);
+				maxAdjeacentArmyCountry.setArmy(attackResponse.getRestOfArmies());
+				if (attackResponse.getAttackStatus()) {
+					maxAdjeacentArmyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+					Player[] players = Map.getInstance().getPlayers();
+					for (Player playerItem : players) {
+						if (playerItem.getPlayerID() == this.getPlayerID()) {
+							playerItem.setCountryId(this.getCountryID());
+						}
+						Map.getInstance().setPlayers(players);
+					}
+				}
+
+				boolean updateSucceed = false;
+				while (!updateSucceed) {
+					updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+				}
 			}
-		}
-		return allCountries;
+                            
+                                                
+                // test
+		System.out.print("after attack random");
+		mapView = new MapView();
+		mapView.printMainMap(countryList);
+                return countryList;
+		// test
 	}
 
 	/*
@@ -60,6 +95,13 @@ public class AggressivePlayer extends Player {
 	 * adjeacent and move on it behavior on maximum armies
 	 */
 	public void aggressiveMovePlayer(ArrayList<Country> countryList) {
+            
+            
+            	// TEST MAP
+		System.out.print("Before Move");
+		MapView mapView = new MapView();
+		mapView.printMainMap(countryList);
+		// TEST MAP
 		PlayerHelper playerHelper = new PlayerHelper();
 
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
@@ -95,6 +137,12 @@ public class AggressivePlayer extends Player {
 		while (!updateSucceed) {
 			updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
 		}
+                
+           	// TEST MAP
+		System.out.print("before move random");
+		mapView = new MapView();
+		mapView.printMainMap(updatedCountries);
+		// TEST MAP
 	}
 
 	/*
