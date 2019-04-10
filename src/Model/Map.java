@@ -3,7 +3,6 @@ package Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import com.sun.javafx.scene.layout.region.LayeredBackgroundPositionConverter;
 import View.MapView;
 
 /**

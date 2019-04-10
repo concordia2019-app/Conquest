@@ -6,10 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.PrimitiveIterator.OfDouble;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import Controller.CardController;
 import Controller.ConquestController;
 import Controller.TournamentController;
@@ -35,13 +31,15 @@ public class ConquestUI implements IConquestUI {
 			+ "\\src\\MapAndPlayerSavedFiles\\Players.json");
 	private String ContinueReinforcementMessage = "Do you want to finish the reinforcement phase?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
-	private String InputNumberOfPlayers = "Enter bumber of players [2..5]:";
+	private String InputNumberOfPlayers = "Enter number of players [2..5]:";
+	private String InputNumberOfTournamentPlayers = "Enter number of players [2..4]:";
 	private String ErrorEnteredValue = "Entered value is not acceptable.";
 	private String ErrorInputNumberOfPlayers = "Your input number is not acceptable. Please enter a number between 2..5";
 	private String SaveAndExitQuestion = "Do you want to save and exit the Game ?(Y/N)";
 	private String UsePlayerCardQuestion = "Do you want to use your cards?(Y/N)";
 	private String HandInCardsForceMessage = "Your cards will be converted to armies,\n because you have more than 4 cards.";
 	private Scanner scanner;
+	private String PlayerTypeTableTournament = "1.Aggressive \r\n2.Benevolent \r\n3.Random \r\n4.Cheater \r\n";
 	private String PlayerTypeTable = "1.Aggressive \r\n2.Benevolent \r\n3.Random \r\n4.Cheater \r\n5.Human\r\n";
 	private String FinishGame = " ||==================================================||\n"
 			+ " ||**************************************************||\n"
@@ -50,12 +48,12 @@ public class ConquestUI implements IConquestUI {
 			+ " ||    ||  ___      /__\\\\     | \\\\    / |  |         ||\n"
 			+ " ||    ||    ||    /    \\\\    |  \\\\  /  |  |*****    ||\n"
 			+ " ||    ||____||   /      \\\\   |   \\\\/   |  |         ||\n"
-			+ " ||                                                  ||\n"
-			+ " ||     =====    \\\\       ////  |*****      ||****|    ||\n"
-			+ " ||    ||   ||    \\\\     ////   |           ||    |    ||\n"
-			+ " ||    ||   ||     \\\\   ////    |*****      ||*****    ||\n"
-			+ " ||    ||   ||      \\\\ ////     |           ||  \\\\     ||\n"
-			+ " ||     =====        ---      |*****      ||   \\\\    ||\n"
+			+ " ||                                         *****    ||\n"
+			+ " ||     =====    \\\\       ////  |*****      ||****|  ||\n"
+			+ " ||    ||   ||    \\\\     ////   |           ||    |  ||\n"
+			+ " ||    ||   ||     \\\\   ////    |*****      ||*****  ||\n"
+			+ " ||    ||   ||      \\\\ ////     |           ||  \\\\   ||\n"
+			+ " ||     =====        ---        |*****      ||   \\\\  ||\n"
 			+ " ||                                                  ||\n"
 			+ " ||**************************************************||\n"
 			+ " ||==================================================||\n";
@@ -577,6 +575,57 @@ public class ConquestUI implements IConquestUI {
 	 * @return return a class model which is a list of players. Each player has name
 	 *         and type to help to create specific player with specific behaviour.
 	 */
+	public ArrayList<PlayerNameAndType> getPlayerNamesAndTypesTournament(int numberOfPlayers) {
+		ArrayList<PlayerNameAndType> playerAttrList = new ArrayList<PlayerNameAndType>();
+		scanner.nextLine();
+		System.out.format("Enter %d names of your players: \n", numberOfPlayers);
+		for (int i = 0; i < numberOfPlayers; i++) {
+			String playerName = "";
+			int playerTypeID = 0;
+			PlayerType playerType = PlayerType.HUMAN;
+			while (true) {
+				System.out.format("Enter name of player %d: ", i + 1);
+				playerName = scanner.nextLine();
+				System.out.print(PlayerTypeTableTournament);
+				System.out.format("Choose type of player %d: ", i + 1);
+				playerTypeID = Integer.parseInt(scanner.nextLine());
+				if ((playerName.isEmpty() || playerName.length() > 16) && (playerTypeID > 0 && playerTypeID < 6)) {
+					System.out.println(ErrorEnteredValue);
+				} else {
+					switch (playerTypeID) {
+					case 1:
+						playerType = PlayerType.AGGRESSIVE;
+						break;
+					case 2:
+						playerType = PlayerType.BENOVOLENT;
+						break;
+					case 3:
+						playerType = PlayerType.RANDOM;
+						break;
+					case 4:
+						playerType = PlayerType.CHEATER;
+						break;
+					case 5:
+						playerType = PlayerType.HUMAN;
+						break;
+					}
+					PlayerNameAndType playerAttr = new PlayerNameAndType(playerName, playerType);
+					playerAttrList.add(playerAttr);
+					break;
+				}
+			}
+			PlayerNames.add(playerName);
+		}
+		return playerAttrList;
+	}
+
+	/**
+	 * Get name and type of player To make players
+	 * 
+	 * @param numberOfPlayers - number of players for creation
+	 * @return return a class model which is a list of players. Each player has name
+	 *         and type to help to create specific player with specific behaviour.
+	 */
 	public ArrayList<PlayerNameAndType> getPlayerNamesAndTypes(int numberOfPlayers) {
 		ArrayList<PlayerNameAndType> playerAttrList = new ArrayList<PlayerNameAndType>();
 		scanner.nextLine();
@@ -588,7 +637,7 @@ public class ConquestUI implements IConquestUI {
 			while (true) {
 				System.out.format("Enter name of player %d: ", i + 1);
 				playerName = scanner.nextLine();
-				System.out.print(PlayerTypeTable);
+				System.out.print(PlayerTypeTableTournament);
 				System.out.format("Choose type of player %d: ", i + 1);
 				playerTypeID = Integer.parseInt(scanner.nextLine());
 				if ((playerName.isEmpty() || playerName.length() > 16) && (playerTypeID > 0 && playerTypeID < 6)) {
@@ -660,6 +709,10 @@ public class ConquestUI implements IConquestUI {
 		return (System.getProperty("user.dir") + "\\src\\MapAndPlayerSavedFiles\\CountrySample.json");
 	}
 
+	public void printGameOver() {
+		System.out.print(FinishGame);
+	}
+
 	public int getNumberOfMaps() {
 		int numberOfMaps = 0;
 		while (true) {
@@ -705,7 +758,7 @@ public class ConquestUI implements IConquestUI {
 	 * the graphs and information about map and countries.
 	 * </p>
 	 * 
-	 * @throws FileNotFoundException
+	 * 
 	 */
 	@Override
 	public void conquestUIGetNodes() {
@@ -731,8 +784,8 @@ public class ConquestUI implements IConquestUI {
 	}
 
 	/**
-	 * This method just ask from player if player want to attack Y => to agree that
-	 * want to attack N => to skip the attack
+	 * This method just ask from player if player want to attack Y to agree that
+	 * want to attack N to skip the attack
 	 * 
 	 * @return if player pass n , then return false, on the other hand, if pass y,
 	 *         then return true
@@ -773,6 +826,32 @@ public class ConquestUI implements IConquestUI {
 			} else
 				return num;
 		}
+	}
+
+	/**
+	 * numberOfPlayer method will ask the player to enter an integer for number of
+	 * players and save the number for the next part to ask the player for their
+	 * names. if the player enter a number more than 5 or less than 2 he will get an
+	 * error for entering a wrong number.
+	 * 
+	 * @return num is number of players that player entered.
+	 */
+	public int getNumberOfTournamentPlayer() {
+		while (true) {
+			System.out.print(InputNumberOfTournamentPlayers);
+			int num = scanner.nextInt();
+			if (!checkTournamentPlayerNumber(num)) {
+				System.out.println(ErrorInputNumberOfPlayers);
+			} else
+				return num;
+		}
+	}
+
+	public boolean checkTournamentPlayerNumber(int number) {
+		if (number > 1 && number < 5) {
+			return true;
+		} else
+			return false;
 	}
 
 	public boolean checkPlayerNumber(int number) {
@@ -833,7 +912,7 @@ public class ConquestUI implements IConquestUI {
 	 * them to their armies who are in each country.
 	 * 
 	 * @param armiesNumber number of armies
-	 * @player current player to separate countries and assign armies
+	 * 
 	 * @return rest of armies
 	 */
 	@Override

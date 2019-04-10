@@ -17,6 +17,7 @@ public class CardController {
 
 	/**
 	 * Randomly return a new card and assign it
+	 * @return card to assign player
 	 */
 	public Card cardAssigner() {
 		Random random = new Random();
@@ -36,6 +37,7 @@ public class CardController {
 	 * give the types of cards and counts them the
 	 * 
 	 * @param cards player cards which this function calculating
+	 * @return CardsCounter return a card counter to assign player
 	 */
 	public CardsCounter defineCardsType(ArrayList<Card> cards) {
 
@@ -56,6 +58,7 @@ public class CardController {
 	 * /** give the countries of player by playerId
 	 * 
 	 * @param playerId playerId is the id for finding player countries
+	 * @return list of countries of player
 	 */
 	public ArrayList<Country> getPlayerCountries(int playerId) {
 		ArrayList<Country> allCountries = Map.getInstance().getCountries();
@@ -72,6 +75,7 @@ public class CardController {
 	 * /** calculate armies count from the types of cards base on 3 matching
 	 * 
 	 * @param cards player cards which this function calculating
+	 * @return number of armies which is gotten from cards
 	 */
 	public int calculateArmiesCount(CardsCounter cardsCounter, ArrayList<Card> cards) {
 
@@ -118,6 +122,7 @@ public class CardController {
 	 * 
 	 * @param cards        player cards which this function calculating
 	 * @param cardsCounter cards counter
+	 * @return card list which is updated
 	 */
 	public ArrayList<Card> updateListCards(CardsCounter cardsCounter, ArrayList<Card> cards) {
 

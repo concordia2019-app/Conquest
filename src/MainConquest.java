@@ -1,10 +1,9 @@
-import java.util.Random;
-
 import Model.*;
 import View.ConquestUI;
 
 public class MainConquest {
 
+	// Main Game
 	public static void main(String[] args) {
 		Editor editor = new Editor();
 		Map map = Map.getInstance();

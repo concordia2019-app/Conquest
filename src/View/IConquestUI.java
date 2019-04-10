@@ -42,13 +42,13 @@ public interface IConquestUI {
 	 * the graphs and information about map and countries.
 	 * </p>
 	 * 
-	 * @throws FileNotFoundException
+	 * 
 	 */
 	public void conquestUIGetNodes();
 
 	/**
-	 * This method just ask from player if player want to attack Y => to agree that
-	 * want to attack N => to skip the attack
+	 * This method just ask from player if player want to attack Y to agree that
+	 * want to attack N to skip the attack
 	 * 
 	 * @param strQuestion String to show the message
 	 * @return if player pass n , then return false, on the other hand, if pass y,
@@ -69,7 +69,7 @@ public interface IConquestUI {
 	/**
 	 * This method check the count of armies which player want to leave in moving
 	 * 
-	 * @param country
+	 * @param country source country
 	 * @return an object which contains CountryId and Number of left armies in that
 	 *         country
 	 */
@@ -80,7 +80,7 @@ public interface IConquestUI {
 	 * them to their armies who are in each country.
 	 * 
 	 * @param armiesNumber number of armies
-	 * @player current player to separate countries and assign armies
+	 * @param player       current player to separate countries and assign armies
 	 * @return rest of armies
 	 */
 	public int reinforcementOfPlayer(int armiesNumber, Player player);

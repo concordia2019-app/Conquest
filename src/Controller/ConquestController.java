@@ -40,6 +40,7 @@ public class ConquestController {
 	 * This method get player and set random card to player object
 	 * 
 	 * @param currentPlayer
+	 * @return player
 	 */
 	public Player setCardToPlayer(Player currentPlayer) {
 		CardController cardController = new CardController();
@@ -51,7 +52,6 @@ public class ConquestController {
 	/**
 	 * check Game is finished or not
 	 * 
-	 * @param players - List of players
 	 * @return If game is finished then return true, if it's not finished, then
 	 *         return false
 	 */
@@ -105,35 +105,35 @@ public class ConquestController {
 		int randomNumber = random.nextInt(greatest + 1 - least) + least;
 		return randomNumber;
 	}
-         /**
-	 * This method will generate the best country for adjeacent 
+
+	/**
+	 * This method will generate the best country for adjeacent
 	 * 
-	 * @param playerCountries    Gets the least of player countries
- 	 
+	 * @param playerCountries Gets the least of player countries
+	 * 
 	 */
-        
-        public Country findTheBestAdjeacentPlayer( ArrayList<Country> playerCountries)    {
-            
-           Country  bestCountry=playerCountries.get(0);
-           for(int i=0;i<playerCountries.size();i++)
-           {
-               if(playerCountries.get(i).getAdjacentCountriesID().length>0)
-               {
-                   for(int j=0;j<playerCountries.get(i).getAdjacentCountriesID().length;j++)
-                   {
-                       int[] a=playerCountries.get(i).getAdjacentCountriesID();
-                       bestCountry=  Map.getInstance().getCountries().get(a[0]);
-                   }
-                   }
-           }
-           return bestCountry;
-        }
+
+	public Country findTheBestAdjeacentPlayer(ArrayList<Country> playerCountries) {
+
+		Country bestCountry = playerCountries.get(0);
+		for (int i = 0; i < playerCountries.size(); i++) {
+			if (playerCountries.get(i).getAdjacentCountriesID().length > 0) {
+				for (int j = 0; j < playerCountries.get(i).getAdjacentCountriesID().length; j++) {
+					int[] a = playerCountries.get(i).getAdjacentCountriesID();
+					bestCountry = Map.getInstance().getCountries().get(a[0]);
+				}
+			}
+		}
+		return bestCountry;
+	}
+
 	/**
 	 * Return adjancent countries
+	 * 
 	 * @param adjacentId
 	 * @return
 	 */
-	public ArrayList<Country> getAdjacentCountries(int[] adjacentId ,ArrayList<Country> allCountries ) {
+	public ArrayList<Country> getAdjacentCountries(int[] adjacentId, ArrayList<Country> allCountries) {
 		ArrayList<Country> countries = new ArrayList<Country>();
 		for (int i = 0; i < adjacentId.length; i++) {
 			for (int j = 0; j < allCountries.size(); j++) {
@@ -147,6 +147,7 @@ public class ConquestController {
 
 	/**
 	 * return player countries
+	 * 
 	 * @param playerId
 	 * @return
 	 */

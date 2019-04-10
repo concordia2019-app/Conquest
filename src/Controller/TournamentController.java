@@ -1,11 +1,6 @@
 package Controller;
 
 import java.util.ArrayList;
-
-import javax.activation.MailcapCommandMap;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
 import Model.AggressivePlayer;
 import Model.BenovolentPlayer;
 import Model.CheaterPlayer;
@@ -44,7 +39,7 @@ public class TournamentController {
 	 */
 	public void tournamentStart() {
 		ConquestUI conquestUI = ConquestUI.getInstance();
-		int playerNumber = conquestUI.getNumberOfPlayer();
+		int playerNumber = conquestUI.getNumberOfTournamentPlayer();
 		ArrayList<PlayerNameAndType> playerNamesAndTypes = conquestUI.getPlayerNamesAndTypes(playerNumber);
 		int numberOfMaps = conquestUI.getNumberOfMaps();
 		int numberOfGamesPerMap = conquestUI.getNumberOfGamesPerMap();
@@ -118,6 +113,7 @@ public class TournamentController {
 				numberOfGamesPerMap, tournamentResults);
 		// Map map = Map.getInstance();
 		// map.assigningPlayerCountries(playerNamesAndTypes);
+		conquestUI.printGameOver();
 
 	}
 
