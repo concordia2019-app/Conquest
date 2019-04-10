@@ -19,6 +19,12 @@ import Model.TournamentResult;
 import View.ConquestUI;
 import View.TournamentView;
 
+/**
+ * This class is for control of tournament mode
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class TournamentController {
 
 	private static TournamentController instance;
@@ -32,6 +38,10 @@ public class TournamentController {
 		return instance;
 	}
 
+	/**
+	 * Main controller of tournament. It's responsible for handle Players list and
+	 * run reinforcement, attack, and move of each one
+	 */
 	public void tournamentStart() {
 		ConquestUI conquestUI = ConquestUI.getInstance();
 		int playerNumber = conquestUI.getNumberOfPlayer();
@@ -65,9 +75,6 @@ public class TournamentController {
 										playerItem.getPlayerName(), playerItem.getCountryID());
 								aggressivePlayer.aggressiveReinforcementPlayer(Map.getInstance().getCountries());
 								aggressivePlayer.aggressiveAttackPlayer();
-								if (conquestController.isGameFinish()) {
-
-								}
 								aggressivePlayer.aggressiveMovePlayer(Map.getInstance().getCountries());
 								break;
 							case BENOVOLENT:
@@ -80,9 +87,9 @@ public class TournamentController {
 							case CHEATER:
 								CheaterPlayer cheaterPlayer = new CheaterPlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
-								cheaterPlayer.setReinforcementPlayerArmies(playerItem.getReinforcementPlayerArmies());
-								cheaterPlayer.attackPlayer(Map.getInstance().getCountries());
-								cheaterPlayer.movePlayer(Map.getInstance().getCountries());
+								cheaterPlayer.cheaterReinforcementPlayer(Map.getInstance().getCountries());
+								cheaterPlayer.cheaterAttackPlayer();
+								cheaterPlayer.cheaterMovePlayer(Map.getInstance().getCountries());
 								break;
 							case RANDOM:
 								RandomPlayer randomPlayer = new RandomPlayer(playerItem.getPlayerID(),
@@ -114,6 +121,13 @@ public class TournamentController {
 
 	}
 
+	/**
+	 * This method get a list of countries and select the winner Player. Then return
+	 * name of mentioned player.
+	 * 
+	 * @param countryList - list of countries
+	 * @return Name of player as a string
+	 */
 	public String getWinnerName(ArrayList<Country> countryList) {
 		ArrayList<Integer> playerScores = new ArrayList<Integer>();
 		int p1 = 0;
@@ -160,11 +174,17 @@ public class TournamentController {
 		}
 		for (Country country : countryList) {
 			if (country.getPlayerID() == (winnerId + 1))
-				return country.getPlayerName();
+				return (country.getPlayerName());
 		}
 		return "-";
 	}
 
+	/**
+	 * Getting file path for reading tournament map
+	 * 
+	 * @param filePath - path of file as an string
+	 * @return result of reading file and creating countries as boolean parameter
+	 */
 	private boolean getFilePathForLoadingMap(String filePath) {
 		MapGenerator mapGenerator = new MapGenerator();
 		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);

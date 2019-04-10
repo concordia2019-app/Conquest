@@ -197,6 +197,13 @@ public class PlayerHelper {
 		return weakerCountry;
 	}
 
+	/**
+	 * return adjacent with same player that have more than one army
+	 * 
+	 * @param familyAdjacentCountries
+	 * @param country
+	 * @return
+	 */
 	public Country getFamilyAdjacentWithMoreThanOneArmy(ArrayList<Country> familyAdjacentCountries, Country country) {
 		for (Country countryFamilyItem : familyAdjacentCountries) {
 			if (checkNumberIsInList(countryFamilyItem.getAdjacentCountriesID(), country.getCountryID())
@@ -207,6 +214,13 @@ public class PlayerHelper {
 		return null;
 	}
 
+	/**
+	 * Check number is in list or not
+	 * 
+	 * @param intArrays      - list of numbers
+	 * @param specificNumber - number that we looking for
+	 * @return if number find , return true, otherwise return false
+	 */
 	public boolean checkNumberIsInList(int[] intArrays, int specificNumber) {
 		for (int i = 0; i < intArrays.length; i++) {
 			if (intArrays[i] == specificNumber)
@@ -233,6 +247,13 @@ public class PlayerHelper {
 		return countryList;
 	}
 
+	/**
+	 * this method calculate and decide that user can calculate and hand in cards or
+	 * not
+	 * 
+	 * @param playerCards
+	 * @return
+	 */
 	public boolean playerUseCardDecide(ArrayList<Card> playerCards) {
 		int infantryCardCounter = 0;
 		int cavalryCardCounter = 0;

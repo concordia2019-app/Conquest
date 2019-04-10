@@ -1,5 +1,11 @@
 package Model;
 
+/**
+ * A model with two attributes, Player name and Player type
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class PlayerNameAndType {
 
 	private String PlayerName;

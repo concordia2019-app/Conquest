@@ -92,6 +92,11 @@ public class UIHelper {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param playerId
+	 * @return
+	 */
 	public Player getPlayerById(int playerId) {
 		Player[] playerArray = Map.getInstance().getPlayers();
 		for(int i = 0; i< playerArray.length;i++) {

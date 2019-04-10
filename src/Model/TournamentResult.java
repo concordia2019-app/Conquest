@@ -1,5 +1,12 @@
 package Model;
 
+/**
+ * A model for keep the tournament results in each map, game, and also turn as
+ * well
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class TournamentResult {
 
 	private int GameIndex;
@@ -18,7 +25,7 @@ public class TournamentResult {
 	public int getMapIndex() {
 		return this.MapIndex;
 	}
-	
+
 	public int getTurnIndex() {
 		return this.TurnIndex;
 	}
@@ -34,7 +41,7 @@ public class TournamentResult {
 	public void setMapIndex(int mapIndex) {
 		this.MapIndex = mapIndex;
 	}
-	
+
 	public void setTurnIndex(int turnIndex) {
 		this.TurnIndex = turnIndex;
 	}

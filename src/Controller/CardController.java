@@ -83,6 +83,12 @@ public class CardController {
 		return armiesCount;
 	}
 
+	/**
+	 * overloading for calculateArmiesCount - it converts cards to armies
+	 * 
+	 * @param cards - player cards
+	 * @return number of armies
+	 */
 	public int calculateArmiesCount(ArrayList<Card> cards) {
 
 		int pairInfantry = 0;

@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.PrimitiveIterator.OfDouble;
+
 import Controller.CardController;
 import Controller.ConquestController;
 import Controller.TournamentController;
@@ -26,7 +28,7 @@ import Model.*;
  */
 public class ConquestUI implements IConquestUI {
 
-	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Play Sing;le Mode\r\n4.Run Tornoment\r\n5.Quit";
+	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Play Single Mode\r\n4.Run Tornoment\r\n5.Quit";
 
 	private String ContinueReinforcementMessage = "Do you want to finish the reinforcement phase?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
@@ -359,7 +361,55 @@ public class ConquestUI implements IConquestUI {
 
 					// break;
 				case 3:
-					// TODO play Single mood
+					System.out.println("**   Game is started   **");
+					PlayerNumber = getNumberOfPlayer();
+					ArrayList<PlayerNameAndType> playerNamesAndTypes = getPlayerNamesAndTypes(PlayerNumber);
+					Map.getInstance().assigningPlayerCountries(playerNamesAndTypes);
+					Countries = map.getCountries();
+					Players = map.getPlayers();
+					boolean finishingSingeGameStatus = false;
+					while (!finishingSingeGameStatus) {
+						for (Player playerItem : Players) {
+							switch (playerItem.getPlayerType()) {
+							case AGGRESSIVE:
+								AggressivePlayer aggressivePlayer = new AggressivePlayer(playerItem.getPlayerID(),
+										playerItem.getPlayerName(), playerItem.getCountryID());
+								aggressivePlayer.aggressiveReinforcementPlayer(Map.getInstance().getCountries());
+								aggressivePlayer.aggressiveAttackPlayer();
+								if (conquestController.isGameFinish()) {
+
+								}
+								aggressivePlayer.aggressiveMovePlayer(Map.getInstance().getCountries());
+								break;
+							case BENOVOLENT:
+								BenovolentPlayer benovolentPlayer = new BenovolentPlayer(playerItem.getPlayerID(),
+										playerItem.getPlayerName(), playerItem.getCountryID());
+								benovolentPlayer.reinforcementPlayer(Map.getInstance().getCountries());
+								benovolentPlayer.attackPlayer(Map.getInstance().getCountries());
+								benovolentPlayer.movePlayer(Map.getInstance().getCountries());
+								break;
+							case CHEATER:
+								CheaterPlayer cheaterPlayer = new CheaterPlayer(playerItem.getPlayerID(),
+										playerItem.getPlayerName(), playerItem.getCountryID());
+								cheaterPlayer.setReinforcementPlayerArmies(playerItem.getReinforcementPlayerArmies());
+								cheaterPlayer.attackPlayer(Map.getInstance().getCountries());
+								cheaterPlayer.movePlayer(Map.getInstance().getCountries());
+								break;
+							case RANDOM:
+								RandomPlayer randomPlayer = new RandomPlayer(playerItem.getPlayerID(),
+										playerItem.getPlayerName(), playerItem.getCountryID());
+								randomPlayer.reinforcementPlayer(Map.getInstance().getCountries());
+								randomPlayer.attackPlayer(Map.getInstance().getCountries());
+								randomPlayer.movePlayer(Map.getInstance().getCountries());
+								break;
+							default:
+								humanPlayerBehavioursInSingleMode(playerItem);
+							}
+						}
+						boolean syncCountriesDataStatusForSingleMode = countryHelper
+								.updateSourceCountriesArmies(Countries);
+					}
+
 					break;
 				case 4:
 					TournamentController tournamentController = TournamentController.getTournamentControllerInstance();
@@ -379,6 +429,106 @@ public class ConquestUI implements IConquestUI {
 				break;
 			} else
 				System.out.println("Entered value is not acceptable.[0..2]");
+		}
+
+	}
+
+	public void humanPlayerBehavioursInSingleMode(Player playerItem) {
+		System.out.println("Playr " + playerItem.getPlayerName() + " has "
+				+ conquestController.playerPercentageCalculation(playerItem, Countries) + " percentage of the map");
+
+		int restOfReinforcementArmies = 0;
+		CardsCounter playerCardsCounter = new CardsCounter();
+		Countries = map.getCountries();
+		if (playerItem.getReinforcementPlayerArmies() > 0) {
+			restOfReinforcementArmies = reinforcementOfPlayer(playerItem.getReinforcementPlayerArmies(), playerItem);
+			playerItem.setReinforcementPlayerArmies(restOfReinforcementArmies);
+			calculatedArmiesForReinforcement = 0;
+		}
+		playerItem.attackPlayer(Countries);
+		boolean syncCountriesDataStatusInLoadMap = countryHelper.updateSourceCountriesArmies(Countries);
+		Countries = map.getCountries();
+		mapView.printMainMap(map.getCountries());
+
+		int playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+		playerReinforcementArmyCount += FirstArmiesNumberReinforcement;
+		playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+		playerReinforcementArmyCount = 0;
+		ArrayList<Card> playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+		mapView.printMainMap(map.getCountries());
+		CardView cardView = new CardView();
+		if (playerItem.getAllowingCardStatus()) {
+			CardController cardController = new CardController();
+			Card cardToAssign = cardController.cardAssigner();
+			Player CurrentSourcePlayer = uiHelper.getPlayerById(playerItem.getPlayerID());
+			ArrayList<Card> playerItemCards = new ArrayList<Card>();
+			for (Card cardItem : CurrentSourcePlayer.getCards()) {
+				playerItemCards.add(cardItem);
+			}
+			playerItemCards.add(cardToAssign);
+			playerItem.addCard(cardToAssign);
+			playerItem.setCardCounts(playerCardsCounter);
+			map.setPlayers(Players);
+			playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+			playerItem.setAllowingStatus(false);
+
+			playerCards = uiHelper.getPlayerById(playerItem.getPlayerID()).getCards();
+		}
+
+		playerItem.movePlayer(Countries);
+		syncCountriesDataStatusInLoadMap = countryHelper.updateSourceCountriesArmies(Countries);
+		Countries = map.getCountries();
+
+		Player currentPlayerItem = uiHelper.getPlayerById(playerItem.getPlayerID());
+		if (currentPlayerItem.getCards().size() > 0) {
+			cardView.printCardsPlayer(currentPlayerItem);
+		}
+
+		playerCardsCounter = cardController.defineCardsType(playerItem.getCards());
+		playerItem.setCardCounts(playerCardsCounter);
+
+		if (playerCards.size() > 2) {
+			boolean cardHandInAnswer = conquestUiYesNoQuestion(UsePlayerCardQuestion);
+			if (cardHandInAnswer) {
+				calculatedArmiesForReinforcement = cardController.calculateArmiesCount(playerCards);
+				playerCardsCounter = cardController.defineCardsType(playerCards);
+				if (calculatedArmiesForReinforcement > 0) {
+					playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+					playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+					playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+					playerReinforcementArmyCount = 0;
+				}
+				playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+				playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+				playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+				playerReinforcementArmyCount = 0;
+			} else {
+				if (playerItem.getCards().size() >= 5) {
+					System.out.println(HandInCardsForceMessage);
+					playerCardsCounter = cardController.defineCardsType(playerCards);
+					calculatedArmiesForReinforcement = cardController.calculateArmiesCount(playerCards);
+					if (calculatedArmiesForReinforcement > 0) {
+						playerReinforcementArmyCount = playerItem.getReinforcementPlayerArmies();
+						playerReinforcementArmyCount += calculatedArmiesForReinforcement;
+						playerItem.setReinforcementPlayerArmies(playerReinforcementArmyCount);
+						playerReinforcementArmyCount = 0;
+					}
+
+				}
+
+			}
+		}
+		if (playerItem.getPlayerID() == Players[Players.length - 1].getPlayerID()) {
+			boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
+			if (saveAndExitGame) {
+				mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+				System.exit(0);
+			}
+		}
+		boolean finishGameStatus = conquestController.isGameFinish();
+		if (finishGameStatus) {
+			printFinishGame();
+			System.exit(0);
 		}
 
 	}

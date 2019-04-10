@@ -7,21 +7,27 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
-import View.ConquestUI;
 import View.MapView;
 
+/**
+ * Implementing Random player behavior
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class RandomPlayer extends Player {
 
 	public RandomPlayer(int playerID, String playerName, int[] countryID) {
 		super(playerID, playerName, countryID);
 	}
 
+	/**
+	 * implementing attack of Random player
+	 */
 	@Override
-
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
 		// test
 		System.out.print("before attack random");
@@ -80,6 +86,9 @@ public class RandomPlayer extends Player {
 		return countryList;
 	}
 
+	/**
+	 * Implementing Move of Random player
+	 */
 	@Override
 	public void movePlayer(ArrayList<Country> countryList) {
 		// test
@@ -119,6 +128,9 @@ public class RandomPlayer extends Player {
 		// test
 	}
 
+	/**
+	 * Implementing reinforcement of Random player
+	 */
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
 		ArrayList<Card> playerCards = this.getCards();
 		PlayerHelper playerHelper = new PlayerHelper();

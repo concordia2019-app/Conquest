@@ -8,10 +8,16 @@ import Model.Player;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Conquest controller for controlling the core of game
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class ConquestController {
 
 	private static ConquestController instance;
- 
+
 	private ConquestController() {
 
 	}
@@ -26,9 +32,10 @@ public class ConquestController {
 
 	}
 
-	public float playerPercentageCalculation(Player player, ArrayList<Country> countries ){
-         return   ((float)player.getCountryID().length/countries.size())*100;            
-        }
+	public float playerPercentageCalculation(Player player, ArrayList<Country> countries) {
+		return ((float) player.getCountryID().length / countries.size()) * 100;
+	}
+
 	/**
 	 * This method get player and set random card to player object
 	 * 
@@ -98,33 +105,38 @@ public class ConquestController {
 		int randomNumber = random.nextInt(greatest + 1 - least) + least;
 		return randomNumber;
 	}
-          public ArrayList<Country> getAdjacentCountries(int[] adjacentId)
-        {
-            ArrayList<Country> countries= new  ArrayList<Country> ();
-             for(int i=0;i< adjacentId.length;i++)
-             {
-            for(int j=0; j< Map.getInstance().getCountries().size() ;j++)
-            {
-                  if( Map.getInstance().getCountries().get(j).getPlayerID()==adjacentId[i])
-                    {
-                        countries.add(Map.getInstance().getCountries().get(i));
-                    }
-            }
-             }
-            return countries;
-        }
-        public ArrayList<Country> getPlayerCountries(int playerId)
-        {
-            ArrayList<Country> playerCountries= new  ArrayList<Country> ();
-            for(int i=0; i< Map.getInstance().getCountries().size() ;i++)
-            {
-                  if( Map.getInstance().getCountries().get(i).getPlayerID()==playerId)
-                    {
-                        playerCountries.add(Map.getInstance().getCountries().get(i));
-                    }
-            }
-            return playerCountries;
-        }
+
+	/**
+	 * Return adjancent countries
+	 * @param adjacentId
+	 * @return
+	 */
+	public ArrayList<Country> getAdjacentCountries(int[] adjacentId) {
+		ArrayList<Country> countries = new ArrayList<Country>();
+		for (int i = 0; i < adjacentId.length; i++) {
+			for (int j = 0; j < Map.getInstance().getCountries().size(); j++) {
+				if (Map.getInstance().getCountries().get(j).getPlayerID() == adjacentId[i]) {
+					countries.add(Map.getInstance().getCountries().get(i));
+				}
+			}
+		}
+		return countries;
+	}
+
+	/**
+	 * return player countries
+	 * @param playerId
+	 * @return
+	 */
+	public ArrayList<Country> getPlayerCountries(int playerId) {
+		ArrayList<Country> playerCountries = new ArrayList<Country>();
+		for (int i = 0; i < Map.getInstance().getCountries().size(); i++) {
+			if (Map.getInstance().getCountries().get(i).getPlayerID() == playerId) {
+				playerCountries.add(Map.getInstance().getCountries().get(i));
+			}
+		}
+		return playerCountries;
+	}
 
 	/**
 	 * This method will simulate the attack when player attacks an adjacent country.

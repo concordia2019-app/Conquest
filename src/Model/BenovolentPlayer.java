@@ -13,6 +13,12 @@ import Helper.CountryHelper;
 import Helper.PlayerHelper;
 import View.MapView;
 
+/**
+ * This class is created for benovolent player type
+ * 
+ * @author FarzadShamriz
+ *
+ */
 public class BenovolentPlayer extends Player {
 
 	public BenovolentPlayer(int playerID, String playerName, int[] countryID) {
@@ -28,6 +34,9 @@ public class BenovolentPlayer extends Player {
 		return map.getCountries();
 	}
 
+	/**
+	 * Move behaviour for benovolent player
+	 */
 	@Override
 	public void movePlayer(ArrayList<Country> countryList) {
 		// test
@@ -55,6 +64,9 @@ public class BenovolentPlayer extends Player {
 		// test
 	}
 
+	/**
+	 * reinforcement of belonovent player
+	 */
 	@Override
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
 		// test
