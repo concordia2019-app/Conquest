@@ -67,36 +67,30 @@ public class CheaterPlayer extends Player {
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
             	// TEST MOVE
-	
-		PlayerHelper playerHelper = new PlayerHelper();
- 
+	        PlayerHelper playerHelper = new PlayerHelper();
+
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
-                 
-                Country maxArmyCountry = playerCountries.get(0);
-		// finding max maxArmyCountry from player countries
-		for (int i = 1; i < playerCountries.size(); i++) {
-			if (playerCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
-				maxArmyCountry = playerCountries.get(i);
-			}
-		}
-                
-                // finding max adjaecent Country from player countries
+		// finding the best country wich has more  adjaecent Country from player countries
 
- 		int armiesNumberToAdd =  (maxArmyCountry.getArmy() - 1);   //  QUESTION : why should be ( -1 ) and does it check the exceptions
+		Country selectedCountry = ConquestController.getInstance(). findTheBestAdjeacentPlayer(playerCountries);
+
+		// finding max adjaecent Country from player countries
+
+		int armiesNumberToAdd = (selectedCountry.getArmy() - 1);  
 		CountryHelper countryHelper = new CountryHelper();
-		ArrayList<Country> adjacentCountries = countryHelper.getFamilyCountryAdjacencies(countryList,maxArmyCountry, this);
+		ArrayList<Country> adjacentCountries = countryHelper.getFamilyCountryAdjacencies(countryList, selectedCountry,
+				this);
 
-                
-                Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
+		Country maxArmy = adjacentCountries.get(0);
 
 		for (int i = 1; i < adjacentCountries.size(); i++) {
-			if (adjacentCountries.get(i).getArmy() > maxAdjeacentArmyCountry.getArmy()) {
-				maxAdjeacentArmyCountry = adjacentCountries.get(i);
+			if (adjacentCountries.get(i).getArmy() > maxArmy.getArmy()) {
+				maxArmy = adjacentCountries.get(i);
 			}
 		}
-                
- 		ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, maxArmyCountry,
-				maxAdjeacentArmyCountry, armiesNumberToAdd);
+
+		ArrayList<Country> updatedCountries = countryHelper.updateCountriesForMove(countryList, selectedCountry,
+				maxArmy, armiesNumberToAdd);
 
 		boolean updateSucceed = false;
 		while (!updateSucceed) {

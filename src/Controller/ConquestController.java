@@ -105,7 +105,29 @@ public class ConquestController {
 		int randomNumber = random.nextInt(greatest + 1 - least) + least;
 		return randomNumber;
 	}
-
+         /**
+	 * This method will generate the best country for adjeacent 
+	 * 
+	 * @param playerCountries    Gets the least of player countries
+ 	 
+	 */
+        
+        public Country findTheBestAdjeacentPlayer( ArrayList<Country> playerCountries)    {
+            
+           Country  bestCountry=playerCountries.get(0);
+           for(int i=0;i<playerCountries.size();i++)
+           {
+               if(playerCountries.get(i).getAdjacentCountriesID().length>0)
+               {
+                   for(int j=0;j<playerCountries.get(i).getAdjacentCountriesID().length;j++)
+                   {
+                       int[] a=playerCountries.get(i).getAdjacentCountriesID();
+                       bestCountry=  Map.getInstance().getCountries().get(a[0]);
+                   }
+                   }
+           }
+           return bestCountry;
+        }
 	/**
 	 * Return adjancent countries
 	 * @param adjacentId

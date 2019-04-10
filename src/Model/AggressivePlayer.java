@@ -29,7 +29,7 @@ public class AggressivePlayer extends Player {
       
 		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
                 // TEST MAP
-		System.out.print("before Attack");
+		System.out.print("Test Attack 1");
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
 		// TEST MAP
@@ -83,7 +83,7 @@ public class AggressivePlayer extends Player {
                             
                                                 
                 // test
-		System.out.print("after attack random");
+		System.out.print("Test Attack 2");
 		mapView = new MapView();
 		mapView.printMainMap(countryList);
                 return countryList;
@@ -96,9 +96,8 @@ public class AggressivePlayer extends Player {
 	 */
 	public void aggressiveMovePlayer(ArrayList<Country> countryList) {
             
-            
             	// TEST MAP
-		System.out.print("Before Move");
+		System.out.print("Test Move 1");
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
 		// TEST MAP
@@ -139,7 +138,7 @@ public class AggressivePlayer extends Player {
 		}
                 
            	// TEST MAP
-		System.out.print("before move random");
+		System.out.print("Test Move 2");
 		mapView = new MapView();
 		mapView.printMainMap(updatedCountries);
 		// TEST MAP
