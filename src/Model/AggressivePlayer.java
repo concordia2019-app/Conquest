@@ -42,18 +42,26 @@ public class AggressivePlayer extends Player {
 				maxArmyCountry = playerCountries.get(i);
 			}
 		}
-		ArrayList<Country> adjacentCountries = ConquestController.getInstance()
-				.getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID());
-		// attacking adjacentCountries from player countries
-		Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
+		ArrayList<Country> adjacentCountries = ConquestController.getInstance().getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID(),countryList);
+
+
+
+		System.out.println("maxArmyCountry Adjeadent :  "+maxArmyCountry.getAdjacentCountriesID().length+ " name : "+maxArmyCountry.getCountryName());
+
+		System.out.println("adjacentCountries "+adjacentCountries.size());
+		
+		 if(adjacentCountries.size()<1)
+			  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
+ 		// attacking adjacentCountries from player countries
+		 
+		 Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
 
 		for (int i = 1; i < adjacentCountries.size(); i++) {
 			if (adjacentCountries.get(i).getArmy() > maxAdjeacentArmyCountry.getArmy()) {
 				maxAdjeacentArmyCountry = adjacentCountries.get(i);
 			}
 		} 
-                 
-                // here is the attacker and enemy which max armt 
+                  // here is the attacker and enemy which max armt 
                 // from player is attacker and max adjeacent army is enemy
                         int attackerArmies = maxArmyCountry.getArmy();
 			int enemyArmies = maxAdjeacentArmyCountry.getArmy();
@@ -98,6 +106,7 @@ public class AggressivePlayer extends Player {
             
             	// TEST MAP
 		System.out.print("Test Move 1");
+		System.out.print("countries "+ countryList.size());
 		MapView mapView = new MapView();
 		mapView.printMainMap(countryList);
 		// TEST MAP
@@ -115,12 +124,16 @@ public class AggressivePlayer extends Player {
 
 		// finding max adjaecent Country from player countries
 
-		int armiesNumberToAdd = (maxArmyCountry.getArmy() - 1); // QUESTION : why should be ( -1 ) and does it check the
-																// exceptions
+		int armiesNumberToAdd = (maxArmyCountry.getArmy() - 1);  
+		 // exceptions
 		CountryHelper countryHelper = new CountryHelper();
-		ArrayList<Country> adjacentCountries = countryHelper.getFamilyCountryAdjacencies(countryList, maxArmyCountry,
-				this);
+ 		 ArrayList<Country> adjacentCountries=ConquestController.getInstance().getAdjacentCountries( maxArmyCountry.getAdjacentCountriesID(),countryList );
+ 
+ 		System.out.println("maxArmyCountry Adjeadent :  "+maxArmyCountry.getAdjacentCountriesID().length+ " name : "+maxArmyCountry.getCountryName());
 
+		System.out.println("adjacentCountries "+adjacentCountries.size());
+  if(adjacentCountries.size()<1)
+	  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
 		Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
 
 		for (int i = 1; i < adjacentCountries.size(); i++) {

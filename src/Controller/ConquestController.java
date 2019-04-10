@@ -133,12 +133,12 @@ public class ConquestController {
 	 * @param adjacentId
 	 * @return
 	 */
-	public ArrayList<Country> getAdjacentCountries(int[] adjacentId) {
+	public ArrayList<Country> getAdjacentCountries(int[] adjacentId ,ArrayList<Country> allCountries ) {
 		ArrayList<Country> countries = new ArrayList<Country>();
 		for (int i = 0; i < adjacentId.length; i++) {
-			for (int j = 0; j < Map.getInstance().getCountries().size(); j++) {
-				if (Map.getInstance().getCountries().get(j).getPlayerID() == adjacentId[i]) {
-					countries.add(Map.getInstance().getCountries().get(i));
+			for (int j = 0; j < allCountries.size(); j++) {
+				if (allCountries.get(j).getCountryID() == adjacentId[i]) {
+					countries.add(allCountries.get(j));
 				}
 			}
 		}
