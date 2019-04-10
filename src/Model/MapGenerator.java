@@ -74,11 +74,11 @@ public class MapGenerator {
 		if (exceptionErrorMessage == null || exceptionErrorMessage.isEmpty()) {
 			System.out.println("Check your file. There is something wrong in the content of the file.");
 			System.out.println("Check and press enter");
-			//input.nextLine();
+			// input.nextLine();
 		} else {
 			System.out.print(exceptionErrorMessage);
 			System.out.println("Check and press enter");
-			//input.nextLine();
+			// input.nextLine();
 		}
 	}
 
@@ -100,6 +100,8 @@ public class MapGenerator {
 				for (int i = 0; i < allCountryDetails.size(); i++) {
 					JSONObject countryDetails = (JSONObject) jsonCountries[i];
 					String name = (String) countryDetails.get("countryName");
+					String playername = (String) countryDetails.get("playerName");
+					Integer playerId = Integer.parseInt(countryDetails.get("playerID").toString());
 					Integer id = Integer.parseInt(countryDetails.get("countryID").toString());
 					Integer continentId = Integer.parseInt(countryDetails.get("continentID").toString());
 					Integer army = Integer.parseInt(countryDetails.get("army").toString());
@@ -110,7 +112,7 @@ public class MapGenerator {
 					for (int j = 0; j < adjacentCountriesId.size() - 1; ++j) {
 						adjCountries[j] = (Integer.parseInt((adjacentCountriesId.get(j)).toString()));
 					}
-					Country c = new Country(name, id, continentId, army, adjCountries, 0, "");
+					Country c = new Country(name, id, continentId, army, adjCountries, playerId, playername);
 					importedCountries.add(c);
 				}
 			} else {
@@ -152,7 +154,7 @@ public class MapGenerator {
 					for (int k = 0; k < cardLists.size() - 1; ++k) {
 						Card c = new Card(CardType.valueOf((cardLists.get(k)).toString()));
 						cardList.add(c);
-					}	
+					}
 					Player p = new Player(id, name, countryId);
 					p.setAllowingStatus(allowToGetCard);
 					p.setCards(cardList);
@@ -168,13 +170,13 @@ public class MapGenerator {
 			readFileStatus = false;
 			printException(e.getMessage());
 		}
-		System.out.println(importedPlayers);
+		// System.out.println(importedPlayers);
 		return importedPlayers;
 	}
-	
+
 	public static String savePlayers(ArrayList<Player> players, String filePath) {
 		JSONArray playersArray = new JSONArray();
-		for(int i = 0; i<players.size(); i++) {
+		for (int i = 0; i < players.size(); i++) {
 			JSONObject playerObject = new JSONObject();
 			int playerId = players.get(i).getPlayerID();
 			String playerName = players.get(i).getPlayerName();
@@ -185,12 +187,12 @@ public class MapGenerator {
 			for (int j = 0; j < cardLists.size() - 1; ++j) {
 				String cardType = cardLists.get(j).getCardType().toString();
 				cards.add(cardType);
-			}	
+			}
 			playerObject.put("playerID", playerId);
 			playerObject.put("playerName", playerName);
-			playerObject.put("countryID",countriesId);
-			playerObject.put("allowToGetCard",allowToGetCards);
-			playerObject.put("cards",cards);
+			playerObject.put("countryID", countriesId);
+			playerObject.put("allowToGetCard", allowToGetCards);
+			playerObject.put("cards", cards);
 			playersArray.add(playerObject);
 		}
 		Gson gson = new Gson();

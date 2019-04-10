@@ -74,7 +74,7 @@ public class TournamentController {
 								AggressivePlayer aggressivePlayer = new AggressivePlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
 								aggressivePlayer.aggressiveReinforcementPlayer(Map.getInstance().getCountries());
-								aggressivePlayer.aggressiveAttackPlayer();
+								aggressivePlayer.aggressiveAttackPlayer(Map.getInstance().getCountries());
 								aggressivePlayer.aggressiveMovePlayer(Map.getInstance().getCountries());
 								break;
 							case BENOVOLENT:
@@ -88,7 +88,7 @@ public class TournamentController {
 								CheaterPlayer cheaterPlayer = new CheaterPlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
 								cheaterPlayer.cheaterReinforcementPlayer(Map.getInstance().getCountries());
-								cheaterPlayer.cheaterAttackPlayer();
+								cheaterPlayer.cheaterAttackPlayer(Map.getInstance().getCountries());
 								cheaterPlayer.cheaterMovePlayer(Map.getInstance().getCountries());
 								break;
 							case RANDOM:

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.PrimitiveIterator.OfDouble;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import Controller.CardController;
 import Controller.ConquestController;
 import Controller.TournamentController;
@@ -29,7 +31,8 @@ import Model.*;
 public class ConquestUI implements IConquestUI {
 
 	private String StartGameMenuMessage = "** Conquest Game **\r\n1.Start Game with Default Map. \r\n2.Start Game with Load Map \r\n3.Play Single Mode\r\n4.Run Tornoment\r\n5.Quit";
-
+	private String FilePathForPlayers = (System.getProperty("user.dir")
+			+ "\\src\\MapAndPlayerSavedFiles\\Players.json");
 	private String ContinueReinforcementMessage = "Do you want to finish the reinforcement phase?(Y/N)";
 	private String WrongInputString = "Your input is not acceptable.";
 	private String InputNumberOfPlayers = "Enter bumber of players [2..5]:";
@@ -137,6 +140,7 @@ public class ConquestUI implements IConquestUI {
 					map.assigningPlayerCountries(playerNames, PlayerNumber);
 					Countries = map.getCountries();
 					Players = map.getPlayers();
+
 					for (Player playerItem : Players) {
 						reinforcementOfPlayer(FirstArmiesNumberReinforcement, playerItem);
 					}
@@ -227,6 +231,13 @@ public class ConquestUI implements IConquestUI {
 								boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
 								if (saveAndExitGame) {
 									mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+									ArrayList<Player> playerArrayList = new ArrayList<Player>();
+									Player[] playersForWrite = map.getPlayers();
+									for (int playerCounter = 0; playerCounter < playersForWrite.length; playerCounter++) {
+										playerArrayList.add(playersForWrite[playerCounter]);
+									}
+									String playerSaveResult = mapGenerator.savePlayers(playerArrayList,
+											FilePathForPlayers);
 									System.exit(0);
 								}
 							}
@@ -246,9 +257,23 @@ public class ConquestUI implements IConquestUI {
 					boolean readFileStatus = getFilePathForLoadingMap();
 					if (readFileStatus) {
 						System.out.println("**   Game is started   **");
-						PlayerNumber = getNumberOfPlayer();
-						ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
-						map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
+						// PlayerNumber = getNumberOfPlayer();
+						// ArrayList<String> playerNamesInLoadMap = getPlayernames(PlayerNumber);
+						// map.assigningPlayerCountries(playerNamesInLoadMap, PlayerNumber);
+
+						ArrayList<Player> importPlayerList = mapGenerator.assignePlayers(FilePathForPlayers);
+						Player[] playerTempArrayList = new Player[(importPlayerList.size())];
+						if (importPlayerList.size() > 0) {
+							for (int playerTempCounter = 0; playerTempCounter < importPlayerList
+									.size(); playerTempCounter++) {
+								playerTempArrayList[playerTempCounter] = importPlayerList.get(playerTempCounter);
+								System.out.println("Player " + importPlayerList.get(playerTempCounter).getPlayerName()
+										+ " is loaded.");
+							}
+							Players = playerTempArrayList;
+							Map.getInstance().setPlayers(playerTempArrayList);
+						}
+
 						Countries = map.getCountries();
 						Players = map.getPlayers();
 						for (Player playerItem : Players) {
@@ -344,6 +369,13 @@ public class ConquestUI implements IConquestUI {
 									boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
 									if (saveAndExitGame) {
 										mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+										ArrayList<Player> playerArrayList = new ArrayList<Player>();
+										for (int playerCounter = 0; playerCounter < map.getPlayers().length; map
+												.getPlayers()) {
+											playerArrayList.add(map.getPlayers()[playerCounter]);
+										}
+										String playerSaveResult = mapGenerator.savePlayers(playerArrayList,
+												FilePathForPlayers);
 										System.exit(0);
 									}
 								}
@@ -375,7 +407,7 @@ public class ConquestUI implements IConquestUI {
 								AggressivePlayer aggressivePlayer = new AggressivePlayer(playerItem.getPlayerID(),
 										playerItem.getPlayerName(), playerItem.getCountryID());
 								aggressivePlayer.aggressiveReinforcementPlayer(Map.getInstance().getCountries());
-								aggressivePlayer.aggressiveAttackPlayer();
+								aggressivePlayer.aggressiveAttackPlayer(Map.getInstance().getCountries());
 								if (conquestController.isGameFinish()) {
 
 								}
@@ -522,6 +554,11 @@ public class ConquestUI implements IConquestUI {
 			boolean saveAndExitGame = conquestUiYesNoQuestion(SaveAndExitQuestion);
 			if (saveAndExitGame) {
 				mapGenerator.writeMap(map.getCountries(), getFilePathForWritingMap());
+				ArrayList<Player> playerArrayList = new ArrayList<Player>();
+				for (int playerCounter = 0; playerCounter < map.getPlayers().length; map.getPlayers()) {
+					playerArrayList.add(map.getPlayers()[playerCounter]);
+				}
+				String playerSaveResult = mapGenerator.savePlayers(playerArrayList, FilePathForPlayers);
 				System.exit(0);
 			}
 		}
@@ -610,7 +647,7 @@ public class ConquestUI implements IConquestUI {
 	private boolean getFilePathForLoadingMap() {
 		System.out.println("Your file should be in this path : " + System.getProperty("user.dir")
 				+ "\\bin\\ResourceProject\\CountrySample.json");
-		String filePath = System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json";
+		String filePath = System.getProperty("user.dir") + "\\src\\MapAndPlayerSavedFiles\\CountrySample.json";
 		ArrayList<Country> loadingListCountries = mapGenerator.mapReader(filePath);
 		map.setCountries(loadingListCountries);
 		if (loadingListCountries.size() > 0) {
@@ -620,7 +657,7 @@ public class ConquestUI implements IConquestUI {
 	}
 
 	private String getFilePathForWritingMap() {
-		return (System.getProperty("user.dir") + "\\bin\\ResourceProject\\CountrySample.json");
+		return (System.getProperty("user.dir") + "\\src\\MapAndPlayerSavedFiles\\CountrySample.json");
 	}
 
 	public int getNumberOfMaps() {

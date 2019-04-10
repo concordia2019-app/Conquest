@@ -56,7 +56,7 @@ public class RandomPlayer extends Player {
 				int attackerRandomArmy = random.nextInt(attackerArmies);
 				if (attackerRandomArmy == 0)
 					attackerRandomArmy = 1;
-				int restOfAttackerRandomArmy = ((attackerRandomArmy));
+				int restOfAttackerRandomArmy = ((attackCountry.getArmy() - attackerRandomArmy));
 				attackCountry.setArmy(restOfAttackerRandomArmy);
 				AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(attackerRandomArmy,
 						enemyArmies);
@@ -69,6 +69,12 @@ public class RandomPlayer extends Player {
 							playerItem.setCountryId(this.getCountryID());
 						}
 						Map.getInstance().setPlayers(players);
+					}
+					for (Country countryForUpdate : countryList) {
+						if (countryForUpdate.getCountryID() == enemyCountry.getCountryID()) {
+							countryForUpdate.setArmy(enemyCountry.getArmy());
+							countryForUpdate.setPlayer(enemyCountry.getPlayerID(), enemyCountry.getPlayerName());
+						}
 					}
 				}
 
