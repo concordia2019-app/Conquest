@@ -171,4 +171,73 @@ public class PlayerHelperTest {
 		cards.add(card3);
 		assertFalse(playerHelper.playerUseCardDecide(cards));
 	}
+
+	@Test
+	public void getFamilyAdjacentWithMoreThanOneArmyTest() {
+		PlayerHelper playerHelper = new PlayerHelper();
+		ArrayList<Country> familyAdjacencies = new ArrayList<Country>();
+		Country country1 = new Country("CountryTest1", 1, 1, 5, new int[] { 2, 3 }, 1, "PTest1");
+		Country country2 = new Country("CountryTest2", 2, 1, 5, new int[] { 1 }, 1, "PTest1");
+		Country country3 = new Country("CountryTest3", 3, 1, 1, new int[] { 1 }, 1, "PTest1");
+		familyAdjacencies.add(country2);
+		familyAdjacencies.add(country3);
+		Country countryResult = playerHelper.getFamilyAdjacentWithMoreThanOneArmy(familyAdjacencies, country1);
+		assertEquals(country2, countryResult);
+	}
+
+	@Test
+	public void checkNumberIsInLisFalseTest() {
+		PlayerHelper playerHelper = new PlayerHelper();
+		int[] intList = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+		int number = 12;
+		boolean searchStatus = playerHelper.checkNumberIsInList(intList, number);
+		assertFalse(searchStatus);
+	}
+
+	@Test
+	public void checkNumberIsInListTest() {
+		PlayerHelper playerHelper = new PlayerHelper();
+		int[] intList = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+		int number = 4;
+		boolean searchStatus = playerHelper.checkNumberIsInList(intList, number);
+		assertTrue(searchStatus);
+	}
+
+	@Test
+	public void playerUseCardDecideTest() {
+		PlayerHelper playerHelper = new PlayerHelper();
+		ArrayList<Card> cards = new ArrayList<Card>();
+		Card card1 = new Card(CardType.ARTILLERY);
+		Card card2 = new Card(CardType.ARTILLERY);
+		Card card3 = new Card(CardType.ARTILLERY);
+		Card card4 = new Card(CardType.ARTILLERY);
+		Card card5 = new Card(CardType.ARTILLERY);
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		cards.add(card4);
+		cards.add(card5);
+
+		boolean result = playerHelper.playerUseCardDecide(cards);
+		assertTrue(result);
+	}
+
+	@Test
+	public void playerUseCardDecideFalseTest() {
+		PlayerHelper playerHelper = new PlayerHelper();
+		ArrayList<Card> cards = new ArrayList<Card>();
+		Card card1 = new Card(CardType.CAVALRY);
+		Card card2 = new Card(CardType.CAVALRY);
+		Card card3 = new Card(CardType.INFANTRY);
+		Card card4 = new Card(CardType.ARTILLERY);
+		Card card5 = new Card(CardType.ARTILLERY);
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		cards.add(card4);
+		cards.add(card5);
+
+		boolean result = playerHelper.playerUseCardDecide(cards);
+		assertFalse(result);
+	}
 }

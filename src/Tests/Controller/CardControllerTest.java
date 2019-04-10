@@ -3,6 +3,7 @@
  * 
  */
 package Tests.Controller;
+
 import Model.CardType;
 import Model.Card;
 import Model.CardsCounter;
@@ -41,70 +42,84 @@ public class CardControllerTest {
 	 * Test method for {@link Controller.CardController#cardAssigner()}.
 	 */
 //	@Test
-	//public void testCardAssigner() {
-	//	fail("Not yet implemented");
-	//}
+	// public void testCardAssigner() {
+	// fail("Not yet implemented");
+	// }
 
 	/**
-	 * Test method for {@link Controller.CardController#defineCardsType(java.util.ArrayList)}.
+	 * Test method for
+	 * {@link Controller.CardController#defineCardsType(java.util.ArrayList)}.
 	 */
 //	@Test
-	//public void testDefineCardsType() {
-		//fail("Not yet implemented");
+	// public void testDefineCardsType() {
+	// fail("Not yet implemented");
 //	}
 
 	/**
-	 * Test method for {@link Controller.CardController#calculateArmiesCount(Model.CardsCounter, java.util.ArrayList)}.
+	 * Test method for
+	 * {@link Controller.CardController#calculateArmiesCount(Model.CardsCounter, java.util.ArrayList)}.
 	 */
 	@Test
 	public void testCalculateArmiesCount() {
-		
-		CardController cardcontroller=new CardController();
-		CardsCounter cardsCounter=new CardsCounter();
+
+		CardController cardcontroller = new CardController();
+		CardsCounter cardsCounter = new CardsCounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseCavalrycounter();
 		cardsCounter.increaseCavalrycounter();
 		cardsCounter.increaseInfantrycounter();
-        ArrayList<Card> cards= new ArrayList<Card>();
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.CAVALRY));
-        cards.add(new Card(CardType.CAVALRY));
-        cards.add(new Card(CardType.INFANTRY));
+		ArrayList<Card> cards = new ArrayList<Card>();
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.CAVALRY));
+		cards.add(new Card(CardType.CAVALRY));
+		cards.add(new Card(CardType.INFANTRY));
 
-
-		assertEquals(cardcontroller.calculateArmiesCount(cardsCounter,cards), 5);
+		assertEquals(cardcontroller.calculateArmiesCount(cardsCounter, cards), 5);
 
 	}
 
-
 	/**
-	 * Test method for {@link Controller.CardController#calculateArmiesCount(Model.CardsCounter, java.util.ArrayList)}.
+	 * Test method for
+	 * {@link Controller.CardController#calculateArmiesCount(Model.CardsCounter, java.util.ArrayList)}.
 	 */
 	@Test
 	public void testUpdateListCards() {
-		
-		CardController cardcontroller=new CardController();
-		CardsCounter cardsCounter=new CardsCounter();
+
+		CardController cardcontroller = new CardController();
+		CardsCounter cardsCounter = new CardsCounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseArtillerycounter();
 		cardsCounter.increaseCavalrycounter();
 		cardsCounter.increaseCavalrycounter();
 		cardsCounter.increaseInfantrycounter();
-        ArrayList<Card> cards= new ArrayList<Card>();
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.ARTILLERY));
-        cards.add(new Card(CardType.CAVALRY));
-        cards.add(new Card(CardType.CAVALRY));
-        cards.add(new Card(CardType.INFANTRY));
+		ArrayList<Card> cards = new ArrayList<Card>();
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.ARTILLERY));
+		cards.add(new Card(CardType.CAVALRY));
+		cards.add(new Card(CardType.CAVALRY));
+		cards.add(new Card(CardType.INFANTRY));
 
+		assertEquals(cardcontroller.updateListCards(cardsCounter, cards).size(), 3);
 
-		assertEquals(cardcontroller.updateListCards(cardsCounter, cards).size(),3);
+	}
 
+	@Test
+	public void calculateArmiesCountTest() {
+		CardController cardController = new CardController();
+		ArrayList<Card> cards = new ArrayList<Card>();
+		Card card1 = new Card(CardType.INFANTRY);
+		Card card2 = new Card(CardType.INFANTRY);
+		Card card3 = new Card(CardType.INFANTRY);
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		int armies = cardController.calculateArmiesCount(cards);
+		assertEquals(5, armies);
 	}
 }

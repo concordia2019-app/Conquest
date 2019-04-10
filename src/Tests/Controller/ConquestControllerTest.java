@@ -57,4 +57,13 @@ public class ConquestControllerTest {
 		assertTrue(attackResponse.getAttackStatus());
 	}
 
+	@Test
+	public void setCardToPlayerTest() {
+		ConquestController conquestController = ConquestController.getInstance();
+		Player playerForUpdate = new Player(1, "TestPlayer", null);
+		Player assignedCardPlayer = conquestController.setCardToPlayer(playerForUpdate);
+
+		assertTrue(assignedCardPlayer.getCards().size() > 0);
+	}
+
 }
