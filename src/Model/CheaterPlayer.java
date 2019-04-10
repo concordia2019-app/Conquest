@@ -8,6 +8,7 @@ package Model;
 import Controller.ConquestController;
 import Helper.CountryHelper;
 import Helper.PlayerHelper;
+import View.MapView;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +25,7 @@ public class CheaterPlayer extends Player {
 	 * and find the best adjeacent and attack on it
 	 * behavior on maximum armies
 	 */
-	public ArrayList<Country> cheaterAttackPlayer() {
+	public ArrayList<Country> cheaterAttackPlayer(ArrayList<Country> countryList) {
 		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
 		ArrayList<Country> allCountries = Map.getInstance().getCountries();
 
@@ -52,7 +53,7 @@ public class CheaterPlayer extends Player {
 				// => GoTo ConquestController.attackCalculation
 			}
 		}
-		return allCountries;
+		return countryList;
 	}
         /*
 	 * cheater move behaviosr choosing the best country's army 
@@ -60,6 +61,13 @@ public class CheaterPlayer extends Player {
 	 * behavior on maximum armies
 	 */
         public void cheaterMovePlayer(ArrayList<Country> countryList) {
+             
+            	// TEST MOVE
+		System.out.print("Teest Move 1");
+		MapView mapView = new MapView();
+		mapView.printMainMap(countryList);
+            	// TEST MOVE
+	
 		PlayerHelper playerHelper = new PlayerHelper();
  
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
@@ -94,6 +102,15 @@ public class CheaterPlayer extends Player {
 		while (!updateSucceed) {
 			updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
 		}
+                
+            	// TEST MOVE
+		System.out.print("Test Move 2");
+		mapView = new MapView();
+		mapView.printMainMap(countryList);
+            	// TEST MOVE
+            
+            
+            ///...
 	}
 
 	 /*
@@ -104,39 +121,34 @@ public class CheaterPlayer extends Player {
 	public ArrayList<Country> cheaterReinforcementPlayer(ArrayList<Country> countryList) {
 		ArrayList<Card> playerCards = this.getCards();
 		PlayerHelper playerHelper = new PlayerHelper();
-                ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
+		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
 
-                   Country maxArmyCountry = playerCountries.get(0);
+		Country playerCountry;
 		// finding max maxArmyCountry from player countries
-		for (int i = 1; i < playerCountries.size(); i++) {
-			if (playerCountries.get(i).getArmy() > maxArmyCountry.getArmy()) {
-				maxArmyCountry = playerCountries.get(i);
-			}
-		}
-                
-                 
+		for (int i = 0; i < playerCountries.size(); i++) {
+			 
+		 playerCountry = playerCountries.get(i); 
 		if (playerHelper.playerUseCardDecide(playerCards)) {
-			ArrayList<Country> updatedCountryList = new ArrayList<Country>();
 
 			for (Country countryItem : countryList) {
-				if (countryItem.getCountryID() == maxArmyCountry.getCountryID()) {
-					int selectedCountryArmies = maxArmyCountry.getArmy();
-					int numberRandomArmies =  this.getReinforcementPlayerArmies();
+				if (countryItem.getCountryID() == playerCountry.getCountryID()) {
+                                    // doubles the army count
+					int selectedCountryArmies = playerCountry.getArmy() * 2;
+					int numberRandomArmies = this.getReinforcementPlayerArmies();
 					this.setReinforcementPlayerArmies((this.getReinforcementPlayerArmies() - numberRandomArmies));
 					int armiesToAdd = (selectedCountryArmies + numberRandomArmies);
 					countryItem.setArmy(armiesToAdd);
 				}
-				updatedCountryList.add(countryItem);
 			}
-
+                }
+ 
 			boolean updateSucceed = false;
 			CountryHelper countryHelper = new CountryHelper();
 			while (!updateSucceed) {
-				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
-			}
-		}
-
-		return countryList;
+				updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+			} 
+                } 
+ 		return countryList;
 	}
 
     
