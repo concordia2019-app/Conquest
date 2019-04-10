@@ -113,9 +113,9 @@ public class AggressivePlayer extends Player {
 				maxArmyCountry = playerCountries.get(i);
 			}
 		}
+		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
 
 		if (playerHelper.playerUseCardDecide(playerCards)) {
-			ArrayList<Country> updatedCountryList = new ArrayList<Country>();
 
 			for (Country countryItem : countryList) {
 				if (countryItem.getCountryID() == maxArmyCountry.getCountryID()) {
@@ -133,9 +133,11 @@ public class AggressivePlayer extends Player {
 			while (!updateSucceed) {
 				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
 			}
-		}
+		
+                }
 
-		return countryList;
+ 		return updatedCountryList;
 	}
 
+         
 }
