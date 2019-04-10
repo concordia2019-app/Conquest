@@ -40,9 +40,9 @@ public class BenovolentPlayer extends Player {
 	@Override
 	public void movePlayer(ArrayList<Country> countryList) {
 		// test
-		MapView mapView = new MapView();
-		System.out.print("befor move benevolent");
-		mapView.printMainMap(countryList);
+		// MapView mapView = new MapView();
+		// System.out.print("befor move benevolent");
+		// mapView.printMainMap(countryList);
 		// test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
@@ -59,8 +59,8 @@ public class BenovolentPlayer extends Player {
 			}
 		}
 		// test
-		System.out.print("after move benovolent");
-		mapView.printMainMap(countryList);
+		// System.out.print("after move benovolent");
+		// mapView.printMainMap(countryList);
 		// test
 	}
 
@@ -70,9 +70,9 @@ public class BenovolentPlayer extends Player {
 	@Override
 	public ArrayList<Country> reinforcementPlayer(ArrayList<Country> countryList) {
 		// test
-		MapView mapView = new MapView();
-		System.out.print("befor rinforcement benovolent");
-		mapView.printMainMap(countryList);
+		// MapView mapView = new MapView();
+		// System.out.print("befor rinforcement benovolent");
+		// mapView.printMainMap(countryList);
 		// test
 		ArrayList<Card> playerCards = this.getCards();
 		PlayerHelper playerHelper = new PlayerHelper();
@@ -109,8 +109,8 @@ public class BenovolentPlayer extends Player {
 		}
 
 		// test
-		System.out.print("after rinforcement benovolent");
-		mapView.printMainMap(countryList);
+		// System.out.print("after rinforcement benovolent");
+		// mapView.printMainMap(countryList);
 		// test
 		return countryList;
 	}

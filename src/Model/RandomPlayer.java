@@ -30,9 +30,9 @@ public class RandomPlayer extends Player {
 	@Override
 	public ArrayList<Country> attackPlayer(ArrayList<Country> countryList) {
 		// test
-		System.out.print("before attack random");
-		MapView mapView = new MapView();
-		mapView.printMainMap(countryList);
+		// System.out.print("before attack random");
+		// MapView mapView = new MapView();
+		// mapView.printMainMap(countryList);
 		// test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
@@ -85,9 +85,9 @@ public class RandomPlayer extends Player {
 			}
 		}
 		// test
-		System.out.print("after attack random");
-		mapView = new MapView();
-		mapView.printMainMap(countryList);
+		// System.out.print("after attack random");
+		// mapView = new MapView();
+		// mapView.printMainMap(countryList);
 		// test
 		return countryList;
 	}
@@ -98,9 +98,9 @@ public class RandomPlayer extends Player {
 	@Override
 	public void movePlayer(ArrayList<Country> countryList) {
 		// test
-		System.out.print("before move random");
-		MapView mapView = new MapView();
-		mapView.printMainMap(countryList);
+		// System.out.print("before move random");
+		// MapView mapView = new MapView();
+		// mapView.printMainMap(countryList);
 		// test
 		PlayerHelper playerHelper = new PlayerHelper();
 		ArrayList<Country> playerCountries = playerHelper.getPlayerCountries(countryList, this.getPlayerID());
@@ -128,9 +128,9 @@ public class RandomPlayer extends Player {
 			}
 		}
 		// test
-		System.out.print("before move random");
-		mapView = new MapView();
-		mapView.printMainMap(countryList);
+		// System.out.print("before move random");
+		// mapView = new MapView();
+		// mapView.printMainMap(countryList);
 		// test
 	}
 

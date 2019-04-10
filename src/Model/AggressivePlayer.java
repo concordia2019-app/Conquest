@@ -26,15 +26,15 @@ public class AggressivePlayer extends Player {
 	 * best adjeacent and attack on it behavior on maximum armies
 	 */
 	public ArrayList<Country> aggressiveAttackPlayer(ArrayList<Country> countryList) {
-      
+
 		ArrayList<Country> playerCountries = ConquestController.getInstance().getPlayerCountries(this.getPlayerID());
-                // TEST MAP
-		System.out.print("Test Attack 1");
-		MapView mapView = new MapView();
-		mapView.printMainMap(countryList);
 		// TEST MAP
-                CountryHelper countryHelper = new CountryHelper();
-                 
+		// System.out.print("Test Attack 1");
+		// MapView mapView = new MapView();
+		// mapView.printMainMap(countryList);
+		// TEST MAP
+		CountryHelper countryHelper = new CountryHelper();
+
 		Country maxArmyCountry = playerCountries.get(0);
 		// finding max maxArmyCountry from player countries
 		for (int i = 1; i < playerCountries.size(); i++) {
@@ -42,55 +42,53 @@ public class AggressivePlayer extends Player {
 				maxArmyCountry = playerCountries.get(i);
 			}
 		}
-		ArrayList<Country> adjacentCountries = ConquestController.getInstance().getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID(),countryList);
+		ArrayList<Country> adjacentCountries = ConquestController.getInstance()
+				.getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID(), countryList);
 
+		if (adjacentCountries.size() < 1)
+			adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
+		// attacking adjacentCountries from player countries
 
- 
-		
-		 if(adjacentCountries.size()<1)
-			  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
- 		// attacking adjacentCountries from player countries
-		 
-		 Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
+		Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
 
 		for (int i = 1; i < adjacentCountries.size(); i++) {
 			if (adjacentCountries.get(i).getArmy() > maxAdjeacentArmyCountry.getArmy()) {
 				maxAdjeacentArmyCountry = adjacentCountries.get(i);
 			}
-		} 
-                  // here is the attacker and enemy which max armt 
-                // from player is attacker and max adjeacent army is enemy
-                        int attackerArmies = maxArmyCountry.getArmy();
-			int enemyArmies = maxAdjeacentArmyCountry.getArmy();
- 
-                         if (enemyArmies > 1 && attackerArmies > 1) {
-                              
-				maxArmyCountry.setArmy(maxArmyCountry.getArmy() -1);
-				AttackResponse attackResponse = ConquestController.getInstance().attackCalculation(maxArmyCountry.getArmy() -1,
-						enemyArmies);
-				maxAdjeacentArmyCountry.setArmy(attackResponse.getRestOfArmies());
-				if (attackResponse.getAttackStatus()) {
-					maxAdjeacentArmyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
-					Player[] players = Map.getInstance().getPlayers();
-					for (Player playerItem : players) {
-						if (playerItem.getPlayerID() == this.getPlayerID()) {
-							playerItem.setCountryId(this.getCountryID());
-						}
-						Map.getInstance().setPlayers(players);
-					}
-				}
+		}
+		// here is the attacker and enemy which max armt
+		// from player is attacker and max adjeacent army is enemy
+		int attackerArmies = maxArmyCountry.getArmy();
+		int enemyArmies = maxAdjeacentArmyCountry.getArmy();
 
-				boolean updateSucceed = false;
-				while (!updateSucceed) {
-					updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+		if (enemyArmies > 1 && attackerArmies > 1) {
+
+			maxArmyCountry.setArmy(maxArmyCountry.getArmy() - 1);
+			AttackResponse attackResponse = ConquestController.getInstance()
+					.attackCalculation(maxArmyCountry.getArmy() - 1, enemyArmies);
+			maxAdjeacentArmyCountry.setArmy(attackResponse.getRestOfArmies());
+			if (attackResponse.getAttackStatus()) {
+				maxAdjeacentArmyCountry.setPlayer(this.getPlayerID(), this.getPlayerName());
+				Player[] players = Map.getInstance().getPlayers();
+				for (Player playerItem : players) {
+					if (playerItem.getPlayerID() == this.getPlayerID()) {
+						playerItem.setCountryId(this.getCountryID());
+					}
+					Map.getInstance().setPlayers(players);
 				}
 			}
-                                              
-                // test
-		System.out.print("Test Attack 2");
-		mapView = new MapView();
-		mapView.printMainMap(countryList);
-                return countryList;
+
+			boolean updateSucceed = false;
+			while (!updateSucceed) {
+				updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
+			}
+		}
+
+		// test
+		// System.out.print("Test Attack 2");
+		// mapView = new MapView();
+		// mapView.printMainMap(countryList);
+		return countryList;
 		// test
 	}
 
@@ -99,12 +97,12 @@ public class AggressivePlayer extends Player {
 	 * adjeacent and move on it behavior on maximum armies
 	 */
 	public void aggressiveMovePlayer(ArrayList<Country> countryList) {
-            
-            	// TEST MAP
-		System.out.print("Test Move 1");
-		System.out.print("countries "+ countryList.size());
-		MapView mapView = new MapView();
-		mapView.printMainMap(countryList);
+
+		// TEST MAP
+		//System.out.print("Test Move 1");
+		//System.out.print("countries " + countryList.size());
+		//MapView mapView = new MapView();
+		//mapView.printMainMap(countryList);
 		// TEST MAP
 		PlayerHelper playerHelper = new PlayerHelper();
 
@@ -120,13 +118,14 @@ public class AggressivePlayer extends Player {
 
 		// finding max adjaecent Country from player countries
 
-		int armiesNumberToAdd = (maxArmyCountry.getArmy() - 1);  
-		 // exceptions
+		int armiesNumberToAdd = (maxArmyCountry.getArmy() - 1);
+		// exceptions
 		CountryHelper countryHelper = new CountryHelper();
- 		 ArrayList<Country> adjacentCountries=ConquestController.getInstance().getAdjacentCountries( maxArmyCountry.getAdjacentCountriesID(),countryList );
-  
-  if(adjacentCountries.size()<1)
-	  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
+		ArrayList<Country> adjacentCountries = ConquestController.getInstance()
+				.getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID(), countryList);
+
+		if (adjacentCountries.size() < 1)
+			adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
 		Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
 
 		for (int i = 1; i < adjacentCountries.size(); i++) {
@@ -142,11 +141,11 @@ public class AggressivePlayer extends Player {
 		while (!updateSucceed) {
 			updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountries);
 		}
-                
-           	// TEST MAP
-		System.out.print("Test Move 2");
-		mapView = new MapView();
-		mapView.printMainMap(updatedCountries);
+
+		// TEST MAP
+		//System.out.print("Test Move 2");
+		//mapView = new MapView();
+		//mapView.printMainMap(updatedCountries);
 		// TEST MAP
 	}
 
@@ -186,11 +185,10 @@ public class AggressivePlayer extends Player {
 			while (!updateSucceed) {
 				updateSucceed = countryHelper.updateSourceCountriesArmies(updatedCountryList);
 			}
-		
-                }
 
- 		return updatedCountryList;
+		}
+
+		return updatedCountryList;
 	}
 
-         
 }
