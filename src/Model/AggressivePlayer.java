@@ -45,10 +45,7 @@ public class AggressivePlayer extends Player {
 		ArrayList<Country> adjacentCountries = ConquestController.getInstance().getAdjacentCountries(maxArmyCountry.getAdjacentCountriesID(),countryList);
 
 
-
-		System.out.println("maxArmyCountry Adjeadent :  "+maxArmyCountry.getAdjacentCountriesID().length+ " name : "+maxArmyCountry.getCountryName());
-
-		System.out.println("adjacentCountries "+adjacentCountries.size());
+ 
 		
 		 if(adjacentCountries.size()<1)
 			  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
@@ -88,8 +85,7 @@ public class AggressivePlayer extends Player {
 					updateSucceed = countryHelper.updateSourceCountriesArmies(countryList);
 				}
 			}
-                            
-                                                
+                                              
                 // test
 		System.out.print("Test Attack 2");
 		mapView = new MapView();
@@ -128,10 +124,7 @@ public class AggressivePlayer extends Player {
 		 // exceptions
 		CountryHelper countryHelper = new CountryHelper();
  		 ArrayList<Country> adjacentCountries=ConquestController.getInstance().getAdjacentCountries( maxArmyCountry.getAdjacentCountriesID(),countryList );
- 
- 		System.out.println("maxArmyCountry Adjeadent :  "+maxArmyCountry.getAdjacentCountriesID().length+ " name : "+maxArmyCountry.getCountryName());
-
-		System.out.println("adjacentCountries "+adjacentCountries.size());
+  
   if(adjacentCountries.size()<1)
 	  adjacentCountries.add(countryList.get(maxArmyCountry.getAdjacentCountriesID()[0]));
 		Country maxAdjeacentArmyCountry = adjacentCountries.get(0);
